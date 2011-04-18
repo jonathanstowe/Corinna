@@ -9,7 +9,7 @@ use Corinna::Schema::Object;
 use parent 'Class::Accessor';
 
 Corinna::Schema::Context->mk_accessors(
-    qw(	counter schema schema_url operation node_stack targetNamespace));
+    qw( counter schema schema_url operation node_stack targetNamespace));
 
 #------------------------------------------------------------
 sub new {
@@ -43,7 +43,7 @@ sub find_node {
     for ( my $i = 0 ; $i < $node_stack->count() ; $i++ ) {
         my $node = $node_stack->get($i);
 
-        #		print "\n", ref($node);
+        #       print "\n", ref($node);
         if ( ref($class) =~ /ARRAY/ ) {
             foreach my $c (@$class) {
                 if ( UNIVERSAL::isa( $node, $c ) ) {

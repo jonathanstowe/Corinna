@@ -64,22 +64,22 @@ B<Corinna::Builtin::List> - Ancestor of all classes that correspond to whitespac
 
 =head1 WARNING
 
-This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is 
-documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in 
-any of the subsequent releases. You have been warned. 
+This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is
+documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in
+any of the subsequent releases. You have been warned.
 
 =head1 ISA
 
-This class descends from L<Corinna::Builtin::SimpleType>. 
+This class descends from L<Corinna::Builtin::SimpleType>.
 
 =head1 DESCRIPTION
 
-This class is used for grouping the B<builtin> classes that 
+This class is used for grouping the B<builtin> classes that
 have whitespace separated B<list> content. Some utility methods are
-defined for easing the use of such content. 
+defined for easing the use of such content.
 
 Some B<builtin> W3C types have a B<list> nature on their own, such as B<NMTOKENS> (whitespace
-seperated B<NMTOKEN> values) or B<IDREFS>. 
+seperated B<NMTOKEN> values) or B<IDREFS>.
 
 In W3C schemas it is also possible to define a simple type to be a B<list> of another atomic simple type.
 
@@ -87,8 +87,8 @@ In W3C schemas it is also possible to define a simple type to be a B<list> of an
 
 =head2 INHERITED METHODS
 
-This class inherits many methods from its ancestors. Please see L<Corinna::Builtin::SimpleType> for 
-more methods. 
+This class inherits many methods from its ancestors. Please see L<Corinna::Builtin::SimpleType> for
+more methods.
 
 =head2 CONSTRUCTORS
 
@@ -111,7 +111,7 @@ Sets the object's value by joining the values passed as the parameter list with 
 
   @list = $object->to_list();
 
-Splits the object's value on whitespace and returns the resulting list. 
+Splits the object's value on whitespace and returns the resulting list.
 
 =head4 xml_validate()
 
@@ -120,10 +120,10 @@ Splits the object's value on whitespace and returns the resulting list.
 B<OBJECT METHOD> overriden from L<Corinna::SimpleType>.
 
 Normaly the B<xml_validate> method checks an atomic value. However, B<list> types
-are aggregate values made up of B<items> whose type is known via B<itemType> and 
-B<itemClass> properties (see L<Corinna::Schema::SimpleType>). 
+are aggregate values made up of B<items> whose type is known via B<itemType> and
+B<itemClass> properties (see L<Corinna::Schema::SimpleType>).
 
-This method will first split the object's value into a list and then run B<xml_validate> on each 
+This method will first split the object's value into a list and then run B<xml_validate> on each
 item by instantiating an simple type object on their own and invoking the B<xml_validate> method
 on each of them. If I<all> those invocations return TRUE, this method will return TRUE. Otherwise,
 it would have died along the way before even returning FALSE.
@@ -131,8 +131,8 @@ it would have died along the way before even returning FALSE.
 
 =head1 BUGS & CAVEATS
 
-There no known bugs at this time, but this doesn't mean there are aren't any. 
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code. 
+There no known bugs at this time, but this doesn't mean there are aren't any.
+Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
 So use it at your own risk.
 
 Note that there may be other bugs or limitations that the author is not aware of.
@@ -157,6 +157,6 @@ See also L<Corinna>, L<Corinna::ComplexType>, L<Corinna::SimpleType>, L<Corinna:
 If you are curious about the implementation, see L<Corinna::Schema::Parser>,
 L<Corinna::Schema::Model>, L<Corinna::Generator>.
 
- 
+
 =cut
 

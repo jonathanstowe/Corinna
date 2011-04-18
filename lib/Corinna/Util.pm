@@ -8,7 +8,7 @@ use XML::LibXML;
 use parent 'Exporter';
 
 our @EXPORT    = qw();
-our @EXPORT_OK = qw( 	merge_hash
+our @EXPORT_OK = qw(    merge_hash
   get_attribute_hash
   get_children_hash_dom
 

@@ -53,8 +53,8 @@ This class descends from L<Corinna::Schema::Object>.
 
   $ag->attributes(['lastName', 'firstName', 'title', 'dateOfBirth']);
 
-  print $ag->name();	# prints 'personal'.
-  print $ag->scope();	# prints 'global'.
+  print $ag->name();    # prints 'personal'.
+  print $ag->scope();   # prints 'global'.
 
 
 =head1 DESCRIPTION

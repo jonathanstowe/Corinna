@@ -77,7 +77,7 @@ This module is used internally by L<Corinna>. You do not normally know much
 about this module to actually use L<Corinna>.  It is documented here for
 completeness and for L<Corinna> developers. Do not count on the interface of
 this module. It may change in any of the subsequent releases. You have been
-warned. 
+warned.
 
 =head1 SYNOPSIS
 
@@ -87,7 +87,7 @@ warned.
 =head1 DESCRIPTION
 
 Quite simple, really.  Just a stack implemented via an array.
- 
+
 This module is a blunt copy of the L<Data::Stack> module. I had originally intended to use that module
 but it turns out that it -superflously- requires perl 5.8.6 to build and I only had perl 5.8.4 on my system
 with no means to upgrade. So that's why I had to copy all the code in L<Data::Stack> into this otherwise needless module.
