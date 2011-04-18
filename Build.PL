@@ -10,7 +10,8 @@ my $builder = Module::Build->new(
     dist_version_from => 'lib/Corinna.pm',
     build_requires    => { 'Test::Most' => 0.23, },
     requires          => {
-        'perl'                   => 5.008,
+        'perl'                     => 5.008,
+        'parent'                   => 0.225, # until Moose?
         'Carp'                     => 0,
         'Class::Accessor'          => 0,
         'Class::Data::Inheritable' => 0,

@@ -75,28 +75,28 @@ the newly created object.
 
 =head4 uri()
 
-  my $uri = $object->uri();	# GET
+  my $uri = $object->uri(); # GET
   $object->uri($uri);       # SET
 
 The namespace URI associated.
 
 =head4 ns_prefix()
 
-  my $pfx = $object->ns_prefix();	# GET
+  my $pfx = $object->ns_prefix();   # GET
   $object->ns_prefix($pfx);       # SET
 
 The namespace prefix associated with this URI.
 
 =head4 class_prefix()
 
-  my $pfx = $object->class_prefix();	# GET
+  my $pfx = $object->class_prefix();    # GET
   $object->class_prefix($pfx);       # SET
 
 The class prefix that will be used in conjunction with this target namespace.
 
 =head4 id()
 
-  my $id = $object->id();	# GET
+  my $id = $object->id();   # GET
   $object->id($id);       # SET
 
 An identifier, local to the schema model, of this namespace.

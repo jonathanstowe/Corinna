@@ -2,13 +2,8 @@ package Corinna::Schema::AttributeGroup;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#=================================================
-
-use Corinna::Schema::Object;
-
-our @ISA = qw(Corinna::Schema::Object);
+use parent 'Corinna::Schema::Object';
 
 Corinna::Schema::AttributeGroup->mk_accessors(qw(attributes attribute_info));
 
@@ -58,8 +53,8 @@ This class descends from L<Corinna::Schema::Object>.
 
   $ag->attributes(['lastName', 'firstName', 'title', 'dateOfBirth']);
 
-  print $ag->name();	# prints 'personal'.
-  print $ag->scope();	# prints 'global'.
+  print $ag->name();    # prints 'personal'.
+  print $ag->scope();   # prints 'global'.
 
 
 =head1 DESCRIPTION

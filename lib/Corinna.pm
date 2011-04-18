@@ -470,7 +470,7 @@ the schemas though.
 
 =item mode
 
-This parameter effects what actuallly will be done by the method. Either
+This parameter affects what actuallly will be done by the method. Either
 offline code generation, or run-time code evaluation, or just returning the
 generated code.
 

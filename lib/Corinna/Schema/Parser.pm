@@ -2,16 +2,12 @@ package Corinna::Schema::Parser;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
-
-#======================================================================
 
 use Cwd;
 use File::Spec;
 use LWP::UserAgent;
 use URI;
 use URI::file;
-use Class::Accessor;
 use Data::HashArray;
 
 use XML::LibXML;
@@ -21,7 +17,7 @@ use Corinna::Schema;
 use Corinna::Util qw(get_attribute_hash sprint_xml_element);
 use Scalar::Util qw(reftype);
 
-our @ISA = qw(Class::Accessor);
+use parent 'Class::Accessor';
 Corinna::Schema::Parser->mk_accessors(qw(model contextStack counter verbose));
 
 #------------------------------------------------------------
@@ -56,9 +52,9 @@ sub context {
 # structure that represents the object model of the schemas.
 #
 # ARGUMENTS :
-# 	schema	: A single file name or an array of schema file names to be processed.
-#				If you give an array, the result is the same as parsing them one after the other
-#			  They all accumulate in the parser 'model'.
+#   schema  : A single file name or an array of schema file names to be processed.
+#               If you give an array, the result is the same as parsing them one after the other
+#             They all accumulate in the parser 'model'.
 #
 #------------------------------------------------------------
 sub parse { &process; }
@@ -91,7 +87,7 @@ sub import_schema() {
 
     $self->_process( @_, operation => "import" );
 
-    #	die "Pastor : Schema IMPORT functionality not yet supported!\n";
+    #   die "Pastor : Schema IMPORT functionality not yet supported!\n";
 }
 
 #------------------------------------------------------------
@@ -1265,60 +1261,60 @@ B<Corinna::Schema::Parser> - Module for parsing a W3C XSD schema into an interna
 
 =head1 WARNING
 
-This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is 
-documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in 
-any of the subsequent releases. You have been warned. 
+This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is
+documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in
+any of the subsequent releases. You have been warned.
 
 =head1 ISA
 
-This class descends from L<Class::Accessor>. 
+This class descends from L<Class::Accessor>.
 
 =head1 DESCRIPTION
 
 B<Corinna::Schema::Parse> is used internally by L<Corinna> for parsing a W3C schema into an
-internal schema model (L<Corinna::Schema::Model>). 
+internal schema model (L<Corinna::Schema::Model>).
 
 The parsing is done with the L</parse()> method. The schema is not parsed directly. Instead, L<XML::LibXML> is used
-to first parse the schema into a DOM tree (since the W3C schema is itself represented in XML). Then, the DOM tree 
-hence obtained is traversed recursively in order to construct the B<schema model> which is somewhat like a parse-tree. 
+to first parse the schema into a DOM tree (since the W3C schema is itself represented in XML). Then, the DOM tree
+hence obtained is traversed recursively in order to construct the B<schema model> which is somewhat like a parse-tree.
 
 For more information on the B<schema model> produced, please refer to L<Corinna::Schema::Model>.
 
 =head1 METHODS
 
 =head2 CONSTRUCTORS
- 
-=head4 new() 
+
+=head4 new()
 
   Corinna::Schema::Parser->new(%fields)
 
 B<CONSTRUCTOR>.
 
-The new() constructor method instantiates a new object. It is inheritable. 
-  
+The new() constructor method instantiates a new object. It is inheritable.
+
 Any -named- fields that are passed as parameters are initialized to those values within
-the newly created object. 
+the newly created object.
 
 The B<new()> method will create a I<model> and a I<contextStack> if it is not passed values for those fields.
 
 .
 
 =head2 ACCESSORS
- 
-=head4 contextStack() 
+
+=head4 contextStack()
 
 A stack (of type L<Corinna::Stack>) that keeps track of the current context. Every time a new schema
 is opened for parsing (as a result of I<include> or I<redefine> statements), a new context is pushed on the stack.
 
-Each context is of type L<Corinna::Schema::Context>. Basically, the context keeps track of the DOM nodes that are 
+Each context is of type L<Corinna::Schema::Context>. Basically, the context keeps track of the DOM nodes that are
 being processed before they are inserted into the I<model>.
 
-=head4 counter() 
+=head4 counter()
 
 A simple integer counter that keeps track of the count that is attributed to implicit nodes (typically simple types) that need
 to be named. Whenever such a node needs to be named, the counter is used to generate a unique name before being incremented.
-  
-=head4 model() 
+
+=head4 model()
 
 The schema model (of type L<Corinna::Schema::Model>) that is currently being constructed. The I<model> is the result of the
 parsing operation and it is the internal reprsentation (information set) of a series of schemas that are related to each other
@@ -1327,20 +1323,20 @@ parsing operation and it is the internal reprsentation (information set) of a se
 =head2 OTHER METHODS
 
 =head4 parse()
-   
+
   $model = $parser->parse(%options);
 
 B<OBJECT METHOD>.
 
 This method accomplishes the major role of this module. Namely, it parses a W3C XSD schema
-into an internal structure called a B<schema model>. 
+into an internal structure called a B<schema model>.
 
 Example:
 
   my $parser = Corinna::Schema::Parser->new();
   my $model  = $parser->parse(schema=>'/tmp/schemas/country.xsd');
-  
-The W3C schema, which is in XML itself, is not parsed directly. Instead, it is parsed first into a DOM tree with 
+
+The W3C schema, which is in XML itself, is not parsed directly. Instead, it is parsed first into a DOM tree with
 the help of L<XML::LibXML>. Then, a recursive algorithm is used for constructing a B<schema model> which is an
 internal structure.
 
@@ -1348,12 +1344,12 @@ For more information on the B<schema model> produced, please refer to L<Corinna:
 
 OPTIONS
 
-=over 
+=over
 
 =item schema
 
 This is the file name or the URL to the B<W3C XSD schema> file to be processed. Experimentally, it can also be a string
-containing schema XSD. 
+containing schema XSD.
 
 Be careful about the paths that are mentioned for any included schemas though. If these are relative, they
 will be taken realtive to the current schema being processed. In the case of a schema string, the resolution
@@ -1369,8 +1365,8 @@ and merged to the same model for code generation. Just make sure you don't have 
 
 =head1 BUGS & CAVEATS
 
-There no known bugs at this time, but this doesn't mean there are aren't any. 
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code. 
+There no known bugs at this time, but this doesn't mean there are aren't any.
+Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
 So use it at your own risk.
 
 Note that there may be other bugs or limitations that the author is not aware of.

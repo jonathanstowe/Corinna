@@ -2,13 +2,8 @@ package Corinna::Builtin::Union;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#======================================================================
-
-use Corinna::Builtin::SimpleType;
-
-our @ISA = qw(Corinna::Builtin::SimpleType);
+use parent 'Corinna::Builtin::SimpleType';
 
 #--------------------------------------------------------------
 sub xml_validate {
@@ -45,18 +40,18 @@ B<Corinna::Builtin::Union> - Ancestor of all classes that correspond to whitespa
 
 =head1 WARNING
 
-This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is 
-documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in 
-any of the subsequent releases. You have been warned. 
+This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is
+documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in
+any of the subsequent releases. You have been warned.
 
 =head1 ISA
 
-This class descends from L<Corinna::Builtin::SimpleType>. 
+This class descends from L<Corinna::Builtin::SimpleType>.
 
 =head1 DESCRIPTION
 
-This class is used for grouping the B<builtin> classes that 
-have whitespace separated B<union> content. 
+This class is used for grouping the B<builtin> classes that
+have whitespace separated B<union> content.
 
 In W3C schemas it is possible to define a simple type to be a B<union> of other simple types.
 
@@ -64,8 +59,8 @@ In W3C schemas it is possible to define a simple type to be a B<union> of other 
 
 =head2 INHERITED METHODS
 
-This class inherits many methods from its ancestors. Please see L<Corinna::Builtin::SimpleType> for 
-more methods. 
+This class inherits many methods from its ancestors. Please see L<Corinna::Builtin::SimpleType> for
+more methods.
 
 =head2 OTHER METHODS
 
@@ -76,18 +71,18 @@ more methods.
 B<OBJECT METHOD> overriden from L<Corinna::SimpleType>.
 
 Normaly the B<xml_validate> method checks an atomic value. However, B<union> types
-are aggregate types whose values may correspond to a value from any of the 
-member types. The member types are known via the B<memberTypes> and 
-B<memberClasses> properties (see L<Corinna::Schema::SimpleType>). 
+are aggregate types whose values may correspond to a value from any of the
+member types. The member types are known via the B<memberTypes> and
+B<memberClasses> properties (see L<Corinna::Schema::SimpleType>).
 
 For each B<memberClass>, this method will instatiate an object and run B<xml_validate> on it.
-If any of these invocations return TRUE, this method will also return TRUE. If all I<die>, this 
-method will then I<die> with an error message. 
+If any of these invocations return TRUE, this method will also return TRUE. If all I<die>, this
+method will then I<die> with an error message.
 
 =head1 BUGS & CAVEATS
 
-There no known bugs at this time, but this doesn't mean there are aren't any. 
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code. 
+There no known bugs at this time, but this doesn't mean there are aren't any.
+Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
 So use it at your own risk.
 
 Note that there may be other bugs or limitations that the author is not aware of.
@@ -112,5 +107,5 @@ See also L<Corinna>, L<Corinna::ComplexType>, L<Corinna::SimpleType>, L<Corinna:
 If you are curious about the implementation, see L<Corinna::Schema::Parser>,
 L<Corinna::Schema::Model>, L<Corinna::Generator>.
 
- 
+
 =cut

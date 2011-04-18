@@ -4,9 +4,7 @@ use utf8;
 use strict;
 use warnings;
 
-#========================================================
-use Data::HashArray;
-our @ISA = qw(Data::HashArray);
+use parent 'Data::HashArray';
 
 use vars qw($VERSION);
 $VERSION = '1.0.1';
@@ -18,22 +16,22 @@ __END__
 
 =head1 NAME
 
-B<Corinna::NodeArray> - An array class of hashes that has magical properties via overloading and AUTOLOAD. 
+B<Corinna::NodeArray> - An array class of hashes that has magical properties via overloading and AUTOLOAD.
 
 =head1 ISA
 
-This class is a simple wrapper around L<Data::HashArray> 
+This class is a simple wrapper around L<Data::HashArray>
 
 =head1 SYNOPSIS
 
-  # please see the documentation of Data::HashArray  
+  # please see the documentation of Data::HashArray
 
 =head1 DESCRIPTION
 
-B<Corinna::NodeArray> is an array class that is used for element multiplicity in L<Corinna>. 
+B<Corinna::NodeArray> is an array class that is used for element multiplicity in L<Corinna>.
 
 Normally, B<Corinna::NodeArray> is an array of hashes or hash-based objects. This class has some magical properties
-that make it easier to deal with multiplicity. 
+that make it easier to deal with multiplicity.
 
 B<Corinna::NodeArray> is a simple wrapper around the generic class L<Data::HashArray>. Please see the documentation of
 L<Data::HashArray> for more details.
@@ -41,8 +39,8 @@ L<Data::HashArray> for more details.
 
 =head1 BUGS & CAVEATS
 
-There no known bugs at this time, but this doesn't mean there are aren't any. 
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code. 
+There no known bugs at this time, but this doesn't mean there are aren't any.
+Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
 So use it at your own risk.
 
 Note that there may be other bugs or limitations that the author is not aware of.
