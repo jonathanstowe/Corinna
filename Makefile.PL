@@ -11,6 +11,7 @@ WriteMakefile
                  ],
   'VERSION_FROM' => 'lib/Corinna.pm',
   'PREREQ_PM' => {
+                   'MooseX::UndefTolerant' => 0,
                    'Scalar::Util' => 0,
                    'Pod::Usage' => 0,
                    'File::Spec' => 0,

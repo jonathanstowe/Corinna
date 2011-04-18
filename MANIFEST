@@ -54,6 +54,7 @@ t/02.5.instance01_country.t
 t/02.5.instance02_product.t
 t/02.5.instance03_country_import.t
 t/complex_type_bug.t
+t/99_datetime.t
 test/bin/testme.pl
 test/source/bugs/schema/complex_type_from_simple_type.xsd
 test/source/country/schema/common.xsd
@@ -80,5 +81,6 @@ test/source/mathworks/schema/productDepList.xsd
 test/source/mathworks/schema/releaseData.xsd
 test/source/mathworks/schema/source.xsd
 test/source/mathworks/xml/mProduct.xml
+test/source/bugs/schema/DateTest.xsd
 
 META.yml                                 Module meta-data (added by MakeMaker)

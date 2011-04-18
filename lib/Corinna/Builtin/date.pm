@@ -73,7 +73,7 @@ sub set_from_date_time($) {
     require DateTime::Format::W3CDTF;
 
     my $f = DateTime::Format::W3CDTF->new;
-    $self->value( $f->format_date($dt) );
+    $self->__value( $f->format_date($dt) );
 }
 
 #--------------------------------------------------------
