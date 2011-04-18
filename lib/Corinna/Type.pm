@@ -141,36 +141,44 @@ sub set {
 # CLASS METHOD
 # Return the Perl class name of a given field (element or attribute).
 #------------------------------------------------------
-sub xml_field_class($$) {
-    my $self  = shift;
-    my $field = shift;
-    my $class;
+sub xml_field_class($$)
+{
+   my $self  = shift;
+   my $field = shift;
+   my $class;
 
-    my $type = $self->XmlSchemaType();
+   if ( defined $field )
+   {
+      my $type = $self->XmlSchemaType();
 
-    # Try with elements
-    if ( UNIVERSAL::can( $type, 'effective_element_info' ) ) {
-        my $elementInfo = $type->effective_element_info();
-        if ( defined( my $element = $elementInfo->{$field} ) ) {
+      # Try with elements
+      if ( UNIVERSAL::can( $type, 'effective_element_info' ) )
+      {
+         my $elementInfo = $type->effective_element_info();
+         if ( defined( my $element = $elementInfo->{$field} ) )
+         {
             $class = $element->class();
-        }
+         }
 
-        # Return the class if we already have it.
-        return $class if ($class);
-    }
+         # Return the class if we already have it.
+         return $class if ($class);
+      }
 
-    # Try with attributes
-    if ( UNIVERSAL::can( $type, 'effective_attribute_info' ) ) {
-        my $attribInfo = $type->effective_attribute_info();
-        my $attribPfx  = $type->attributePrefix();
-        my $afield     = $field;
-        $afield =~ s/^$attribPfx//;
-        if ( defined( my $attrib = $attribInfo->{$afield} ) ) {
+      # Try with attributes
+      if ( UNIVERSAL::can( $type, 'effective_attribute_info' ) )
+      {
+         my $attribInfo = $type->effective_attribute_info();
+         my $attribPfx  = $type->attributePrefix();
+         my $afield     = $field;
+         $afield =~ s/^$attribPfx//;
+         if ( defined( my $attrib = $attribInfo->{$afield} ) )
+         {
             $class = $attrib->class();
-        }
-    }
+         }
+      }
+   }
 
-    return $class;
+   return $class;
 }
 
 #------------------------------------------------------
