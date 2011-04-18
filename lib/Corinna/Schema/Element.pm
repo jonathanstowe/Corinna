@@ -2,13 +2,8 @@ package Corinna::Schema::Element;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#===================================================
-
-use Corinna::Schema::Object;
-
-our @ISA = qw(Corinna::Schema::Object);
+use parent 'Corinna::Schema::Object';
 
 Corinna::Schema::Element->mk_accessors(
     qw(baseClasses minOccurs maxOccurs targetNamespace));

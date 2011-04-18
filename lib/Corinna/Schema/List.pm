@@ -2,12 +2,8 @@ package Corinna::Schema::List;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#========================================================
-
-use Corinna::Schema::Object;
-our @ISA = qw(Corinna::Schema::Object);
+use parent 'Corinna::Schema::Object';
 
 Corinna::Schema::List->mk_accessors(qw(itemType itemClass));
 

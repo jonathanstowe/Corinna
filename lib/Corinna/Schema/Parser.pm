@@ -2,16 +2,12 @@ package Corinna::Schema::Parser;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
-
-#======================================================================
 
 use Cwd;
 use File::Spec;
 use LWP::UserAgent;
 use URI;
 use URI::file;
-use Class::Accessor;
 use Data::HashArray;
 
 use XML::LibXML;
@@ -21,7 +17,7 @@ use Corinna::Schema;
 use Corinna::Util qw(get_attribute_hash sprint_xml_element);
 use Scalar::Util qw(reftype);
 
-our @ISA = qw(Class::Accessor);
+use parent 'Class::Accessor';
 Corinna::Schema::Parser->mk_accessors(qw(model contextStack counter verbose));
 
 #------------------------------------------------------------

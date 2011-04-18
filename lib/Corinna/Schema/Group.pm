@@ -2,11 +2,8 @@ package Corinna::Schema::Group;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#===================================================
-use Corinna::Schema::Object;
-our @ISA = qw(Corinna::Schema::Object);
+use parent 'Corinna::Schema::Object';
 
 Corinna::Schema::Group->mk_accessors(qw(elements elementInfo));
 

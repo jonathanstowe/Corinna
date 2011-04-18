@@ -2,13 +2,8 @@ package Corinna::Builtin::Union;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#======================================================================
-
-use Corinna::Builtin::SimpleType;
-
-our @ISA = qw(Corinna::Builtin::SimpleType);
+use parent 'Corinna::Builtin::SimpleType';
 
 #--------------------------------------------------------------
 sub xml_validate {

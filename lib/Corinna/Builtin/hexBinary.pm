@@ -2,13 +2,8 @@ package Corinna::Builtin::hexBinary;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#======================================================================
-
-use Corinna::Builtin::Scalar;
-
-our @ISA = qw(Corinna::Builtin::Scalar);
+use parent 'Corinna::Builtin::Scalar';
 
 Corinna::Builtin::hexBinary->XmlSchemaType(
     bless(

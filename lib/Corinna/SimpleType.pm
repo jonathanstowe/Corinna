@@ -2,17 +2,13 @@ package Corinna::SimpleType;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
-
-#======================================================
 
 use XML::LibXML;
-use Corinna::Type;
 
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
-our @ISA = qw(Corinna::Type);
+use parent 'Corinna::Type';
 
 #----------------------------------------------
 # xml_validate_value
@@ -295,8 +291,8 @@ organization of the object.
 
 =head4 from_xml_dom() 
 
-	my $object = $class->from_xml_dom($node);
-	
+    my $object = $class->from_xml_dom($node);
+    
 B<CONSTRUCTOR> that should be called upon your generated class rather than B<Corinna::ComplexType>.
   
 This method instatiates an object of the generated class from a DOM object passed as a parameter. Currently, the DOM
@@ -328,8 +324,8 @@ methods as meta information about the generated class.
 
 =head4 value()
 
-  $currentValue = $object->value();	# GET
-  $object->value($newValue);		# SET
+  $currentValue = $object->value(); # GET
+  $object->value($newValue);        # SET
 
 Gets and sets the value of the 'value' field, which is the actual SCALAR value of the object.
 
@@ -355,7 +351,7 @@ error message that resulted from the death of L</xml_validate>.
 
 =head4 xml_validate()
  
-	$object->xml_validate();	# Will die on failure
+    $object->xml_validate();    # Will die on failure
 
 B<OBJECT METHOD>, overriden from L<Corinna::Type>.
  
@@ -424,7 +420,7 @@ calls will result in the failure of B<xml_validate> which will consequently I<di
 
 =head4 xml_validate_further()
  
-	$object->xml_validate_further();	# Never called directly.
+    $object->xml_validate_further();    # Never called directly.
 
 B<OBJECT METHOD>, overriden from L<Corinna::Type>.
  

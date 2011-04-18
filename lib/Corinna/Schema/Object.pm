@@ -2,10 +2,8 @@ package Corinna::Schema::Object;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#================================================================
-use base qw (Class::Accessor);
+use parent 'Class::Accessor';
 
 Corinna::Schema::Object->mk_accessors(
     qw(class definition documentation is_redefinable meta_class name name_is_auto_generated ref ref_key scope type targetNamespace)

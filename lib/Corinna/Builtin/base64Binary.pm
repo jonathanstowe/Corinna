@@ -3,13 +3,10 @@ package Corinna::Builtin::base64Binary;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#======================================================================
-use Corinna::Builtin::Scalar;
 use MIME::Base64 ();
 
-our @ISA = qw(Corinna::Builtin::Scalar);
+use parent 'Corinna::Builtin::Scalar';
 
 Corinna::Builtin::base64Binary->XmlSchemaType(
     bless(

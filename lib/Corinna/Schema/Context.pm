@@ -2,15 +2,11 @@ package Corinna::Schema::Context;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#========================================================
-
-use Class::Accessor;
 use Corinna::Stack;
 use Corinna::Schema::Object;
 
-our @ISA = qw(Class::Accessor);
+use parent 'Class::Accessor';
 
 Corinna::Schema::Context->mk_accessors(
     qw(	counter schema schema_url operation node_stack targetNamespace));

@@ -2,13 +2,8 @@ package Corinna::Schema::ComplexType;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#==================================================
-
-use Corinna::Schema::Type;
-
-our @ISA = qw(Corinna::Schema::Type);
+use parent 'Corinna::Schema::Type';
 
 Corinna::Schema::ComplexType->mk_accessors(
     qw(attributes attribute_info attributePrefix elements elementInfo isSimpleContent xAttributes xAttributeInfo xElements xElementInfo)

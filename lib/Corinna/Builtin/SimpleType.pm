@@ -2,13 +2,8 @@ package Corinna::Builtin::SimpleType;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#======================================================================
-
-use Corinna::SimpleType;
-
-our @ISA = qw(Corinna::SimpleType);
+use parent 'Corinna::SimpleType';
 
 1;
 

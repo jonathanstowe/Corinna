@@ -2,14 +2,11 @@ package Corinna::Util;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
-
-#================================================================
 
 use XML::LibXML;
-use Exporter;
 
-our @ISA       = qw (Exporter);
+use parent 'Exporter';
+
 our @EXPORT    = qw();
 our @EXPORT_OK = qw( 	merge_hash
   get_attribute_hash

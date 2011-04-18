@@ -2,11 +2,8 @@ package Corinna::Schema::SimpleType;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#=================================================
-use Corinna::Schema::Type;
-our @ISA = qw(Corinna::Schema::Type);
+use parent 'Corinna::Schema::Type';
 
 Corinna::Schema::SimpleType->mk_accessors(
     qw(

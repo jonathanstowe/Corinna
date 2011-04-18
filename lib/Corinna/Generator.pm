@@ -2,9 +2,6 @@ package Corinna::Generator;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
-
-#=======================================================
 
 use Data::Dumper;
 use IO::File;

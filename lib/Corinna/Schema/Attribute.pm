@@ -3,13 +3,8 @@ package Corinna::Schema::Attribute;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#============================================================
-
-use Corinna::Schema::Object;
-
-our @ISA = qw(Corinna::Schema::Object);
+use parent 'Corinna::Schema::Object';
 
 Corinna::Schema::Attribute->mk_accessors(qw(use));
 

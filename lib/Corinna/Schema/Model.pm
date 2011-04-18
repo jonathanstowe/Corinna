@@ -2,17 +2,15 @@ package Corinna::Schema::Model;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
 use Data::Dumper;
-use Class::Accessor;
 
 use Corinna::Schema::Object;
 use Corinna::Schema::NamespaceInfo;
 
 use Corinna::Util qw(merge_hash);
 
-our @ISA = qw(Class::Accessor);
+use parent 'Class::Accessor';
 
 Corinna::Schema::Model->mk_accessors(
     qw(type element group attribute attributeGroup defaultNamespace namespaces namespaceCounter)

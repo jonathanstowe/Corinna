@@ -2,15 +2,12 @@ package Corinna::Builtin::List;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
 #======================================================================
 # White space separated tokens.
 #======================================================================
 
-use Corinna::Builtin::SimpleType;
-
-our @ISA = qw(Corinna::Builtin::SimpleType);
+use parent 'Corinna::Builtin::SimpleType';
 
 #-----------------------------------------------------------------
 sub to_list {

@@ -2,7 +2,6 @@ package Corinna::Builtin;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
 use Corinna::SimpleType;
 use Corinna::Builtin::List;
@@ -200,19 +199,19 @@ Corinna::Builtin::duration->XmlSchemaType(
             'name'        => 'duration|http://www.w3.org/2001/XMLSchema',
 
 # Regex shamelessly copied from XML::Validator::Schema by Sam Tregar who thanks to perlmonk Abigail-II
-            'regex' => qr /^-? 				  # Optional leading minus.
-					            P                     # Required.
-					            (?=[T\d])             # Duration cannot be empty.
-						        (?:(?!-) \d+ Y)?      # Non-negative integer, Y (optional)
-           						(?:(?!-) \d+ M)?      # Non-negative integer, M (optional)
-           						(?:(?!-) \d+ D)?      # Non-negative integer, D (optional)
-								(
-           						(?:T (?=\d)           # T, must be followed by a digit.
-           						(?:(?!-) \d+ H)?      # Non-negative integer, H (optional)
-           						(?:(?!-) \d+ M)?      # Non-negative integer, M (optional)
-           						(?:(?!-) \d+\.\d+ S)? # Non-negative decimal, S (optional)
-           						)?                    # Entire T part is optional
-								)$/x,
+            'regex' => qr /^-?                # Optional leading minus.
+                                P                     # Required.
+                                (?=[T\d])             # Duration cannot be empty.
+                                (?:(?!-) \d+ Y)?      # Non-negative integer, Y (optional)
+                                (?:(?!-) \d+ M)?      # Non-negative integer, M (optional)
+                                (?:(?!-) \d+ D)?      # Non-negative integer, D (optional)
+                                (
+                                (?:T (?=\d)           # T, must be followed by a digit.
+                                (?:(?!-) \d+ H)?      # Non-negative integer, H (optional)
+                                (?:(?!-) \d+ M)?      # Non-negative integer, M (optional)
+                                (?:(?!-) \d+\.\d+ S)? # Non-negative decimal, S (optional)
+                                )?                    # Entire T part is optional
+                                )$/x,
         },
         'Corinna::Schema::SimpleType'
     )

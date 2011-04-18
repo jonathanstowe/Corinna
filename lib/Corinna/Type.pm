@@ -3,13 +3,10 @@ package Corinna::Type;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
 use Carp;
-use Class::Data::Inheritable;
-use Class::Accessor;
 
-our @ISA = qw(Class::Accessor Class::Data::Inheritable);
+use parent qw(Class::Accessor Class::Data::Inheritable);
 
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);

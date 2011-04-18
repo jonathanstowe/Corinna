@@ -2,13 +2,8 @@ package Corinna::Builtin::date;
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
-#======================================================================
-
-use Corinna::Builtin::Scalar;
-
-our @ISA = qw(Corinna::Builtin::Scalar);
+use parent 'Corinna::Builtin::Scalar';
 
 use Corinna::Util qw(validate_date);
 

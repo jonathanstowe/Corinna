@@ -3,7 +3,7 @@ package Corinna::ComplexType;
 use strict;
 use warnings;
 
-our @ISA = qw(Corinna::Type);
+use parent 'Corinna::Type';
 
 1;
 
