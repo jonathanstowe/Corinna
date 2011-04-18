@@ -1,12 +1,12 @@
-# NAME
+=head1 NAME
 
-__Corinna__ - Generate Perl classes with XML bindings starting from a W3C XSD Schema
+B<Corinna> - Generate Perl classes with XML bindings starting from a W3C XSD Schema
 
-# VERSION
+=head1 VERSION
 
 2.0
 
-# SYNOPSIS
+=head1 SYNOPSIS
 
     use Corinna;
 
@@ -166,7 +166,7 @@ And somewhere in an other place of the code ...
       ;    # Same thing without the <?xml version="1.0?> part
 
 By the way, for those who are interesed in the data structure, here is a
-sample DUMP of what `$country` might look like.  However, don't count on
+sample DUMP of what C<$country> might look like.  However, don't count on
 anything but attribute and element names. Anything else may change. You have
 been warned.
 
@@ -281,15 +281,15 @@ been warned.
         'Corinna::Test::country'
     );
 
-# DESCRIPTION
+=head1 DESCRIPTION
 
-Java had CASTOR, and now Perl has `Corinna`!
+Java had CASTOR, and now Perl has C<Corinna>!
 
-If you know what Castor does in the Java world, then __Corinna__ should be
-familiar to you. If you have a __W3C XSD schema__, you can generate Perl
+If you know what Castor does in the Java world, then B<Corinna> should be
+familiar to you. If you have a B<W3C XSD schema>, you can generate Perl
 classes with roundtrip XML bindings.
 
-Whereas Castor is limited to offline code generation, __Corinna__ is able to
+Whereas Castor is limited to offline code generation, B<Corinna> is able to
 generate Perl classes either offline or at run-time starting from a W3C XSD
 Schema. The generated classes correspond to the global elements, complex and
 simple type declarations in the schema. The generated classes have full XML
@@ -299,12 +299,12 @@ automatically.  Furthermore it is possible to validate the objects of
 generated classes against the original schema although the schema is typically
 no longer accessible.
 
-__Corinna__ defines just one method, '_generate()_', but the classes it
+B<Corinna> defines just one method, 'I<generate()>', but the classes it
 generates define many methods which may be found in the documentation of
-[Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType) and [Corinna::SimpleType](http://search.cpan.org/perldoc?Corinna::SimpleType) from which all generated
+L<Corinna::ComplexType> and L<Corinna::SimpleType> from which all generated
 classes descend.
 
-In '_offline_'  mode, it is possible to generate a single module with all the
+In 'I<offline>'  mode, it is possible to generate a single module with all the
 generated clasess or multiple modules one for each class. The typical use of
 the offline mode is during a 'make' process, where you have a set of XSD
 schemas and you generate your modules to be later installed by the 'make
@@ -313,79 +313,81 @@ schemas don't have to be accessible during run-time and you don't have a
 performance penalty.
 
 Perl philosophy dictates however, that There Is More Than One Way To Do It. In
-'_eval_' (run-time) mode, the XSD schema is processed at run-time giving much
+'I<eval>' (run-time) mode, the XSD schema is processed at run-time giving much
 more flexibility to the user. This added flexibility has a price on the other
 hand, namely a performance penalty and the fact that the XSD schema needs to
 be accessible at run-time. Note that the performance penalty applies only to
 the code genereration (pastorize) phase; the generated classes perform the
 same as if they were generated offline.
 
-There is a command line utility called [pastorize](http://search.cpan.org/perldoc?pastorize) that can help generating
-classes offline. See the documentation of [pastorize](http://search.cpan.org/perldoc?pastorize) for more details on
+There is a command line utility called L<pastorize> that can help generating
+classes offline. See the documentation of L<pastorize> for more details on
 that.
 
-# SCOPE AND WARNING
+=head1 SCOPE AND WARNING
 
-__Corinna__ is quite good for the so called 'data xml', that is, XML without
+B<Corinna> is quite good for the so called 'data xml', that is, XML without
 mixed markup.  It is NOT suitable for parsing and manipulating a markup
 language such as XHTML for example. 'Mixed markup' means that an element can
-contain both textual data and child elements miexed together. __Corinna__ does
+contain both textual data and child elements miexed together. B<Corinna> does
 not support that.
 
-__Corinna__ is NOT a recommended way of treating HUGE XML documents. The exact
+B<Corinna> is NOT a recommended way of treating HUGE XML documents. The exact
 definition of HUGE varies.  It usually means paging into virtual memory. If
 you find yourself doing that, you should know that you might be better of with
-[XML::Twig](http://search.cpan.org/perldoc?XML::Twig) which lets you selectively parse chunks of a tree. Or better yet,
-just do __SAX__ processing. Note that things are not that bad with __Corinna__
-=> The memory used by __Corinna__ is not that much more than that of
-[XML::Simple](http://search.cpan.org/perldoc?XML::Simple) or a DOM for the same document.
+L<XML::Twig> which lets you selectively parse chunks of a tree. Or better yet,
+just do B<SAX> processing. Note that things are not that bad with B<Corinna>
+=> The memory used by B<Corinna> is not that much more than that of
+L<XML::Simple> or a DOM for the same document.
 
-# METHODS
+=head1 METHODS
 
-## new()       (CONSTRUCTOR)
+=head2 new()       (CONSTRUCTOR)
 
-The new() constructor method instantiates a new __Corinna__ object.
+The new() constructor method instantiates a new B<Corinna> object.
 
     my $corinna = Corinna->new();
 
-This is currently unnecessary as the only method ('_generate_') is a class
+This is currently unnecessary as the only method ('I<generate>') is a class
 method.  However, it is higly recommended to use it and call 'generate' on an
 object (rather than the class) as in the future, 'generate' may no longer be a
 class method.
 
-## version  (CLASS METHOD)
+=head2 version  (CLASS METHOD)
 
 Returns the current VERSION of Corinna;
 
-## generate(%options)
+=head2 generate(%options)
 
-Currently a __CLASS METHOD__, but may change to be an __OBJECT METHOD__ in the
+Currently a B<CLASS METHOD>, but may change to be an B<OBJECT METHOD> in the
 future. It works when called on an OBJECT too at this time.
 
 This method is the heart of the module. It will accept a schema file name or
 URL as input (among some other parameters) and proceed to code generation.
 
-This method will parse the schema(s) given by the [schema](#pod_schema) parameter and
+This method will parse the schema(s) given by the L</schema> parameter and
 then proceed to code generation.  The generated code will be written to disk
-(mode=>[offline](#pod_offline)) or evaluated at run-time (mode=>[eval](#pod_eval)) depending on the
-value of the [mode](#pod_mode) parameter.
+(mode=>L</offline>) or evaluated at run-time (mode=>L</eval>) depending on the
+value of the L</mode> parameter.
 
-In [offline](#pod_offline) mode, the generated classes will either all be put in one
-[single](#pod_single) big code block, or in [multiple](#pod_multiple) module files (one for each
-class) depending on the [style](#pod_style) parameter. Again in [offline](#pod_offline) mode, the
+In L</offline> mode, the generated classes will either all be put in one
+L</single> big code block, or in L</multiple> module files (one for each
+class) depending on the L</style> parameter. Again in L</offline> mode, the
 generated modules will be written to disk under the directory prefix given by
-the [destination](#pod_destination) parameter.
+the L</destination> parameter.
 
 In any case, the names of the generated classes will be prefixed by the string
-given by the [class_prefix](#pod_class_prefix) parameter.  It is possible to indicate common
-ancestors for generated classes via the [complex_isa](#pod_complex_isa) and [simple_isa](#pod_simple_isa)
+given by the L</class_prefix> parameter.  It is possible to indicate common
+ancestors for generated classes via the L</complex_isa> and L</simple_isa>
 parameters.
 
 This method expects the following parameters:
 
-- schema
+=over
 
-This is the file name or the URL to the __W3C XSD schema__ file to be
+=item schema
+
+This is the file name or the URL to the B<W3C XSD schema> file to be
 processed. Experimentally, it can also be a string containing schema XSD.
 
 Be careful about the paths that are mentioned for any included schemas though.
@@ -398,124 +400,132 @@ in which case the schemas will be processed in order and merged to the same
 model for code generation. Just make sure you don't have name collisions in
 the schemas though.
 
-- mode
+=item mode
 
-This parameter effects what actuallly will be done by the method. Either
+This parameter affects what actuallly will be done by the method. Either
 offline code generation, or run-time code evaluation, or just returning the
 generated code.
 
-    - offline
+=over
 
-    __Default__.
+=item offline
 
-    In this mode, the code generation is done 'offline', that is, similar to
-    Java's Castor way of doing things, the generated code will be written to disk
-    on module files under the path given by the [destination](#pod_destination) parameter.
+B<Default>.
 
-    In '_offline_'  mode, it is possible to generate a single module with all the
-    generated clasess or multiple modules one for each class, depending on the
-    value of the [style](#pod_style) parameter.
+In this mode, the code generation is done 'offline', that is, similar to
+Java's Castor way of doing things, the generated code will be written to disk
+on module files under the path given by the L</destination> parameter.
 
-    The typical use of the _offline_ mode is during a '__make__' process, where
-    you have a set of XSD schemas and you generate your modules to be later
-    installed by '__make install__'. This is very similar to Java Castor's
-    behaviour.  This way your XSD schemas don't have to be accessible during
-    run-time and you don't have a performance penalty.
+In 'I<offline>'  mode, it is possible to generate a single module with all the
+generated clasess or multiple modules one for each class, depending on the
+value of the L</style> parameter.
 
-        # Generate MULTIPLE modules, one module for each class, and put them under destination.
-        my $corinna = Corinna->new();
-        $corinna->generate(
-            mode         => 'offline',
-            style        => 'multiple',
-            schema       => '/some/path/to/schema.xsd',
-            class_prefix => 'MyApp::Data::',
-            destination  => '/tmp/lib/perl/',
-        );
+The typical use of the I<offline> mode is during a 'B<make>' process, where
+you have a set of XSD schemas and you generate your modules to be later
+installed by 'B<make install>'. This is very similar to Java Castor's
+behaviour.  This way your XSD schemas don't have to be accessible during
+run-time and you don't have a performance penalty.
 
-    - eval
+    # Generate MULTIPLE modules, one module for each class, and put them under destination.
+    my $corinna = Corinna->new();
+    $corinna->generate(
+        mode         => 'offline',
+        style        => 'multiple',
+        schema       => '/some/path/to/schema.xsd',
+        class_prefix => 'MyApp::Data::',
+        destination  => '/tmp/lib/perl/',
+    );
 
-    In '_eval_' (run-time) mode, the XSD schema is processed at run-time giving
-    much more flexibility to the user. In this mode, no code will be written to
-    disk. Instead, the generated code (which is necessarily a [single](#pod_single) block)
-    will be evaluated before returning to the caller.
+=item eval
 
-    The added flexibility has a price on the other hand, namely a performance
-    penalty and the fact that the XSD schema needs to be accessible at run-time.
-    Note that the performance penalty applies only to the code genereration
-    (pastorize) phase; the generated classes perform the same as if they were
-    generated offline.
+In 'I<eval>' (run-time) mode, the XSD schema is processed at run-time giving
+much more flexibility to the user. In this mode, no code will be written to
+disk. Instead, the generated code (which is necessarily a L</single> block)
+will be evaluated before returning to the caller.
 
-    Note that '_eval_' mode forces the [style](#pod_style) parameter to have a value of
-    '_single_';
+The added flexibility has a price on the other hand, namely a performance
+penalty and the fact that the XSD schema needs to be accessible at run-time.
+Note that the performance penalty applies only to the code genereration
+(pastorize) phase; the generated classes perform the same as if they were
+generated offline.
 
-        # Generate classes in MEMORY, and EVALUATE the generated code on the fly.
-        my $corinna = Corinna->new();
-        $corinna->generate(
-            mode         => 'eval',
-            schema       => '/some/path/to/schema.xsd',
-            class_prefix => 'MyApp::Data::'
-        );
+Note that 'I<eval>' mode forces the L</style> parameter to have a value of
+'I<single>';
 
-    - return
+    # Generate classes in MEMORY, and EVALUATE the generated code on the fly.
+    my $corinna = Corinna->new();
+    $corinna->generate(
+        mode         => 'eval',
+        schema       => '/some/path/to/schema.xsd',
+        class_prefix => 'MyApp::Data::'
+    );
 
-    In '_return_'  mode, the XSD schema is processed but no code is written to
-    disk or evaluated. In this mode, the method just returns the generated block
-    of code as a string, so that you may use it to your liking. You would
-    typically be evaluating it though.
+=item return
 
-    Note that '_return_' mode forces the [style](#pod_style) parameter to have a value of
-    '_single_';
+In 'I<return>'  mode, the XSD schema is processed but no code is written to
+disk or evaluated. In this mode, the method just returns the generated block
+of code as a string, so that you may use it to your liking. You would
+typically be evaluating it though.
 
-- style
+Note that 'I<return>' mode forces the L</style> parameter to have a value of
+'I<single>';
 
-This parameter determines if __Corinna__ will generate a single module where
-all classes reside ([single](#pod_single)), or multiple modules one for each class
-([multiple](#pod_multiple)).
+=back
 
-Some modes (such as [eval](#pod_eval) and [return](#pod_return))force the style argument to be
-'_single_'.
+=item style
+
+This parameter determines if B<Corinna> will generate a single module where
+all classes reside (L</single>), or multiple modules one for each class
+(L</multiple>).
+
+Some modes (such as L</eval> and L</return>)force the style argument to be
+'I<single>'.
 
 Possible values are :
 
-    - single
+=over
 
-    One block of code containg all the generated classes will be produced.
+=item single
 
-    - multiple
+One block of code containg all the generated classes will be produced.
 
-    A separate piece of code for each class will be produced. In addition, a
-    module that 'uses' each of the individual generated modules will be created
-    whose name is given by the 'module' argument (or otherwise it's given by
-    'class_prefix').
+=item multiple
 
-- class_prefix
+A separate piece of code for each class will be produced. In addition, a
+module that 'uses' each of the individual generated modules will be created
+whose name is given by the 'module' argument (or otherwise it's given by
+'class_prefix').
+
+=back
+
+=item class_prefix
 
 If present, the names of the generated classes will be prefixed by this value.
 You may end the value with '::' or not, it's up to you. It will be
 autocompleted.  In other words both 'MyApp::Data' and 'MyApp::Data::' are
 valid.
 
-- destination
+=item destination
 
 This is the directory prefix where the produced modules will be written in
-_offline_ mode. In other modes (_eval_ and _return_), it is ignored.
+I<offline> mode. In other modes (I<eval> and I<return>), it is ignored.
 
 Note that the trailing slash ('/') is optional. The default value for this
 parameter is '/tmp/lib/perl/'.
 
-- module
+=item module
 
-This parameter has sense only when generating one big chunk of code ([style](#pod_style)
-=> [single](#pod_single)) in offline [mode](#pod_mode).
+This parameter has sense only when generating one big chunk of code (L</style>
+=> L</single>) in offline L</mode>.
 
 It denotes the name of the module (without the .pm extension) that will be
 written to disk in this case.
 
-- complex_isa
+=item complex_isa
 
 Via this parameter, it is possible to indicate a common ancestor (or
-ancestors) of all complex types that are generated by __Corinna__.  The
-generated complex types will still have __Corinna::ComplexType__ as their last
+ancestors) of all complex types that are generated by B<Corinna>.  The
+generated complex types will still have B<Corinna::ComplexType> as their last
 ancestor in their @ISA, but they will also have the class whose name is given
 by this parameter as their first ancestor. Handy if you would like to add
 common behaviour to all your generated classes.
@@ -524,11 +534,11 @@ This parameter can have a string value (the usual case) or an array reference
 to strings. In the array case, each item is added to the @ISA array (in that
 order) of the generated classes.
 
-- simple_isa
+=item simple_isa
 
 Via this parameter, it is possible to indicate a common ancestor (or
-ancestors) of all simple types that are generated by __Corinna__.  The
-generated simple types will still have __Corinna::SimpleType__ as their last
+ancestors) of all simple types that are generated by B<Corinna>.  The
+generated simple types will still have B<Corinna::SimpleType> as their last
 ancestor in their @ISA, but they will also have the class whose name is given
 by this parameter as their first ancestor. Handy if you would like to add
 common behaviour to all your generated classes.
@@ -537,7 +547,7 @@ This parameter can have a string value (the usual case) or an array reference
 to strings. In the array case, each item is added to the @ISA array (in that
 order) of the generated classes.
 
-- verbose
+=item verbose
 
 This parameter indicates the desired level of verbosity of the output. A value
 of zero (0), which is the default, indicates 'silent' operation where only a
@@ -545,19 +555,20 @@ fatal error will result in a 'die' which will in turn write on STDERR. A
 higher value of 'verbose' indicates more and more chatter on STDERR.
 
 
+=back
 
-# ::Pastor::Meta CLASS
+=head1 ::Pastor::Meta CLASS
 
-Suppose you use [Corinna](http://search.cpan.org/perldoc?Corinna) for code generation with a __class prefix__ of
-__MyApp::Data__. Then, [Corinna](http://search.cpan.org/perldoc?Corinna) will also generate a class that enables you
+Suppose you use L<Corinna> for code generation with a B<class prefix> of
+B<MyApp::Data>. Then, L<Corinna> will also generate a class that enables you
 to access meta information about the generated code under
 'MyApp::Data::Pastor::Meta'.
 
-Currently, the only information you can access is the '__Model__' that was used
-to generate code.  '__Model__' is class data that references to an entire
-schema model object (of type [XML::Schema::Model](http://search.cpan.org/perldoc?XML::Schema::Model)).  With the help of the
+Currently, the only information you can access is the 'B<Model>' that was used
+to generate code.  'B<Model>' is class data that references to an entire
+schema model object (of type L<XML::Schema::Model>).  With the help of the
 generated 'meta' class, you can access the Model which will in turn enable you
-to call methods such as '__xml_item_class()__' which helps you determine the
+to call methods such as 'B<xml_item_class()>' which helps you determine the
 generated Perl class of a given global element or type in the schema.
 
 Example:
@@ -583,12 +594,12 @@ Example:
     my $country =
       $class->from_xml_file('/some/path/to/country.xml');    # retrieve from a file
 
-# SCHEMA SUPPORT
+=head1 SCHEMA SUPPORT
 
 The version 1.0 of W3C XSD schema (2001) is supported almost in full, albeit
-with some exceptions (see ["BUGS & CAVEATS"](#pod_"BUGS & CAVEATS")).
+with some exceptions (see L</"BUGS & CAVEATS">).
 
-## SUPPORTED
+=head2 SUPPORTED
 
 Such things as complex and simple types, global elements, groups, attributes,
 and attribute groups are supported. Type declarations can either be global or
@@ -613,7 +624,7 @@ Schema 'import' is now supported (since version 0.6.3).
 ComplexTypes with simpleContent (simple-type elements eventually with
 attributes) are supported (since v0.6.0).
 
-## PARTIALLY SUPPORTED
+=head2 PARTIALLY SUPPORTED
 
 Namespaces are quite well supported now (since version 0.6.3). Multiple
 namespaces are OK.
@@ -622,7 +633,7 @@ However, local name collisions with multiple namespaces will yield unpredicted
 results.  That is, if, for example, you have two child elements with the same
 local name but with different namespaces, the result is unpredictable.
 
-## NOT SUPPORTED
+=head2 NOT SUPPORTED
 
 Elements with 'mixed' content are NOT supported.
 
@@ -630,9 +641,9 @@ Substitution groups are NOT supported.
 
 'any' and 'anyAttribute' are NOT supported.
 
-# HOW IT WORKS
+=head1 HOW IT WORKS
 
-The source code of the [generate()](#pod_generate()) method looks like this:
+The source code of the L</generate()> method looks like this:
 
     sub generate {
         my $self = shift;
@@ -649,7 +660,7 @@ The source code of the [generate()](#pod_generate()) method looks like this:
         return $result;
     }
 
-At code generation time, __Corinna__ will first parse the schema(s) into a
+At code generation time, B<Corinna> will first parse the schema(s) into a
 schema model (Corinna::Schema::Model). The model contains all the schema
 information in perl data structures. All the global elements, types,
 attributes, groups, and attribute groups are put into this model.
@@ -660,14 +671,14 @@ your classes are generated according to the given options. In offline mode,
 this phase will write out the generated code onto modules on disk. Otherwise
 it can also 'eval' the generated code for you.
 
-The generated classes will contain class data named '__XmlSchemaType__' (thanks
-to [Class::Data::Inheritable](http://search.cpan.org/perldoc?Class::Data::Inheritable)), which will contain all the schema model
+The generated classes will contain class data named 'B<XmlSchemaType>' (thanks
+to L<Class::Data::Inheritable>), which will contain all the schema model
 information that corresponds to this type. For a complex type, it will contain
 information about child elements and attributes. For a simple type it will
 contain the restriction facets that may exist and so on.
 
 For complex types, the generated classes will also have accessors for the
-attributes and child elements of that type (thanks to [Class::Accessor](http://search.cpan.org/perldoc?Class::Accessor)).
+attributes and child elements of that type (thanks to L<Class::Accessor>).
 However, you can also use direct hash access as the objects are just blessed
 hash references. The fields in the has correspond to attributes and child
 elements of the complex type. You can also store additional non-XML data in
@@ -676,18 +687,18 @@ serialization. This way, your objects can have state information that is not
 stored in XML. Just make sure the names of these fields do not coincide with
 XML attributes and child elements though.
 
-The inheritance of classes are also managed by __Corinna__ for you. Complex
+The inheritance of classes are also managed by B<Corinna> for you. Complex
 types that are derived by extension will automatically be a descendant of the
 base class. Same applies to the simple types derived by restriction.  Global
 elements will always be a descendant of some type, which may sometimes be
 implicitely defined. Global elements will have an added ancestor
-[Corinna::Element](http://search.cpan.org/perldoc?Corinna::Element) and will also contain an extra class data accessor
-"__XmlSchemaElement__" which will contain schema information about the model.
+L<Corinna::Element> and will also contain an extra class data accessor
+"B<XmlSchemaElement>" which will contain schema information about the model.
 This class data is currently used mainly to get at the name of the element
 when an object of this class is stored in XML (as ComplexTypes don't have an
 element name).
 
-Then you _use_ the generated modules. If the generation was offline, you
+Then you I<use> the generated modules. If the generation was offline, you
 actually need a 'use' statement. If it was an 'eval', you can start using your
 generated classes immediately. At this time, you can call many methods on the
 generated classes that enable you to create, retrieve and save an object
@@ -697,26 +708,26 @@ automagically created for you on class generation for getting at the fields of
 complex objects.  Since all the schema information is saved as class data, the
 schema is no longer needed at run-time.
 
-# NAMING CONVENTIONS FOR GENERATED CLASSES
+=head1 NAMING CONVENTIONS FOR GENERATED CLASSES
 
 The generated classes will all be prefixed by the string given by the
-[class_prefix](#pod_class_prefix) parameter. The rest of this section assumes that
-[class_prefix](#pod_class_prefix) is "__MyApp::Data__".
+L</class_prefix> parameter. The rest of this section assumes that
+L</class_prefix> is "B<MyApp::Data>".
 
 Classes that correspond to global elements will keep the name of the element.
-For example, if there is an element called '__country__' in the schema, the
-corresponding clas will have the name '__MyApp::Data::country__'. Note that no
+For example, if there is an element called 'B<country>' in the schema, the
+corresponding clas will have the name 'B<MyApp::Data::country>'. Note that no
 change in case occurs.
 
 Classes that correspond to global complex and simple types will be put under
-the '__Type__' subtree. For example, if there is a complex type called
-'__City__' in the XSD schema, the corresponding class will be called
-'__MyApp::Data::Type::City__'. Note that no change in case occurs.
+the 'B<Type>' subtree. For example, if there is a complex type called
+'B<City>' in the XSD schema, the corresponding class will be called
+'B<MyApp::Data::Type::City>'. Note that no change in case occurs.
 
-Implicit types (that is, types that are defined _inline_ in the schema) will
+Implicit types (that is, types that are defined I<inline> in the schema) will
 have auto-generated names within the 'Type' subtree. For example, if the
-'__population__' element within '__City__' is defined by an implicit type,  its
-corresponding class will be '__MyApp::Data::Type::City_population__'.
+'B<population>' element within 'B<City>' is defined by an implicit type,  its
+corresponding class will be 'B<MyApp::Data::Type::City_population>'.
 
 Sometimes implicit types need more to disambiguate their names. In that case,
 an auto-incremented sequence is used to generate the class names.
@@ -726,8 +737,7 @@ naming convention for those may change. In other words, do not reference these
 classes by their names in your program. You have been warned.
 
 
-
-# SUGGESTED NAMING CONVENTIONS FOR XML TYPES, ELEMENTS AND ATTRIBUTES IN W3C SCHEMAS
+=head1 SUGGESTED NAMING CONVENTIONS FOR XML TYPES, ELEMENTS AND ATTRIBUTES IN W3C SCHEMAS
 
 Sometimes you will be forced to use a W3C schema defined by someone else. In
 that case, you will not have a choice for the names of types, elements, and
@@ -736,46 +746,48 @@ attributes defined in the schema.
 But most often, you will be the one who defines the W3C schema itself. So you
 will have full power over the names within.
 
-As mentioned earlier, __Corinna__ will generate accesor methods for the child
+As mentioned earlier, B<Corinna> will generate accesor methods for the child
 elements and attributes of each class. The attribute names will be prefixed by
 an underscore in the hash. Attribute accessors will have an underscore prefix,
 too. However, accessor aliases will be generated without the underscore prefix
 for those attributes whose names don't clash with child element names.  '
-Since there exist some utility methods defined under [Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType)
-and [Corinna::SimpleType](http://search.cpan.org/perldoc?Corinna::SimpleType) that are the ancestors of all the generated classes
+Since there exist some utility methods defined under L<Corinna::ComplexType>
+and L<Corinna::SimpleType> that are the ancestors of all the generated classes
 from your schema there is a risk of name collisions.  Below is a list of
 suggestions that will ensure that there are no name collisions within your
 schema and with the defined methods.
 
-- Element and attribute names should start with lower case
+=over
+
+=item Element and attribute names should start with lower case
 
 Element ant attribute names (incuding global ones) should start with lower
 case and be uppercased at word boundries. Example : "firstName", "lastName".
 Do not use underscore to separate words as this may open up a possibility for
 name collisions of accessors with the names of utility methods defined under
-[Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType) and [Corinna::SimpleType](http://search.cpan.org/perldoc?Corinna::SimpleType).
+L<Corinna::ComplexType> and L<Corinna::SimpleType>.
 
-- Element and attribute names should not coincide with builtin method names of [Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType)
+=item Element and attribute names should not coincide with builtin method names of L<Corinna::ComplexType>
 
 Element ant attribute names (incuding global ones) should not coincide with
-builtin method names defined under [Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType) as this will cause
+builtin method names defined under L<Corinna::ComplexType> as this will cause
 a name collision with the generated accessor method. Extra care should be
-taken for the methods called '__get__', '__set__', and '__grab__' as these are
-one-word builtin method names. Same goes for '__isa__' and '__can__' that come
-from Perl's __UNIVERSAL__ package. Multiple word method names should not
+taken for the methods called 'B<get>', 'B<set>', and 'B<grab>' as these are
+one-word builtin method names. Same goes for 'B<isa>' and 'B<can>' that come
+from Perl's B<UNIVERSAL> package. Multiple word method names should not
 normally cause trouble if you abide by the principle of not using underscore
 for separating words in element and attribute names. See
-[Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType) for the names of other builtin methods for the
+L<Corinna::ComplexType> for the names of other builtin methods for the
 generated classes.
 
-- Global complex and simple types should start with upper case
+=item Global complex and simple types should start with upper case
 
 The names of global types (complex and simple) should start with an upper case
 and continue with lower case. Word boundries should be uppercased. This
-resembles the package name convention in Perl.  Example : '__City__',
-'__Country__', '__CountryCode__'.
+resembles the package name convention in Perl.  Example : 'B<City>',
+'B<Country>', 'B<CountryCode>'.
 
-- Avoid child Elements and attributes with the same name, if you can
+=item Avoid child Elements and attributes with the same name, if you can
 
 Try not to use the same name for an attribute and a child element of the same
 complex type or element within your schema. For instance, if you have an
@@ -789,9 +801,11 @@ underscore prefix for those attributes whose names don't clash with child
 element names. So, if there is no clash, old code should continue to work as
 long as it used accessors to get at the value.
 
+=back
+
 You are free to name global groups and attribute groups to your liking.
 
-# BUGS & CAVEATS
+=head1 BUGS & CAVEATS
 
 There no known bugs at this time, but this doesn't mean there are aren't any.
 Note that, although some testing was done prior to releasing the module, this
@@ -799,7 +813,9 @@ should still be considered alpha code.  So use it at your own risk.
 
 There are known limitations however:
 
-- Namespaces
+=over
+
+=item * Namespaces
 
 Namespaces are quite well supported now (since version 0.6.3). Multiple
 namespaces are OK.
@@ -808,49 +824,50 @@ However, local name collisions with multiple namespaces will yield unpredicted
 results.  That is, if, for example, you have two child elements with the same
 local name but with different namespaces, the result is unpredictable.
 
-- 'mixed' elements
+=item * 'mixed' elements
 
 Elements with 'mixed' content (text and child elements) are not supported at
 this time.
 
-- substitution groups
+=item * substitution groups
 
 Substitution groups are not supported at this time.
 
-- Encoding
+=item * Encoding
 
-Only the __UTF-8__ encoding is -officially- supported. You should make sure
+Only the B<UTF-8> encoding is -officially- supported. You should make sure
 that your data is in UTF-8 format. It may be possible to read and write XML
 from other encodings.  But this feature is experimental and not tested at this
 time.
 
-- Default values for attributes
+=item * Default values for attributes
 
 Default values for attributes are not supported at this time. If you can think
 of a simple way to support this, please let me know.
 
+=back
+
 Note that there may be other bugs or limitations that the author is not aware of.
 
-# AUTHOR
+=head1 AUTHOR
 
 Curtis "Ovid" Poe. Ayhan did great work on this, but patches have been in the
 queue for years and this nice idea stalled, so I'm forking and picking it up
 again.
 
-# AUTHOR EMERITUS
+=head1 AUTHOR EMERITUS
 
 Ayhan Ulusoy <dev(at)ulusoy(dot)name>
 
 
-
-# COPYRIGHT
+=head1 COPYRIGHT
 
   Copyright (C) 2006-2008 Ayhan Ulusoy. All Rights Reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
-# DISCLAIMER
+=head1 DISCLAIMER
 
 BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE
 SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN OTHERWISE
@@ -871,9 +888,13 @@ THIRD PARTIES OR A FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER
 SOFTWARE), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGES.
 
-# SEE ALSO
+=head1 SEE ALSO
 
-See also [pastorize](http://search.cpan.org/perldoc?pastorize), [Corinna::ComplexType](http://search.cpan.org/perldoc?Corinna::ComplexType), [Corinna::SimpleType](http://search.cpan.org/perldoc?Corinna::SimpleType)
+See also L<pastorize>, L<Corinna::ComplexType>, L<Corinna::SimpleType>
 
 If you are curious about the implementation, see also
-[Corinna::Schema::Parser](http://search.cpan.org/perldoc?Corinna::Schema::Parser), [Corinna::Schema::Model](http://search.cpan.org/perldoc?Corinna::Schema::Model), [Corinna::Generator](http://search.cpan.org/perldoc?Corinna::Generator).
+L<Corinna::Schema::Parser>, L<Corinna::Schema::Model>, L<Corinna::Generator>.
+
+=cut
+
+1;
