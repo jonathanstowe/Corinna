@@ -18,11 +18,12 @@ Corinna::Type->mk_classdata('XmlSchemaType');
 Corinna::Type->mk_accessors(qw(__value));
 
 use overload
-  '""'   => \&stringify,
-  '0+'   => \&numify,
-  'bool' => \&boolify,
-  '<=>'  => \&num_cmp,
-  'cmp'  => \&str_cmp;
+  '""'     => 'stringify',
+  '0+'     => 'numify',
+  'bool'   => 'boolify',
+  '<=>'    => 'num_cmp',
+  'cmp'    => 'str_cmp',
+  fallback => 1;
 
 #----------------------------------------------
 # Accepts a single parameter or a hash.

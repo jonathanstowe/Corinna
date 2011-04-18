@@ -9,8 +9,6 @@ use Corinna::Builtin::Scalar;
 
 our @ISA = qw(Corinna::Builtin::Scalar);
 
-use overload 'bool' => \&boolify;
-
 Corinna::Builtin::boolean->XmlSchemaType(
     bless(
         {
