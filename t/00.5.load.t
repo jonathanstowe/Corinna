@@ -1,4 +1,7 @@
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
-BEGIN { use_ok('Corinna') or BAIL_OUT "Could not load Corinna"; }
+BEGIN {
+    use_ok('Corinna')            or BAIL_OUT "Could not load Corinna";
+    use_ok('Corinna::Pastorize') or BAIL_OUT "Could not load Corinna::Pastorize";
+}

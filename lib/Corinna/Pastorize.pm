@@ -22,7 +22,7 @@ $VERSION = '1.0.1';
 # METHOD
 #-------------------------------------------------------------
 sub new {
-    my $self = shift;
+    my $class = shift;
     my $self  = {@_};
     return bless $self, $class;
 }
@@ -36,7 +36,7 @@ sub run ($;@) {
 
     $opts->{class_prefix} ||= 'MyApp::Data::';         # should override
     $opts->{destination}  ||= '/tmp/lib/perl/';        # should override
-    $opts->{mode}         ||= 'eval';
+    $opts->{mode}         ||= 'offline';
     $opts->{module}       ||= $opts->{class_prefix};
     $opts->{style}        ||= 'single';
     $opts->{schema}  ||= [];    # Will get it from @ARGV (multiple OK)
