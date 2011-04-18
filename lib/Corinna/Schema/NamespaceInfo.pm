@@ -63,13 +63,10 @@ B<CONSTRUCTOR>, inherited.
 
 The new() constructor method instantiates a new object. It is inheritable.
 
-Any -named- fields that are passed as parameters are initialized to those values within
-the newly created object.
-
-.
+Any -named- fields that are passed as parameters are initialized to those
+values within the newly created object.
 
 =head2 ACCESSORS
-
 
 =head3 Accessors defined here
 
@@ -101,28 +98,25 @@ The class prefix that will be used in conjunction with this target namespace.
 
 An identifier, local to the schema model, of this namespace.
 
-.
-
 =head1 BUGS & CAVEATS
 
 There no known bugs at this time, but this doesn't mean there are aren't any.
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
-So use it at your own risk.
+Note that, although some testing was done prior to releasing the module, this
+should still be considered alpha code.  So use it at your own risk.
 
-Note that there may be other bugs or limitations that the author is not aware of.
+Note that there may be other bugs or limitations that the author is not aware
+of.
 
 =head1 AUTHOR
 
 Ayhan Ulusoy <dev(at)ulusoy(dot)name>
 
-
 =head1 COPYRIGHT
 
   Copyright (C) 2006-2008 Ayhan Ulusoy. All Rights Reserved.
 
-This module is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =head1 SEE ALSO
 

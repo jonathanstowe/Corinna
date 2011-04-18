@@ -733,9 +733,11 @@ B<Corinna::Builtin> - Module that includes definitions of all L<Corinna> B<W3C b
 
 =head1 WARNING
 
-This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is
-documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in
-any of the subsequent releases. You have been warned.
+This module is used internally by L<Corinna>. You do not normally know much
+about this module to actually use L<Corinna>.  It is documented here for
+completeness and for L<Corinna> developers. Do not count on the interface of
+this module. It may change in any of the subsequent releases. You have been
+warned.
 
 =head1 SYNOPSIS
 
@@ -743,62 +745,79 @@ any of the subsequent releases. You have been warned.
 
 =head1 DESCRIPTION
 
-B<Corinna::Builtin> is a module that includes the definitions of the classes that represent
-the W3C B<builtin> simple types. These builtin packages are either directly defined here in this
-module or otherwise they are I<use>d by this module so that you don't have to I<use> them in
-your program once you I<use> this module.
+B<Corinna::Builtin> is a module that includes the definitions of the classes
+that represent the W3C B<builtin> simple types. These builtin packages are
+either directly defined here in this module or otherwise they are I<use>d by
+this module so that you don't have to I<use> them in your program once you
+I<use> this module.
 
-Each builtin type corresponds to a package. So this module defines multiple packages at once.
-In each of the packages, the B<XmlSchemaType> class data accessor is set with an object of
-type L<Corinna::Schema::SimpleType>. This object contains the W3C facets that are used during xml validation,
-such as pattern, minInclusive, and so on. An internal I<facet> called I<regex> (not defined by W3C) is used to give
-the regex patterns that correspond to the B<builtin> types. The I<regex> facet will be guaranteed to be a Perl regex
-while the I<pattern> facet (W3C) may divert from Perl regular expressions although they seem identical to me at this time.
+Each builtin type corresponds to a package. So this module defines multiple
+packages at once.  In each of the packages, the B<XmlSchemaType> class data
+accessor is set with an object of type L<Corinna::Schema::SimpleType>. This
+object contains the W3C facets that are used during xml validation, such as
+pattern, minInclusive, and so on. An internal I<facet> called I<regex> (not
+defined by W3C) is used to give the regex patterns that correspond to the
+B<builtin> types. The I<regex> facet will be guaranteed to be a Perl regex
+while the I<pattern> facet (W3C) may divert from Perl regular expressions
+although they seem identical to me at this time.
 
-All B<builtin> classes descend from L<Corinna::Builtin::SimpleType> which itself descends from
-L<Corinna::SimpleType>.
+All B<builtin> classes descend from L<Corinna::Builtin::SimpleType> which
+itself descends from L<Corinna::SimpleType>.
 
-There exist some ancestors for groupings of B<builtin> types. For example, all numeric builtin types descend directly or
-indirecly from L<Corinna::Builtin::Numeric>.
+There exist some ancestors for groupings of B<builtin> types. For example, all
+numeric builtin types descend directly or indirecly from
+L<Corinna::Builtin::Numeric>.
 
 Such groupings are listed below:
 
 =over
 
-=item * L<Corinna::Builtin::List> : List types such as B<NMTOKENS>
+=item * L<Corinna::Builtin::List>
 
-=item * L<Corinna::Builtin::Numeric> : Numeric types such as B<integer>
+List types such as B<NMTOKENS>
 
-=item * L<Corinna::Builtin::Scalar> : All scalar and numeric types including such as B<string>
+=item * L<Corinna::Builtin::Numeric>
 
-=item * L<Corinna::Builtin::Union> : Union types
+Numeric types such as B<integer>
+
+=item * L<Corinna::Builtin::Scalar>
+
+All scalar and numeric types including such as B<string>
+
+=item * L<Corinna::Builtin::Union>
+
+Union types
 
 =back
 
-
 =head1 EXAMPLE
 
-Below is an example of how the B<double> type is defined in the B<Corinna::Builtin::double> package.
+Below is an example of how the B<double> type is defined in the
+B<Corinna::Builtin::double> package.
 
-  package Corinna::Builtin::double;
-  our @ISA = qw(Corinna::Builtin::Numeric);
+    package Corinna::Builtin::double;
+    our @ISA = qw(Corinna::Builtin::Numeric);
 
-  Corinna::Builtin::double->XmlSchemaType( bless( {
-                'class' => 'Corinna::Builtin::double',
+    Corinna::Builtin::double->XmlSchemaType(
+        bless(
+            {
+                'class'       => 'Corinna::Builtin::double',
                 'contentType' => 'simple',
-                 'derivedBy' => 'restriction',
-                 'name' => 'double|http://www.w3.org/2001/XMLSchema',
+                'derivedBy'   => 'restriction',
+                'name'        => 'double|http://www.w3.org/2001/XMLSchema',
 
-                 # Regex shamelessly copied from XML::Validator::Schema by Sam Tregar
-                 'regex' => qr/^[+-]?(?:(?:INF)|(?:NaN)|(?:\d+(?:\.\d+)?)(?:[eE][+-]?\d+)?)$/,
-               }, 'Corinna::Schema::SimpleType' ) );
-
-
+                # Regex shamelessly copied from XML::Validator::Schema by Sam Tregar
+                'regex' =>
+                  qr/^[+-]?(?:(?:INF)|(?:NaN)|(?:\d+(?:\.\d+)?)(?:[eE][+-]?\d+)?)$/,
+            },
+            'Corinna::Schema::SimpleType'
+        )
+    );
 
 =head1 BUILTIN TYPES
 
-Below is a list of W3C B<builtin> types defined either directly in this module, or I<use>d by it (and so
-made available through it).
+Below is a list of W3C B<builtin> types defined either directly in this
+module, or I<use>d by it (and so made available through it).
 
 =over
 
@@ -892,25 +911,19 @@ made available through it).
 
 =item * B<unsignedShort> defined here in package Corinna::Builtin::unsignedShort;
 
-
 =back
-
-
-
 
 =head1 BUGS & CAVEATS
 
 There no known bugs at this time, but this doesn't mean there are aren't any.
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
-So use it at your own risk.
+Note that, although some testing was done prior to releasing the module, this
+should still be considered alpha code.  So use it at your own risk.
 
 Note that there may be other bugs or limitations that the author is not aware of.
 
 =head1 AUTHOR
 
 Ayhan Ulusoy <dev(at)ulusoy(dot)name>
-
-
 
 =head1 COPYRIGHT
 
@@ -919,7 +932,6 @@ Ayhan Ulusoy <dev(at)ulusoy(dot)name>
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
-
 =head1 SEE ALSO
 
 See also L<Corinna>, L<Corinna::ComplexType>, L<Corinna::SimpleType>
@@ -927,9 +939,10 @@ See also L<Corinna>, L<Corinna::ComplexType>, L<Corinna::SimpleType>
 If you are curious about the implementation, see L<Corinna::Schema::Parser>,
 L<Corinna::Schema::Model>, L<Corinna::Generator>.
 
-If you really want to dig in, see L<Corinna::Schema::Attribute>, L<Corinna::Schema::AttributeGroup>,
-L<Corinna::Schema::ComplexType>, L<Corinna::Schema::Element>, L<Corinna::Schema::Group>,
-L<Corinna::Schema::List>, L<Corinna::Schema::SimpleType>, L<Corinna::Schema::Type>,
-L<Corinna::Schema::Object>
+If you really want to dig in, see L<Corinna::Schema::Attribute>,
+L<Corinna::Schema::AttributeGroup>, L<Corinna::Schema::ComplexType>,
+L<Corinna::Schema::Element>, L<Corinna::Schema::Group>,
+L<Corinna::Schema::List>, L<Corinna::Schema::SimpleType>,
+L<Corinna::Schema::Type>, L<Corinna::Schema::Object>
 
 =cut

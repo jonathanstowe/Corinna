@@ -640,9 +640,11 @@ B<Corinna::Generator> - Module used internally by L<Corinna> for generating Perl
 
 =head1 WARNING
 
-This module is used internally by L<Corinna>. You do not normally know much about this module to actually use L<Corinna>.  It is
-documented here for completeness and for L<Corinna> developers. Do not count on the interface of this module. It may change in
-any of the subsequent releases. You have been warned.
+This module is used internally by L<Corinna>. You do not normally know much
+about this module to actually use L<Corinna>.  It is documented here for
+completeness and for L<Corinna> developers. Do not count on the interface of
+this module. It may change in any of the subsequent releases. You have been
+warned.
 
 =head1 ISA
 
@@ -650,33 +652,37 @@ This class descends from L<Class::Accessor>.
 
 =head1 SYNOPSIS
 
-  my $parser = Corinna::Schema::Parser->new();
+    my $parser    = Corinna::Schema::Parser->new();
+    my $model     = $parser->parse( schema => '/tmp/schema.xsd' );
+    my $generator = Corinna::Generator->new();
 
-  my $model = $parser->parse(schema => '/tmp/schema.xsd');
-
-  my $generator = Corinna::Generator->new();
-
-  $generator->generate (
-                        model => $model,
-                        mode => 'offline',
-                        style => 'multiple'
-                        );
-
+    $generator->generate(
+        model => $model,
+        mode  => 'offline',
+        style => 'multiple'
+    );
 
 =head1 DESCRIPTION
 
-B<Corinna::Generator> is used internally by L<Corinna> for generating Perl code from a schema model (L<Corinna::Schema::Model>) that was produced by
+B<Corinna::Generator> is used internally by L<Corinna> for generating Perl
+code from a schema model (L<Corinna::Schema::Model>) that was produced by
 L<Corinna::Schema::Parser> and properly I<resolve>d prior to code generation.
 
-In 'I<offline>'  mode, it is possible to generate a single module with all the generated clasess or multiple modules
-one for each class. The typical use of the offline mode is during a 'make' process, where you have a set of XSD schemas and you
-generate your modules to be later installed by the 'make install'. This is very similar to Java Castor's behaviour.
-This way your XSD schemas don't have to be accessible during run-time and you don't have a performance penalty.
+In 'I<offline>'  mode, it is possible to generate a single module with all the
+generated clasess or multiple modules one for each class. The typical use of
+the offline mode is during a 'make' process, where you have a set of XSD
+schemas and you generate your modules to be later installed by the 'make
+install'. This is very similar to Java Castor's behaviour.  This way your XSD
+schemas don't have to be accessible during run-time and you don't have a
+performance penalty.
 
-Perl philosophy dictates however, that There Is More Than One Way To Do It. In 'I<eval>' (run-time) mode, the XSD schema is processed at
-run-time giving much more flexibility to the user. This added flexibility has a price on the other hand, namely a performance penalty and
-the fact that the XSD schema needs to be accessible at run-time. Note that the performance penalty applies only to the code genereration (pastorize) phase;
-the generated classes perform the same as if they were generated offline.
+Perl philosophy dictates however, that There Is More Than One Way To Do It. In
+'I<eval>' (run-time) mode, the XSD schema is processed at run-time giving much
+more flexibility to the user. This added flexibility has a price on the other
+hand, namely a performance penalty and the fact that the XSD schema needs to
+be accessible at run-time. Note that the performance penalty applies only to
+the code genereration (pastorize) phase; the generated classes perform the
+same as if they were generated offline.
 
 =head1 METHODS
 
@@ -688,12 +694,11 @@ the generated classes perform the same as if they were generated offline.
 
 B<CONSTRUCTOR>.
 
-The new() constructor method instantiates a new B<Corinna::Genertor> object. It is inheritable.
+The new() constructor method instantiates a new B<Corinna::Genertor> object.
+It is inheritable.
 
-Any -named- fields that are passed as parameters are initialized to those values within
-the newly created object.
-
-.
+Any -named- fields that are passed as parameters are initialized to those
+values within the newly created object.
 
 =head2 OTHER METHODS
 
@@ -701,15 +706,20 @@ the newly created object.
 
     $generator->generate(%options);
 
-This is the heart of the module. This method will generate Perl code (either in a single module or multiple modules) and
-either write the code to module file(s) on disk or evaluate the generated code according to the parameters passed.
+This is the heart of the module. This method will generate Perl code (either
+in a single module or multiple modules) and either write the code to module
+file(s) on disk or evaluate the generated code according to the parameters
+passed.
 
-The Perl code will be generated from the B<model> (L<Corinna::Schema::Model>) that is passed as an argument. All the
-I<type> and I<element> definitions found in the model will have a corresponding generated Perl class.
+The Perl code will be generated from the B<model> (L<Corinna::Schema::Model>)
+that is passed as an argument. All the I<type> and I<element> definitions
+found in the model will have a corresponding generated Perl class.
 
-In L</offline> mode, the generated classes will either all be put in one L</single> big code block, or
-in L</multiple> module files (one for each class) depending on the L</style> parameter. Again in L</offline> mode, the
-generated modules will be written to disk under the directory prefix given by the L</destination> parameter.
+In L</offline> mode, the generated classes will either all be put in one
+L</single> big code block, or in L</multiple> module files (one for each
+class) depending on the L</style> parameter. Again in L</offline> mode, the
+generated modules will be written to disk under the directory prefix given by
+the L</destination> parameter.
 
 B<OPTIONS>
 
@@ -719,14 +729,16 @@ This method expects the following parameters:
 
 =item model
 
-This is an object of type L<Corinna::Schema::Model> that corresponds to the internal representation (info set)
-of the parsed schemas. The model must have been previously I<resolve>d (see L<Corinna::Schema::Model/resolve()>)
-before being passed to this method.
+This is an object of type L<Corinna::Schema::Model> that corresponds to the
+internal representation (info set) of the parsed schemas. The model must have
+been previously I<resolve>d (see L<Corinna::Schema::Model/resolve()>) before
+being passed to this method.
 
 =item mode
 
-This parameter effects what actuallly will be done by the method. Either offline code generation, or run-time
-code evaluation, or just returning the generated code.
+This parameter effects what actuallly will be done by the method. Either
+offline code generation, or run-time code evaluation, or just returning the
+generated code.
 
 =over
 
@@ -734,60 +746,72 @@ code evaluation, or just returning the generated code.
 
 B<Default>.
 
-In this mode, the code generation is done 'offline', that is, similar to Java's Castor way of doing things, the generated code
-will be written to disk on module files under the path given by the L</destination> parameter.
+In this mode, the code generation is done 'offline', that is, similar to
+Java's Castor way of doing things, the generated code will be written to disk
+on module files under the path given by the L</destination> parameter.
 
-In 'I<offline>'  mode, it is possible to generate a single module with all the generated clasess or multiple modules
-one for each class, depending on the value of the L</style> parameter.
+In 'I<offline>'  mode, it is possible to generate a single module with all the
+generated clasess or multiple modules one for each class, depending on the
+value of the L</style> parameter.
 
-The typical use of the I<offline> mode is during a 'B<make>' process, where you have a set of XSD schemas and you
-generate your modules to be later installed by 'B<make install>'. This is very similar to Java Castor's behaviour.
-This way your XSD schemas don't have to be accessible during run-time and you don't have a performance penalty.
+The typical use of the I<offline> mode is during a 'B<make>' process, where
+you have a set of XSD schemas and you generate your modules to be later
+installed by 'B<make install>'. This is very similar to Java Castor's
+behaviour.  This way your XSD schemas don't have to be accessible during
+run-time and you don't have a performance penalty.
 
-  # Generate MULTIPLE modules, one module for each class, and put them under destination.
-  my $generator = Corinna::Generator->new();
-  $generator->generate(
-            mode =>'offline',
-            style => 'multiple',
-            model=>$model,
-            destination=>'/tmp/lib/perl/',
-            );
+    # Generate MULTIPLE modules, one module for each class, and put them under destination.
+    my $generator = Corinna::Generator->new();
+    $generator->generate(
+        mode        => 'offline',
+        style       => 'multiple',
+        model       => $model,
+        destination => '/tmp/lib/perl/',
+    );
 
 =item eval
 
-In 'I<eval>' (run-time) mode, the XSD schema is processed at
-run-time giving much more flexibility to the user. In this mode, no code will be written to disk. Instead, the generated code
-(which is necessarily a L</single> block) will be evaluated before returning to the caller.
+In 'I<eval>' (run-time) mode, the XSD schema is processed at run-time giving
+much more flexibility to the user. In this mode, no code will be written to
+disk. Instead, the generated code (which is necessarily a L</single> block)
+will be evaluated before returning to the caller.
 
-The added flexibility has a price on the other hand, namely a performance penalty and
-the fact that the XSD schema needs to be accessible at run-time. Note that the performance penalty applies only to the code genereration (pastorize) phase;
-the generated classes perform the same as if they were generated offline.
+The added flexibility has a price on the other hand, namely a performance
+penalty and the fact that the XSD schema needs to be accessible at run-time.
+Note that the performance penalty applies only to the code genereration
+(pastorize) phase; the generated classes perform the same as if they were
+generated offline.
 
-Note that 'I<eval>' mode forces the L</style> parameter to have a value of 'I<single>';
+Note that 'I<eval>' mode forces the L</style> parameter to have a value of
+'I<single>';
 
-  # Generate classes in MEMORY, and EVALUATE the generated code on the fly.
-  my $generator = Corinna::Generator->new();
-  $pastor->generate(
-            mode =>'eval',
-            model=>$model,
-            );
+    # Generate classes in MEMORY, and EVALUATE the generated code on the fly.
+    my $generator = Corinna::Generator->new();
+    $pastor->generate(
+        mode  => 'eval',
+        model => $model,
+    );
 
 =item return
 
-In 'I<return>'  mode, the XSD schema is processed but no code is written to disk or evaluated. In this mode, the method
-just returns the generated block of code as a string, so that you may use it to your liking. You would typically be evaluating
-it though.
+In 'I<return>'  mode, the XSD schema is processed but no code is written to
+disk or evaluated. In this mode, the method just returns the generated block
+of code as a string, so that you may use it to your liking. You would
+typically be evaluating it though.
 
-Note that 'I<return>' mode forces the L</style> parameter to have a value of 'I<single>';
+Note that 'I<return>' mode forces the L</style> parameter to have a value of
+'I<single>';
 
 =back
 
 =item style
 
-This parameter determines if L<Corinna> will generate a single module where all classes reside (L</single>), or
-multiple modules one for each class (L</multiple>).
+This parameter determines if L<Corinna> will generate a single module where
+all classes reside (L</single>), or multiple modules one for each class
+(L</multiple>).
 
-Some modes (such as L</eval> and L</return>)force the style argument to be 'I<single>'.
+Some modes (such as L</eval> and L</return>)force the style argument to be
+'I<single>'.
 
 Possible values are :
 
@@ -803,50 +827,49 @@ A separate piece of code for each class will be produced.
 
 =back
 
-
 =item destination
 
-This is the directory prefix where the produced modules will be written in I<offline> mode. In other modes (I<eval> and I<return>), it is ignored.
+This is the directory prefix where the produced modules will be written in
+I<offline> mode. In other modes (I<eval> and I<return>), it is ignored.
 
-Note that the trailing slash ('/') is optional. The default value for this parameter is '/tmp/lib/perl/'.
+Note that the trailing slash ('/') is optional. The default value for this
+parameter is '/tmp/lib/perl/'.
 
 =item module
 
-This parameter has sense only when generating one big chunk of code (L</style> => L</single>) in offline L</mode>.
+This parameter has sense only when generating one big chunk of code (L</style>
+=> L</single>) in offline L</mode>.
 
-It denotes the name of the module (without the .pm extension) that will be written to disk in this case.
-
+It denotes the name of the module (without the .pm extension) that will be
+written to disk in this case.
 
 =back
-
-
-.
 
 =head1 BUGS & CAVEATS
 
 There no known bugs at this time, but this doesn't mean there are aren't any.
-Note that, although some testing was done prior to releasing the module, this should still be considered alpha code.
-So use it at your own risk.
+Note that, although some testing was done prior to releasing the module, this
+should still be considered alpha code.  So use it at your own risk.
 
-Note that there may be other bugs or limitations that the author is not aware of.
+Note that there may be other bugs or limitations that the author is not aware
+of.
 
 =head1 AUTHOR
 
 Ayhan Ulusoy <dev(at)ulusoy(dot)name>
 
-
 =head1 COPYRIGHT
 
   Copyright (C) 2006-2007 Ayhan Ulusoy. All Rights Reserved.
 
-This module is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =head1 SEE ALSO
 
 See also L<Corinna>, L<Corinna::ComplexType>, L<Corinna::SimpleType>
 
-And if you are curious about the implementation, see L<Corinna::Schema::Parser>, L<Corinna::Schema::Model>
+And if you are curious about the implementation, see
+L<Corinna::Schema::Parser>, L<Corinna::Schema::Model>
 
 =cut

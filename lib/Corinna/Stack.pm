@@ -88,9 +88,11 @@ warned.
 
 Quite simple, really.  Just a stack implemented via an array.
 
-This module is a blunt copy of the L<Data::Stack> module. I had originally intended to use that module
-but it turns out that it -superflously- requires perl 5.8.6 to build and I only had perl 5.8.4 on my system
-with no means to upgrade. So that's why I had to copy all the code in L<Data::Stack> into this otherwise needless module.
+This module is a blunt copy of the L<Data::Stack> module. I had originally
+intended to use that module but it turns out that it -superflously- requires
+perl 5.8.6 to build and I only had perl 5.8.4 on my system with no means to
+upgrade. So that's why I had to copy all the code in L<Data::Stack> into this
+otherwise needless module.
 
 =head1 METHODS
 
@@ -98,7 +100,8 @@ with no means to upgrade. So that's why I had to copy all the code in L<Data::St
 
 =item new( [ @ITEMS ] )
 
-Creates a new Corinna::Stack.  If passed an array, those items are added to the stack.
+Creates a new Corinna::Stack.  If passed an array, those items are added to
+the stack.
 
 =item peek()
 
@@ -106,7 +109,8 @@ Returns the item at the top of the stack but does not remove it.
 
 =item get($INDEX)
 
-Returns the item at position $INDEX in the stack but does not remove it.  0 based.
+Returns the item at position $INDEX in the stack but does not remove it.  0
+based.
 
 =item count()
 
@@ -136,19 +140,21 @@ None by default.
 
 =head1 SEE ALSO
 
-There are various Stack packages out there but none of them seemed simple enough. Here we are!
+There are various Stack packages out there but none of them seemed simple
+enough. Here we are!
 
 =head1 AUTHOR
 
 Ayhan Ulusoy <dev(at)ulusoy(dot)name>
 
-The author of the original module L<Data::Stack> is: Cory Watson, E<lt>cpan@onemogin.comE<gt>
+The author of the original module L<Data::Stack> is: Cory Watson,
+E<lt>cpan@onemogin.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
   Copyright (C) 2006-2007 by Ayhan Ulusoy. (A shame, as the code is copied from Data::Stack by Cory Watson)
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+This library is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =cut
