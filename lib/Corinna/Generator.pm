@@ -626,6 +626,7 @@ sub _write_code {
     my $handle = IO::File->new( $file, "w" )
       or die "Pastor : Generator : _write_code : Can't open file : $file\n";
 
+    $handle->binmode(':utf8');
     print $handle $code;
     $handle->close();
 }
