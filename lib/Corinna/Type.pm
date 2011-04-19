@@ -838,14 +838,14 @@ sub to_xml_dom {
         foreach my $elemName (@$elements) {
             my $value = $self->{$elemName};
             next unless defined($value);
-            $value = [$value] unless ( reftype($value) eq 'ARRAY' );
+            $value = [$value] unless ( ref($value) && reftype($value) eq 'ARRAY' );
             my $element = $elementInfo->{$elemName};
 
             foreach my $item (@$value) {
                 my $obj   = $item;
                 my $class = $element->class;
                 if ( !UNIVERSAL::can( $item, "to_xml_dom" ) ) {
-                    if ( ( reftype($item) eq 'HASH' )
+                    if ( ( ref($item) && reftype($item) eq 'HASH' )
                         && UNIVERSAL::isa( $class, "Corinna::ComplexType" ) )
                     {
 
