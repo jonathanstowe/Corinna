@@ -596,29 +596,33 @@ sub _type_to_class {
     my $typePfx   = $isNonType ? "" : "Type::";
     my $verbose   = 0;
 
-    return undef unless ( defined($type) );
+    my $retval;
 
     my $class_prefix = $opts->{class_prefix} || "";
+
     while ( ($class_prefix) && ( $class_prefix !~ /::$/ ) ) {
         $class_prefix .= ':';
     }
 
     my $builtin_prefix = "Corinna::Builtin::";
-    if ( ( $type =~ /^Union$/i ) || ( $type =~ /^List$/i ) ) {
-
-        # This one is put by the parser. So we don't have a URI for it.
-        return $builtin_prefix . ucfirst($type);
-    }
-    elsif ( !$type ) {
+    if ( !$type ) {
 
         # No type declaration, assume string
-        return $builtin_prefix . "string";
+        # TODO:
+        # this should actually be anyType for an element
+        # or anySimpleType for a attribute
+        $retval = $builtin_prefix . "string";
+    }
+    elsif ( ( $type =~ /^Union$/i ) || ( $type =~ /^List$/i ) ) {
+
+        # This one is put by the parser. So we don't have a URI for it.
+        $retval = $builtin_prefix . ucfirst($type);
     }
     elsif ( $type =~ /www.w3.org\/.*\/XMLSchema$/ ) {
 
         # Builtin type
         my ($localType) = split /\|/, $type;
-        return $builtin_prefix . $localType;
+        $retval = $builtin_prefix . $localType;
     }
     elsif ( $type =~ /\|/ ) {
 
@@ -626,13 +630,10 @@ sub _type_to_class {
         my ( $localType, $uri ) = split /\|/, $type;
         my $pfx = $self->namespace_class_prefix($uri);
 
-        my $retval = $class_prefix . $pfx . $typePfx . $localType;
+        $retval = $class_prefix . $pfx . $typePfx . $localType;
         print STDERR "_type_to_class: from '$type'   to    '$retval'\n"
           if ( $verbose >= 9 );
 
-        return $retval;
-
-        #die "Pastor: Namespaces not yet supported!\n";
     }
     else {
 
@@ -642,8 +643,10 @@ sub _type_to_class {
           ? $object->targetNamespace
           : "";
         my $pfx = $uri ? $self->namespace_class_prefix($uri) : "";
-        return $class_prefix . $pfx . $typePfx . $type;
+        $retval =  $class_prefix . $pfx . $typePfx . $type;
     }
+
+    return $retval;
 }
 
 #-------------------------------------------------------

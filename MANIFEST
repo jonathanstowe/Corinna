@@ -40,6 +40,7 @@ lib/Corinna/Stack.pm
 lib/Corinna/Type.pm
 lib/Corinna/Util.pm
 Makefile.PL
+Build.PL
 MANIFEST
 README.pod
 t/00.5.load.t
@@ -54,6 +55,7 @@ t/02.5.instance02_product.t
 t/02.5.instance03_country_import.t
 t/complex_type_bug.t
 t/99_datetime.t
+t/no_type.t
 test/bin/testme.pl
 test/source/bugs/schema/complex_type_from_simple_type.xsd
 test/source/country/schema/common.xsd
@@ -81,5 +83,8 @@ test/source/mathworks/schema/releaseData.xsd
 test/source/mathworks/schema/source.xsd
 test/source/mathworks/xml/mProduct.xml
 test/source/bugs/schema/DateTest.xsd
+test/source/bugs/schema/no_type.xsd
+test/source/bugs/xml/no_type.xml
+
 
 META.yml                                 Module meta-data (added by MakeMaker)

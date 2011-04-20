@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:Test foo="something" xmlns:p="http://www.example.org/no_type">
+     <p:bar />
+</p:Test>
