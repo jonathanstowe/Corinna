@@ -50,7 +50,8 @@ sub get_attribute_hash {
 
     my @attributes = $node->attributes();
     foreach my $attribute (@attributes) {
-        next unless defined $attribute;
+       # not convinced this is necessary
+       # next unless defined $attribute;
         $attribs->{ $attribute->nodeName() } = $attribute->value();
     }
     return $attribs;
@@ -71,7 +72,8 @@ sub get_children_hash_dom {
     my @children =
       grep { UNIVERSAL::isa( $_, "XML::LibXML::Element" ) } $node->childNodes();
     foreach my $child (@children) {
-        next unless defined $child;
+       # this definitely isn't necessary
+       # next unless defined $child;
         my $name = $child->localName();
         unless ( defined( $result->{$name} ) ) {
             $result->{$name} = [];
@@ -111,7 +113,8 @@ sub sprint_xml_element($;$) {
     $s .= _sprint_indent($indent);
     $s .= "<$name ";
     foreach my $attribute (@attributes) {
-        next unless defined $attribute;
+       # pretty certain this isn't needed either
+       # next unless defined $attribute;
         $s .= $attribute->nodeName() . "=\"" . $attribute->value() . "\" ";
     }
     my @children =
@@ -166,12 +169,10 @@ sub module_path {
     my $destination = $args->{destination} || "/tmp/lib/perl/";
 
     # Add a trailing slash if necessary.
-    $destination .= '/' if ( $destination && ( $destination !~ /\/$/ ) );
+    $destination .= '/' if ( $destination !~ /\/$/  );
 
-    # get ride of any trailing columns.
-    while ( $module =~ /:$/ ) {
-        $module =~ s/:$//;
-    }
+    # get ride of any trailing colons.
+    $module =~ s/:+$//;
 
     my $file = $module;
     $file = $destination . $file . '.pm';
@@ -209,8 +210,8 @@ sub validate_time ($$$) {
 
     return 0 if $h != abs int $h;
     return 0 if $m != abs int $m;
-    return 0 unless 0 <= $h and $h <= 23;
-    return 0 unless 0 <= $m and $m <= 59;
+    return 0 unless $h <= 23;  
+    return 0 unless $m <= 59;
     return 0 unless 0 <= $s and $s <= 61;    # Leap seconds can be upto 61!!!
     return 1;
 }

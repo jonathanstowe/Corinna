@@ -32,16 +32,20 @@ my $obj = $class->new();
 
 my $date = DateTime->today();
 
+my $item_class = $obj->xml_field_class('date_test');
+
 eval 
 {
-   my $bd = Corinna::Builtin::date->from_date_time($date);
+   my $bd = $item_class->from_date_time($date);
+   isa_ok($bd, $item_class) ; # actual real bug there
    $obj->date_test($bd);
+   isa_ok($bd->to_date_time(),"DateTime");
 };
 if ($@)
 {
 
    diag $@;
-   # Can't locate object method "value" via package "XML::Pastor::Builtin::date"
+   # Can't locate object method "value" via package "Corinna::Builtin::date"
    fail("setFromDateTime works");
 }
 else

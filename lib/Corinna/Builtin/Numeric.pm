@@ -3,7 +3,17 @@ use utf8;
 use strict;
 use warnings;
 
+use Scalar::Util qw(looks_like_number);
+
 use parent 'Corinna::Builtin::Scalar';
+
+sub xml_validate
+{
+   my ( $self, $path ) = @_;
+
+   return looks_like_number($self->__value()); 
+
+}
 
 1;
 

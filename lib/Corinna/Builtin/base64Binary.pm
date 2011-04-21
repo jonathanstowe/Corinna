@@ -40,7 +40,8 @@ sub set_from_binary($$) {
 #-----------------------------------------------------------------
 sub from_binary($$) {
     my $self = shift->new();
-    return $self->set_from_binary(@_);
+    $self->set_from_binary(@_);
+    return $self;
 }
 
 1;

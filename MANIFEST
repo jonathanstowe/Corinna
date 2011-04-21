@@ -94,7 +94,4 @@ test/source/bugs/schema/base_ns_bug_prefix.xsd
 test/source/w3c/AnnotatedTSSchema.xsd
 test/source/w3c/suite.xml
 test/source/w3c/xml.xsd
-
-
-
 META.yml                                 Module meta-data (added by MakeMaker)

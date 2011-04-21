@@ -44,6 +44,7 @@ sub to_date_time() {
 sub from_date_time($) {
     my $self = shift->new();
     $self->set_from_date_time(shift);
+    return $self;
 }
 
 #--------------------------------------------------------

@@ -67,6 +67,5 @@ if ( $@ )
 }
 else
 {
-
    pass("resolve namespace of restriction base correctly with explicit NS");
 }

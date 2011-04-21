@@ -18,14 +18,23 @@ $pastor->generate(
 
 eval("use lib qw (./test/out/lib/);\nuse Corinna::Test;");
 
-if ($@) {
-    print STDERR "$@\n";
+if ($@) 
+{
+   fail("Generated usable module");
+   diag $@;
+}
+else
+{
+   pass("Generated usable module" );
 }
 
-ok( !$@, "Use generated module" );
-
-#	print STDERR "\nTest OVER baby!\n";
 ok(1);    # survived everything
+
+# be kind rewind
+END
+{
+   rmtree( ['./test/out/lib'] );
+}
 
 1;
 

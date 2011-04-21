@@ -28,7 +28,8 @@ sub set_from_list {
 #-----------------------------------------------------------------
 sub from_list {
     my $self = shift->new();
-    return $self->set_from_list(@_);
+    $self->set_from_list(@_);
+    return $self;
 }
 
 #--------------------------------------------------------------

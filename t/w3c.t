@@ -5,6 +5,8 @@ use_ok('Corinna');
 
 my $pastor = Corinna->new();
 
+eval
+{
 $pastor->generate(
                    mode         => 'eval',
                    schema       => ['./test/source/w3c/AnnotatedTSSchema.xsd'],
@@ -12,8 +14,17 @@ $pastor->generate(
                    destination  => './test/out/lib/',
                    verbose      => 0 
 );
+};
 
-__END__
+if ($@)
+{
+   fail("Can parse the W3C testSuite schema");
+}
+else
+{
+   pass("Can parse the W3C testSuite schema");
+}
+
 my $class = W3C::Test::Pastor::Meta->Model->xml_item_class('testSuite');
 
 my $obj;
