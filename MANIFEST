@@ -56,6 +56,9 @@ t/02.5.instance03_country_import.t
 t/complex_type_bug.t
 t/99_datetime.t
 t/no_type.t
+t/base_ns_bug.t
+t/documentation.t
+t/w3c.t
 test/bin/testme.pl
 test/source/bugs/schema/complex_type_from_simple_type.xsd
 test/source/country/schema/common.xsd
@@ -85,6 +88,13 @@ test/source/mathworks/xml/mProduct.xml
 test/source/bugs/schema/DateTest.xsd
 test/source/bugs/schema/no_type.xsd
 test/source/bugs/xml/no_type.xml
+test/source/bugs/schema/base_ns_bug_default.xsd
+test/source/bugs/schema/base_ns_bug_default_reordered.xsd
+test/source/bugs/schema/base_ns_bug_prefix.xsd
+test/source/w3c/AnnotatedTSSchema.xsd
+test/source/w3c/suite.xml
+test/source/w3c/xml.xsd
+
 
 
 META.yml                                 Module meta-data (added by MakeMaker)

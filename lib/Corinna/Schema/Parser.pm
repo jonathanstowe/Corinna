@@ -119,6 +119,7 @@ sub parse_to_dom() {
           if ( $verbose >= 2 );
         my $ua = LWP::UserAgent->new;
         $ua->agent("Pastor/0.1 ");
+        $ua->env_proxy();
 
         # Create a request
         my $req = HTTP::Request->new( GET => $schema_url );
@@ -244,111 +245,149 @@ sub _process {
 # previously created model objects (Attribute, Element, ComplexType, SimpleType, Group, ...).
 # On the top of the stack will appear the object that was most recently created.
 #------------------------------------------------------------
-sub _process_node {
-    my $self    = shift;
-    my $node    = shift;
-    my $verbose = $self->verbose;
+sub _process_node
+{
+   my $self    = shift;
+   my $node    = shift;
+   my $verbose = $self->verbose;
 
-    # If we are given a DOM document, instead of an ELEMENT, then
-    # just recurse with the ROOT element.
-    if ( UNIVERSAL::isa( $node, "XML::LibXML::Document" ) ) {
-        return $self->_process_node( $node->documentElement() );
-    }
+   my $rc = 0;
 
-    # We only process DOM elements here, nothing else means much to us.
-    unless ( UNIVERSAL::isa( $node, "XML::LibXML::Element" ) ) {
-        return 0;
-    }
+   # If we are given a DOM document, instead of an ELEMENT, then
+   # obtain the root element.
+   if ( UNIVERSAL::isa( $node, "XML::LibXML::Document" ) )
+   {
+      $node = $node->documentElement();
+   }
 
-    my $context   = $self->context();
-    my $node_stack = $context->node_stack();
-    my $obj       = undef;
+   # We only process DOM elements here, nothing else means much to us.
+   if ( UNIVERSAL::isa( $node, "XML::LibXML::Element" ) )
+   {
 
-    # TODO : Namespaces
-    my $name = $node->localName;
+      my $context    = $self->context();
+      my $node_stack = $context->node_stack();
+      my $obj        = undef;
 
-    if ( $verbose >= 10 ) {
-        my $attribs = get_attribute_hash($node);
-        print STDERR "  $name ($attribs->{name})\n";
-    }
+      # TODO : Namespaces
+      my $name   = $node->localName;
+      my $nsURI  = $node->namespaceURI();
+      my $xsd_ns = $self->model()->xsd_namespace();
 
-# If the element name matches any string below, we'll do the corresponding action.
-  SWITCH: for ($name) {    # iterator = $_ (we'll do pattern matching on it)
-        /^all$/        and do { last SWITCH; };
-        /^annotation$/ and do { last SWITCH; };
-        /^appinfo$/ and return 0;    # ignore children as well
-        /^attribute$/
-          and do { $obj = $self->_process_attribute($node); last SWITCH; };
-        /^attributeGroup$/
-          and do { $obj = $self->_process_attributeGroup($node); last SWITCH; };
-        /^choice$/         and do { last SWITCH; };
-        /^complexContent$/ and do { last SWITCH; };
-        /^complexType$/
-          and do { $obj = $self->_process_complex_type($node); last SWITCH; };
-        /^documentation$/
-          and do { $obj = $self->_process_documentation($node); last SWITCH; };
-        /^element$/
-          and do { $obj = $self->_process_element($node); last SWITCH; };
-        /^extension$/
-          and do { $obj = $self->_process_extension($node); last SWITCH; };
-        /^enumeration$/
-          and do { $obj = $self->_process_enumeration($node); last SWITCH; };
-        /^field$/ and do { return 0; };    # ignore children as well
-        /^group$/ and do { $obj = $self->_process_group($node); last SWITCH; };
-        /^import$/
-          and do { $obj = $self->_process_import($node); last SWITCH; };
-        /^include$/
-          and do { $obj = $self->_process_include($node); last SWITCH; };
-        /^key$/    and do { return 0; };    # ignore children as well
-        /^keyref$/ and do { return 0; };    # ignore children as well
-        /^list$/ and do { $obj = $self->_process_list($node); last SWITCH; };
-        /^redefine$/
-          and do { $obj = $self->_process_redefine($node); last SWITCH; };
-        /^restriction$/
-          and do { $obj = $self->_process_restriction($node); last SWITCH; };
-        /^schema$/
-          and do { $obj = $self->_process_schema_node($node); last SWITCH; };
-        /^selector$/ and do { return 0; };      # ignore children as well
-        /^sequence$/ and do { last SWITCH; };
-        /^simpleContent$/
-          and do { $obj = $self->_process_simple_content($node); last SWITCH; };
-        /^simpleType$/
-          and do { $obj = $self->_process_simple_type($node); last SWITCH; };
-        /^unique$/ and do { return 0; };
-        /^union$/ and do { $obj = $self->_process_union($node); last SWITCH; };
-      OTHERWISE: { $obj = $self->_process_other_nodes($node); }
-    }
+      if ( $verbose >= 10 )
+      {
+         my $attribs = get_attribute_hash($node);
+         print STDERR "  $name (", $attribs->{name} || "", ")\n";
+      }
 
-# If the above created a model object, push it on the node stack within the current
-# context.
-    if ( defined($obj) ) {
-        $node_stack->push($obj);
-    }
+      # if we've got a namespace from the schema element and the namespace
+      # of the element doesn't match it we'll ignore it - this is not
+      # strictly correct but can't think of a case where different is
+      # needed.
+      if ( !defined $xsd_ns || ( defined $nsURI && $nsURI eq $xsd_ns ) )
+      {
 
-    # RECURSE into children.
-    my @children =
-      grep { UNIVERSAL::isa( $_, "XML::LibXML::Element" ) } $node->childNodes();
-    foreach my $child (@children) {
-        $self->_process_node($child);
-    }
+         # If the element name matches any string below, we'll do the
+         # corresponding action.
 
-    # CLEAN UP
-    if ( defined($obj) ) {
-        $self->_fix_name_spaces( $obj, $node, [ 'type', 'base', 'ref' ] );
+       SWITCH: for ($name)
+         {    # iterator = $_ (we'll do pattern matching on it)
+            /^all$/        and do { last SWITCH; };
+            /^annotation$/ and do { last SWITCH; };
+            /^any$/ and do { $obj = $self->_process_any($node); last SWITCH; }; # NOOP at the moment
+            /^anyAttribute$/ and do { $obj = $self->_process_any_attribute($node); last SWITCH; }; # NOOP at the moment
+            /^appinfo$/ and return 0;    # ignore children as well
+            /^attribute$/
+              and do { $obj = $self->_process_attribute($node); last SWITCH; };
+            /^attributeGroup$/
+              and
+              do { $obj = $self->_process_attributeGroup($node); last SWITCH; };
+            /^choice$/         and do { last SWITCH; };
+            /^complexContent$/ and do { last SWITCH; };
+            /^complexType$/
+              and
+              do { $obj = $self->_process_complex_type($node); last SWITCH; };
+            /^documentation$/
+              and
+              do { $obj = $self->_process_documentation($node); last SWITCH; };
+            /^element$/
+              and do { $obj = $self->_process_element($node); last SWITCH; };
+            /^extension$/
+              and do { $obj = $self->_process_extension($node); last SWITCH; };
+            /^enumeration$/
+              and
+              do { $obj = $self->_process_enumeration($node); last SWITCH; };
+            /^field$/ and do { return 0; };    # ignore children as well
+            /^group$/
+              and do { $obj = $self->_process_group($node); last SWITCH; };
+            /^import$/
+              and do { $obj = $self->_process_import($node); last SWITCH; };
+            /^include$/
+              and do { $obj = $self->_process_include($node); last SWITCH; };
+            /^key$/    and do { return 0; };    # ignore children as well
+            /^keyref$/ and do { return 0; };    # ignore children as well
+            /^list$/
+              and do { $obj = $self->_process_list($node); last SWITCH; };
+            /^redefine$/
+              and do { $obj = $self->_process_redefine($node); last SWITCH; };
+            /^restriction$/
+              and
+              do { $obj = $self->_process_restriction($node); last SWITCH; };
+            /^schema$/
+              and
+              do { $obj = $self->_process_schema_node($node); last SWITCH; };
+            /^selector$/ and do { return 0; };      # ignore children as well
+            /^sequence$/ and do { last SWITCH; };
+            /^simpleContent$/
+              and
+              do { $obj = $self->_process_simple_content($node); last SWITCH; };
+            /^simpleType$/
+              and
+              do { $obj = $self->_process_simple_type($node); last SWITCH; };
+            /^unique$/ and do { return 0; };
+            /^union$/
+              and do { $obj = $self->_process_union($node); last SWITCH; };
+          OTHERWISE: { $obj = $self->_process_other_nodes($node); }
+         }
+      }
 
-        # 'Union' must be post-processed
-        if ( UNIVERSAL::isa( $obj, "Corinna::Schema::Union" ) ) {
+      # If the above created a model object, push it on the node stack within
+      # the current  context.
+
+      if ( defined($obj) )
+      {
+         $node_stack->push($obj);
+      }
+
+      # RECURSE into children.
+      my @children =
+        grep { UNIVERSAL::isa( $_, "XML::LibXML::Element" ) }
+        $node->childNodes();
+      foreach my $child (@children)
+      {
+         $self->_process_node($child);
+      }
+
+      # CLEAN UP
+      if ( defined($obj) )
+      {
+         $self->_fix_name_spaces( $obj, $node, [ 'type', 'base', 'ref' ] );
+
+         # 'Union' must be post-processed
+         if ( UNIVERSAL::isa( $obj, "Corinna::Schema::Union" ) )
+         {
             $self->_post_process_union( $obj, $node );
-        }
+         }
 
-        # 'List' must be post-processed
-        if ( UNIVERSAL::isa( $obj, "Corinna::Schema::List" ) ) {
+         # 'List' must be post-processed
+         if ( UNIVERSAL::isa( $obj, "Corinna::Schema::List" ) )
+         {
             $self->_post_process_list( $obj, $node );
-        }
+         }
 
-        $node_stack->pop();
-    }
-    return 1;
+         $node_stack->pop();
+      }
+   }
+   return $rc;
 }
 
 #------------------------------------------------------------
@@ -411,6 +450,33 @@ sub _process_attribute {
 # Return the model object to be pushed on the node stack of the current context.
     return $obj;
 }
+
+# For the time being this is a NOOP because I'm not actually sure how to
+# deal with the anyAttribute thing. Just added so we can parse schema that
+# have it 
+
+sub _process_any_attribute
+{
+   my ( $self, $node ) = @_;
+
+   my $obj;
+
+   return $obj;
+}
+
+# For the time being this is a NOOP because I'm not actually sure how to
+# deal with the anyhing. Just added so we can parse schema that
+# have it 
+
+sub _process_any
+{
+   my ( $self, $node ) = @_;
+
+   my $obj;
+
+   return $obj;
+}
+
 
 #------------------------------------------------------------
 # This routine is called whenever an 'attributeGroup' element is encountered
@@ -902,6 +968,11 @@ sub _process_schema_node {
         die "Pastor : Schema elements cannot be nested!\n";
     }
 
+    # capture the schema namespace - assuming it to be the one that the
+    # schema element is in.
+
+    $self->model()->xsd_namespace($node->namespaceURI());
+
     my $nsUri = undef;
     if ( $obj->targetNamespace ) {
 
@@ -1104,7 +1175,7 @@ sub _process_other_nodes {
         }
     }
     else {
-        die "Pastor : Unexpected element '$name' in schema!\n"
+        die "Pastor : Unexpected element '$name' (" . $node->namespaceURI() || '' . ") in schema!\n"
           . sprint_xml_element( $node->parentNode() || $node ) . "\n";
     }
 
@@ -1204,51 +1275,87 @@ sub _fix_up_object {
 # This way, we don't deal with the namespace prefix but the NS URI itself.
 #
 #------------------------------------------------------------
-sub _fix_name_spaces {
-    my $self     = shift;
-    my $obj      = shift;
-    my $node     = shift;
-    my $fields   = shift;
-    my $opts     = {@_};
-    my $localize = $opts->{localize} || 0;
-    my $context  = $self->context();
-    my $verbose  = 0;
+sub _fix_name_spaces
+{
+   my $self     = shift;
+   my $obj      = shift;
+   my $node     = shift;
+   my $fields   = shift;
+   my $opts     = {@_};
+   my $localize = $opts->{localize} || 0;
+   my $context  = $self->context();
+   my $verbose  = 0;
 
-    foreach my $field (@$fields) {
-        my $uri = undef;
-        my $v   = $obj->{$field};
-        print STDERR "Fixing up namespaces for '$field' ('$v')...\n"
-          if ( $verbose >= 9 );
+   foreach my $field (@$fields)
+   {
+      my $uri = undef;
+      my $v   = $obj->{$field};
+      print STDERR "Fixing up namespaces for '$field' ('$v')...\n"
+        if ( $verbose >= 9 );
 
-        if ( $v && ( $v =~ /\|/ ) ) {
+      if ( $v && ( $v =~ /\|/ ) )
+      {
 
-            # Do nothing. There is already a namespace in there.
-        }
-        elsif ( $v && ( $v =~ /:/o ) ) {
+         # Do nothing. There is already a namespace in there.
+      }
+      elsif ( $v && ( $v =~ /:/o ) )
+      {
 
-            # There is a namesapce prefix in there.
-            my ( $prefix, $local ) = split /:/, $v, 2;
-            $uri = $node->lookupNamespaceURI($prefix);
-            if ($uri) {
-                if ($localize) {
-                    $obj->{$field} = $local;
-                    $obj->{targetNamespace} = $uri;
-                }
-                else {
-                    $obj->{$field} = "$local|$uri";
-                }
+         # There is a namesapce prefix in there.
+         my ( $prefix, $local ) = split /:/, $v, 2;
+         $uri = $node->lookupNamespaceURI($prefix);
+         if ($uri)
+         {
+            if ($localize)
+            {
+               $obj->{$field} = $local;
+               $obj->{targetNamespace} = $uri;
             }
-        }
-        elsif ($v) {
-            if ($localize) {
-                $obj->{targetNamespace} = $context->targetNamespace();
+            else
+            {
+               $obj->{$field} = "$local|$uri";
             }
-            elsif ( my $uri = $context->targetNamespace() ) {
-                $obj->{$field} = "$v|$uri";
-            }
-        }
-    }
-    return $obj;
+         }
+      }
+      elsif ($v)
+      {
+         if ( $verbose >= 9 )
+         {
+            print STDERR "no prefix for '$field' ('$v') node has "
+              . $node->namespaceURI()
+              . " and prefix "
+              . $node->prefix() . "\n";
+
+         }
+
+         my $ns;
+
+         # the previous assumption was that if there wasn't a
+         # prefix then the target was the default.  This obviously
+         # failed when something else was the default.  This still
+         # doesn't deal with the situation where a third namespace
+         # (i.e. neither the schema nor the target) is the default
+         # very robustly :-\
+         if (!$node->prefix())
+         {
+            $ns = $node->namespaceURI();
+         }
+         else
+         {
+            $ns = $context->targetNamespace();
+         }
+
+         if ($localize)
+         {
+            $obj->{targetNamespace} = $context->targetNamespace();
+         }
+         else
+         {
+            $obj->{$field} = "$v|$ns";
+         }
+      }
+   }
+   return $obj;
 }
 
 1;

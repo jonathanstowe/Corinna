@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.w3.org/1999/xlink" elementFormDefault="qualified" xmlns="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!--                 typeEnum             -->
+	<xs:simpleType name="typeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="simple" />
+			<xs:enumeration value="extended" />
+			<xs:enumeration value="locator" />
+			<xs:enumeration value="arc" />
+			<xs:enumeration value="resource" />
+			<xs:enumeration value="title" />
+		</xs:restriction>
+	</xs:simpleType>
+
+   <xs:element name="BaseNSBug" type="typeEnum" />
+
+</xs:schema>

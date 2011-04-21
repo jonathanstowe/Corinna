@@ -13,7 +13,7 @@ use Corinna::Util qw(merge_hash);
 use parent 'Class::Accessor';
 
 Corinna::Schema::Model->mk_accessors(
-    qw(type element group attribute attributeGroup defaultNamespace namespaces namespaceCounter)
+    qw(xsd_namespace type element group attribute attributeGroup defaultNamespace namespaces namespaceCounter)
 );
 
 sub new {
