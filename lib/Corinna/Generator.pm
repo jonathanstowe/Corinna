@@ -314,7 +314,7 @@ sub _fabricate_code {
     }
 
     # ISA
-    $code .= "\n\nour " . '@ISA=qw(' . join( ' ', @$isa ) . ");";
+    $code .= "\n\nBEGIN {\nour " . '@ISA=qw(' . join( ' ', @$isa ) . ");\n}";
 
     # mk_accessors
     my $accessors = [];
