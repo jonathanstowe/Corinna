@@ -10,7 +10,7 @@ my $pastor = Corinna->new();
 
 my $verbose = 0;
 
-eval
+lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
@@ -18,7 +18,7 @@ $pastor->generate(
                    class_prefix => "Attribute::Test::Default",
                    destination  => './test/out/lib/',
                    verbose      => $verbose );
-};
+} "generate with XSD as default namespace and local complexType";
 
 
 my $class = Attribute::Test::Default::Pastor::Meta->Model->xml_item_class('TestElement');
