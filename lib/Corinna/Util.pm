@@ -189,14 +189,23 @@ our @days_in_month = (
     [ 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ]
 );
 
-sub validate_date ($$$) {
-    my ( $y, $m, $d ) = @_;
+sub validate_date ($$$)
+{
+   my ( $y, $m, $d ) = @_;
 
-    # any +ve integral year is valid
-    return 0 if $y != abs int $y;
-    return 0 unless 1 <= $m and $m <= 12;
-    return 0 unless 1 <= $d and $d <= $days_in_month[ _leap_year($y) ][$m];
-    return 1;
+   my $rc = 0;
+
+   # any +ve integral year is valid
+   if ( defined $y && defined $m && defined $d )
+   {
+      $rc = 1;
+      $rc = 0 if $y != abs int $y;
+      $rc = 0 unless 1 <= $m and $m <= 12;
+      my $dim = $days_in_month[ _leap_year($y) ][$m];
+      $rc = 0 unless 1 <= $d and (defined $dim && $d <= $dim);
+   }
+
+   return $rc;
 }
 
 sub _leap_year {
