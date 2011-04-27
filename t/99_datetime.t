@@ -53,4 +53,24 @@ else
    pass("setFromDateTime works");
 }
 
+ok($obj->date_test()->xml_validate_further(), "xml_validate_further ok");
+
+eval
+{
+   $obj->date_test('20-13-2012');
+   $obj->date_test->to_date_time();
+};
+
+if ($@ )
+{
+   pass("to_date_time() on invalid date croaks");
+}
+else
+{
+   fail("to_date_time() on invalid date croaks");
+
+}
+
+ok(!$obj->date_test()->xml_validate_further(), "xml_validate_further bad");
+
 1;

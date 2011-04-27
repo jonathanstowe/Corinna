@@ -76,6 +76,10 @@ ok(Corinna::Util::validate_date(25,1,1),"valid year");
 ok(!Corinna::Util::validate_date(25,0,1),"invalid month 0");
 ok(!Corinna::Util::validate_date(25,13,1),"invalid month 13");
 
+ok(!Corinna::Util::validate_date(), "noargs");
+ok(!Corinna::Util::validate_date(2012), "no month or day");
+ok(!Corinna::Util::validate_date(2012,4), "no day");
+
 my $mon = 1;
 foreach my $days ( ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31) )
 {

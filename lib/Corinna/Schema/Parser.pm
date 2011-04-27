@@ -742,7 +742,7 @@ sub _process_extension {
     if (
         my $host = $context->find_node(
             class =>
-              [ "Corinna::Schema::ComplexType", "Corinna::Schema::SimpleType" ]
+              [ "Corinna::Schema::ComplexType", "Corinna::Schema::SimpleType"]
         )
       )
     {
@@ -1089,6 +1089,7 @@ sub _process_complex_type {
     my $self    = shift;
     my $node    = shift;
     my $context = $self->context();
+    my $verbose = $self->verbose() || 0;
 
     # Create an "ComplexType" schema model object and set all fields with the
     # attributes of this node.
@@ -1101,11 +1102,15 @@ sub _process_complex_type {
         die "Pastor : ComplexType must have a name!\n";
     }
 
+    # always getting to assume that a local dfinition is in the
+    # target namespace.
+    my $ns = $context->targetNamespace();
     # if this is a local definition, then our host element must be of this type
     if ( my $host =
         $context->find_node( class => ["Corinna::Schema::Element"] ) )
     {
-        $host->set_fields( { type => $obj->name() } );
+       print STDERR "setting type of parent element to ", $obj->name() || '',"|$ns\n" if $verbose >= 7;
+        $host->set_fields( { type => $obj->name() . '|' . $ns } );
     }
 
 # ComplexTypes are always added to the model, regardless of local or global scope.
@@ -1202,6 +1207,10 @@ sub _fix_up_object {
     my $obj     = shift;
     my $node    = shift;
     my $context = $self->context();
+    my $verbose = $self->verbose() || 0;
+
+    print STDERR "fixing up object of ", ref($obj), "\n"
+       if $verbose >= 9;
 
     unless ( $context->node_stack()->count()
         || UNIVERSAL::isa( $obj, "Corinna::Schema" ) )
@@ -1216,17 +1225,21 @@ sub _fix_up_object {
         # If we are immediatly underneath a schema element,
         # this means we are in a global scope
         $obj->scope("global");
+        print STDERR "Global scope\n" if $verbose >= 9;
     }
     else {
 
         # Otherwise we are in LOCAL context.
         $obj->scope("local");
+        print STDERR "local scope\n" if $verbose >= 9;
         if ( $obj->ref() && !$obj->name() ) {
 
             # No name but this a reference.
             # Just set the name to the reference.
             $obj->name( $obj->ref() );
             $obj->name_is_auto_generated(1);
+            print STDERR "auto-name ", $obj->name()," from ref\n"
+               if $verbose >= 9;
         }
         elsif (
             !$obj->name()
@@ -1246,6 +1259,8 @@ sub _fix_up_object {
 
             $obj->name($name);
             $obj->name_is_auto_generated(1);
+            print STDERR "auto-name for list/union ", $obj->name(), "\n"
+               if $verbose >= 9;
         }
         elsif ( !$obj->name() ) {
 
@@ -1254,6 +1269,7 @@ sub _fix_up_object {
             # names in the context (bottom to top) with an underscore separator.
             $obj->name( $context->name_path( separator => "_" ) );
             $obj->name_is_auto_generated(1);
+
         }
     }
 
@@ -1284,13 +1300,13 @@ sub _fix_name_spaces
    my $opts     = {@_};
    my $localize = $opts->{localize} || 0;
    my $context  = $self->context();
-   my $verbose  = 0;
+   my $verbose  = $self->verbose() || 0;
 
    foreach my $field (@$fields)
    {
       my $uri = undef;
       my $v   = $obj->{$field};
-      print STDERR "Fixing up namespaces for '$field' ('$v')...\n"
+      print STDERR "Fixing up namespaces for '$field' ('" , $v || '' , "')...\n"
         if ( $verbose >= 9 );
 
       if ( $v && ( $v =~ /\|/ ) )
@@ -1322,9 +1338,9 @@ sub _fix_name_spaces
          if ( $verbose >= 9 )
          {
             print STDERR "no prefix for '$field' ('$v') node has "
-              . $node->namespaceURI()
-              . " and prefix "
-              . $node->prefix() . "\n";
+              , $node->namespaceURI()
+              , " and prefix "
+              , $node->prefix() || '' , "\n";
 
          }
 
@@ -1336,7 +1352,12 @@ sub _fix_name_spaces
          # doesn't deal with the situation where a third namespace
          # (i.e. neither the schema nor the target) is the default
          # very robustly :-\
-         if (!$node->prefix())
+
+         if ( $field eq 'name')
+         {
+            $ns = $context->targetNamespace();
+         }
+         elsif (!$node->prefix())
          {
             $ns = $node->namespaceURI();
          }
@@ -1351,6 +1372,7 @@ sub _fix_name_spaces
          }
          else
          {
+            print STDERR "Setting $field to $v|$ns\n" if $verbose >= 9;
             $obj->{$field} = "$v|$ns";
          }
       }

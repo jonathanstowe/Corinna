@@ -33,7 +33,7 @@ sub to_date_time() {
         die "Pastor: Invalid date '$value'!";
     }
     my ( $year, $month, $day ) = ( $1, $2, $3 );
-    $year = -$year if ( $value =~ /^[-]/ );    # Catch negative year.
+    $year = abs($year); # not sure why but hey better than the conditional
 
     require DateTime;
     my $dt = DateTime->new(

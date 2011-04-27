@@ -7,7 +7,7 @@
     </xs:annotation>
     <xs:simpleContent>
       <xs:extension base="StringLength0to64">
-        <xs:attribute name="Code" type="ISO3166" use="optional">
+        <xs:attribute name="Code" type="xs:string" use="optional">
           <xs:annotation>
             <xs:documentation xml:lang="en">ISO 3166 code for a country.</xs:documentation>
           </xs:annotation>

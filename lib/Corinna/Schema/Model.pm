@@ -412,12 +412,13 @@ sub _resolve_object_class {
 
     if ( UNIVERSAL::can( $object, "baseClasses" ) ) {
         print "   object '"
-          . $object->name
-          . "' 'can' baseClasses(). Resolving class...\n"
+          , $object->name , " of type ", ref($object), 
+          , "' 'can' baseClasses(). Resolving class... \n"
           if ( $verbose >= 7 );
 
         if ( UNIVERSAL::can( $object, "base" ) && $object->base() ) {
 
+             print "(" . $object->base() . ")\n" if $verbose >= 7;
             $object->baseClasses(
                 [ $self->_type_to_class( $object->base(), $opts ) ] );
         }
@@ -425,6 +426,7 @@ sub _resolve_object_class {
             && $object->type()
             && ( $object->scope() =~ /global/ ) )
         {
+            print "(" . $object->type() . ")\n" if $verbose >= 7;
             $object->baseClasses(
                 [
                     $self->_type_to_class( $object->type(), $opts ),
@@ -594,7 +596,7 @@ sub _type_to_class {
     my $object    = $opts->{object};
     my $isNonType = $opts->{isNonType} || 0;
     my $typePfx   = $isNonType ? "" : "Type::";
-    my $verbose   = 0;
+    my $verbose   = $opts->{verbose} || 0;
 
     my $retval;
 
@@ -623,6 +625,8 @@ sub _type_to_class {
         # Builtin type
         my ($localType) = split /\|/, $type;
         $retval = $builtin_prefix . $localType;
+        print STDERR "_type_to_class: Think its a builtin: from '$type'   to    '$retval'\n"
+          if ( $verbose >= 9 );
     }
     elsif ( $type =~ /\|/ ) {
 
