@@ -59,6 +59,12 @@ t/no_type.t
 t/base_ns_bug.t
 t/documentation.t
 t/w3c.t
+t/builtins_list.t
+t/element_redefine.t
+t/local_complex_type_bug.t
+t/parser.t
+t/pastorize.t
+t/utils.t
 test/bin/testme.pl
 test/source/bugs/schema/complex_type_from_simple_type.xsd
 test/source/country/schema/common.xsd
@@ -94,4 +100,10 @@ test/source/bugs/schema/base_ns_bug_prefix.xsd
 test/source/w3c/AnnotatedTSSchema.xsd
 test/source/w3c/suite.xml
 test/source/w3c/xml.xsd
+test/source/bugs/schema/local_complex_type.xsd
+test/source/builtins/list/list.xml
+test/source/builtins/list/list.xsd
+test/source/elements/schema/redefine_1.xsd
+test/source/elements/schema/redefine_2.xsd
+
 META.yml                                 Module meta-data (added by MakeMaker)
