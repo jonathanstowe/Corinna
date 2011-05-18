@@ -23,7 +23,7 @@ $pastor->generate(
 
 # ======= COUNTRY ==============
 my $country_class =
-  Corinna::Test::Pastor::Meta->Model->xml_item_class('country');
+  Corinna::Test::Corinna::Meta->Model->xml_item_class('country');
 is( $country_class, "Corinna::Test::country" );
 
 my $country_in = $country_class->from_xml(

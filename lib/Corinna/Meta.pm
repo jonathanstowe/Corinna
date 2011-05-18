@@ -30,7 +30,7 @@ __END__
 
 =head1 NAME
 
-B<Corinna::Meta> - Ancestor of the generated ::Pastor::Meta classes.
+B<Corinna::Meta> - Ancestor of the generated ::Corinna::Meta classes.
 
 =head1 ISA
 
@@ -42,12 +42,12 @@ This class descends from L<Class::Accessor> and L<Class::Data::Inheritable>
 
 =head1 DESCRIPTION
 
-B<Corinna::Meta> is the ancestor of the generated ::Pastor::Meta classes.
+B<Corinna::Meta> is the ancestor of the generated ::Corinna::Meta classes.
 
 Suppose you use L<Corinna> for code generation with a B<class prefix> of
 B<MyApp::Data>. Then, L<Corinna> will also generate a class that enables you
 to access meta information about the generated code under
-'MyApp::Data::Pastor::Meta'.
+'MyApp::Data::Corinna::Meta'.
 
 Currently, the only information you can access is the 'B<Model>' that was used
 to generate code.  'B<Model>' is class data that references to an entire

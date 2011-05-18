@@ -52,7 +52,7 @@ sub xml_validate {
         my $object = $class->new( __value => $part );
         $object->xml_validate(@_)
           or die
-"Pastor : Validate : $path : List part '$part' does not validate against class '$class' in list '$value'!";
+"Corinna : Validate : $path : List part '$part' does not validate against class '$class' in list '$value'!";
     }
     return $self->xml_validate_further(@_);
 }

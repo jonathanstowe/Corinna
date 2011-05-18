@@ -29,7 +29,7 @@ sub xml_validate {
     }
 
     die
-"Pastor : Validate : $path : None of the union members validate value '$value'";
+"Corinna : Validate : $path : None of the union members validate value '$value'";
 }
 
 1;

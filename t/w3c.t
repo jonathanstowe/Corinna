@@ -16,7 +16,7 @@ $pastor->generate(
 );
 } "Can parse the W3C testSuite schema";
 
-my $class = W3C::Test::Pastor::Meta->Model->xml_item_class('testSuite');
+my $class = W3C::Test::Corinna::Meta->Model->xml_item_class('testSuite');
 
 my $obj;
 

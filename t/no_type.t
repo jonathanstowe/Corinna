@@ -13,7 +13,7 @@ $pastor->generate(
                    verbose      => 0
 );
 
-my $class = Corinna::Test::Pastor::Meta->Model->xml_item_class('Test');
+my $class = Corinna::Test::Corinna::Meta->Model->xml_item_class('Test');
 
 my $obj;
 

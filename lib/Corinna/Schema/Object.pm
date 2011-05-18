@@ -142,7 +142,7 @@ __END__
 
 =head1 NAME
 
-B<Corinna::Schema::Object> - Ancestor of all Pastor schema object classes.
+B<Corinna::Schema::Object> - Ancestor of all Corinna schema object classes.
 
 =head1 WARNING
 

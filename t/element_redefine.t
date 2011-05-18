@@ -25,7 +25,7 @@ $pastor->generate(
 
 
 my $class;
-lives_ok { $class = Attribute::Test::Default::Pastor::Meta->Model->xml_item_class('author')} "got class of element";
+lives_ok { $class = Attribute::Test::Default::Corinna::Meta->Model->xml_item_class('author')} "got class of element";
 
 can_ok($class,'country');
 }

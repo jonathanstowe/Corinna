@@ -21,7 +21,7 @@ $pastor->generate(
 } "generate with XSD as default namespace and local complexType";
 
 
-my $class = Attribute::Test::Default::Pastor::Meta->Model->xml_item_class('TestElement');
+my $class = Attribute::Test::Default::Corinna::Meta->Model->xml_item_class('TestElement');
 
 can_ok($class,'test_attribute');
 

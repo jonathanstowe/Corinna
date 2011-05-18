@@ -131,7 +131,7 @@ sub add
         unless ( UNIVERSAL::can( $oldItem, 'is_redefinable' )
             && $oldItem->is_redefinable() )
         {
-            die "Pastor : $field already defined : '$key'\\n";
+            die "Corinna : $field already defined : '$key'\\n";
         }
     }
     $newItem->is_redefinable(1)
@@ -345,7 +345,7 @@ sub _resolve_object_class {
       if ( $verbose >= 6 );
 
     if ( UNIVERSAL::can( $object, "meta_class" ) ) {
-        $object->meta_class( $class_prefix . "Pastor::Meta" );
+        $object->meta_class( $class_prefix . "Corinna::Meta" );
     }
 
     if ( UNIVERSAL::isa( $object, "Corinna::Schema::Type" ) ) {

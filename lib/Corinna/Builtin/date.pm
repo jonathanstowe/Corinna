@@ -32,7 +32,7 @@ sub to_date_time() {
     my $value = $self->__value;
 
     unless ( $value =~ /^[-]?(\d{4,})-(\d\d)-(\d\d)/ ) {
-        die "Pastor: Invalid date '$value'!";
+        die "Corinna: Invalid date '$value'!";
     }
     my ( $year, $month, $day ) = ( $1, $2, $3 );
     $year = abs($year); # not sure why but hey better than the conditional
