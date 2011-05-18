@@ -1,7 +1,9 @@
 
-use Test::More tests => 20;
+use Test::Most tests => 20;
 use utf8;
 use strict;
+use File::Path;
+
 
 use_ok('Corinna');
 
@@ -55,6 +57,11 @@ is( $product->recommendedProducts->productDep->name,
 
 #	print STDERR "\nTest OVER baby!\n";
 ok(1);    # survived everything
+
+END
+{
+   rmtree './test/out';
+}
 
 1;
 

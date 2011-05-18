@@ -1,4 +1,4 @@
-use Test::More 'no_plan';
+use Test::Most 'no_plan';
 
 
 use_ok('Corinna');
@@ -7,7 +7,7 @@ my $pastor = Corinna->new();
 
 my $verbose = 0;
 
-eval
+lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
@@ -16,19 +16,9 @@ $pastor->generate(
                    destination  => './test/out/lib/',
                    verbose      => $verbose 
 );
-};
+} "resolve namespace of restriction base correctly with default NS";
 
-if ( $@ )
-{
-   fail("resolve namespace of restriction base correctly with default NS");
-}
-else
-{
-
-   pass("resolve namespace of restriction base correctly with default NS");
-}
-
-eval
+lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
@@ -37,20 +27,9 @@ $pastor->generate(
                    destination  => './test/out/lib/',
                    verbose      => $verbose 
 );
-};
+} "resolve namespace of restriction base correctly with default NS but NS declarations reordered";
 
-if ( $@ )
-{
-   fail("resolve namespace of restriction base correctly with default NS but NS declarations reordered");
-}
-else
-{
-
-   pass("resolve namespace of restriction base correctly with default NS but NS declarations reordered");
-}
-
-
-eval
+lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
@@ -59,13 +38,5 @@ $pastor->generate(
                    destination  => './test/out/lib/',
                    verbose      => $verbose 
 );
-};
+} "resolve namespace of restriction base correctly with explicit NS";
 
-if ( $@ )
-{
-   fail("resolve namespace of restriction base correctly with explicit NS");
-}
-else
-{
-   pass("resolve namespace of restriction base correctly with explicit NS");
-}

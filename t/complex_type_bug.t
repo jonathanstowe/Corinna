@@ -5,7 +5,7 @@ use File::Path;
 
 my $verbose = 0;
 
-rmtree( ['./test/out/lib'] );
+rmtree( ['./test/out/'] );
 
 my $pastor = Corinna->new();
 lives_ok {
@@ -21,7 +21,7 @@ lives_ok {
 }
 'Complex types which extend simple types should survive';
 
-rmtree( ['./test/out/lib'] );
+rmtree( ['./test/out/'] );
 
     lives_ok {
         $pastor->generate(

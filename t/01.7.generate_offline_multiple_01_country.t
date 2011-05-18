@@ -1,5 +1,5 @@
 
-use Test::More tests => 3;
+use Test::Most tests => 3;
 
 use File::Path;
 use_ok('Corinna');
@@ -7,6 +7,8 @@ use_ok('Corinna');
 rmtree( ['./test/out/lib'] );
 
 my $pastor = Corinna->new();
+
+lives_ok {
 $pastor->generate(
     mode         => 'offline',
     style        => 'multiple',
@@ -14,26 +16,17 @@ $pastor->generate(
     class_prefix => "Corinna::Test",
     destination  => './test/out/lib/',
     verbose      => 0
-);
+) } "offline on country_schema1.xsd OK";
 
-eval("use lib qw (./test/out/lib/);\nuse Corinna::Test;");
-
-if ($@) 
-{
-   fail("Generated usable module");
-   diag $@;
-}
-else
-{
-   pass("Generated usable module" );
-}
-
-ok(1);    # survived everything
+lives_ok {
+            use lib qw (./test/out/lib/); 
+            require Corinna::Test;
+         } "Generated usable module";
 
 # be kind rewind
 END
 {
-   rmtree( ['./test/out/lib'] );
+   rmtree( ['./test/out'] );
 }
 
 1;

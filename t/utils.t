@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More qw(no_plan);
+use Test::Most qw(no_plan);
 
 # tests for Corinna::Util
 

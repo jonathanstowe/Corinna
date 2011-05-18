@@ -1,4 +1,4 @@
-use Test::More qw(no_plan);
+use Test::Most qw(no_plan);
 
 use_ok('Corinna');
 
