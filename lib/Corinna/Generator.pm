@@ -87,7 +87,7 @@ sub _generate_single {
         }
     }
 
-    $code .= $self->_fabricateHeaderModuleCode(@_);
+    $code .= $self->_fabricate_header_module_code(@_);
     $code .= $self->_fabricate_meta_module_code(@_);
 
     # Perl modules must return TRUE
@@ -169,7 +169,7 @@ sub _generate_multiple {
     if ($module) {
 
       # Generate the module with all the 'use' statements for different modules.
-        my $code = $self->_fabricateHeaderModuleCode(@_);
+        my $code = $self->_fabricate_header_module_code(@_);
 
         my $file =
           module_path( module => $module, destination => $destination );
@@ -182,7 +182,7 @@ sub _generate_multiple {
 #--------------------------------------------
 # Fabricate the code for the module that will 'use' all the generated classes.
 #--------------------------------------------
-sub _fabricateHeaderModuleCode {
+sub _fabricate_header_module_code {
     my $self         = shift;
     my $args         = {@_};
     my $model        = $args->{model};

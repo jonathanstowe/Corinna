@@ -227,59 +227,67 @@ sub xml_text_content { &__value; }
 # Grab a field. The difference from 'get'is that 'grab' will create
 # the field if it doesn't exist (correctly typed).
 #------------------------------------------------------
-sub grab($) {
-    my $self  = shift;
-    my $field = shift;
+sub grab
+{
+   my $self  = shift;
+   my $field = shift;
 
-    return $self->{$field} if ( defined( $self->{$field} ) );
-    return undef unless ( UNIVERSAL::can( $self, "XmlSchemaType" ) );
+   my $return;
 
-    my $type = $self->XmlSchemaType();
-
-    # Try with elements
-    if ( UNIVERSAL::can( $type, 'effective_element_info' ) ) {
-        my $elementInfo = $type->effective_element_info();
-        if ( defined( my $element = $elementInfo->{$field} ) ) {
+   if ( defined $field )
+   {
+      my $type = $self->XmlSchemaType();
+      if ( defined( $self->{$field} ) )
+      {
+         $return = $self->{$field};
+      }
+      elsif ( UNIVERSAL::can( $type, 'effective_element_info' ) )
+      {
+         my $elementInfo = $type->effective_element_info();
+         if ( defined( my $element = $elementInfo->{$field} ) )
+         {
             my $class = $element->class();
-            if ( defined($class) ) {
-                my $result;
+            if ( defined($class) )
+            {
 
-                if ( $element->is_singleton() ) {
+               if ( $element->is_singleton() )
+               {
 
-                    # singleton
-                    $result = $self->{$field} = $class->new();
-                }
-                else {
+                  # singleton
+                  $return = $self->{$field} = $class->new();
+               }
+               else
+               {
 
-                    # multiplicity
+                  # multiplicity
 
     # What to do? Should we return an empty array or one having an object in it?
-                    $result = $self->{$field} = Corinna::NodeArray->new();
+                  $return = $self->{$field} = Corinna::NodeArray->new();
 
-        #               $result = $self->{$field} = Corinna::NodeArray->new($class->new());
-                }
-                return $result;
+#               $result = $self->{$field} = Corinna::NodeArray->new($class->new());
+               }
             }
-        }
-    }
+         }
+      }
+      elsif ( UNIVERSAL::can( $type, 'effective_attribute_info' ) )
+      {
+         my $attribInfo = $type->effective_attribute_info();
+         my $attribPfx  = $type->attributePrefix();
+         my $afield     = $field;
+         $afield =~ s/^$attribPfx//;
 
-    # Try with attributes
-    if ( UNIVERSAL::can( $type, 'effective_attribute_info' ) ) {
-        my $attribInfo = $type->effective_attribute_info();
-        my $attribPfx  = $type->attributePrefix();
-        my $afield     = $field;
-        $afield =~ s/^$attribPfx//;
-
-        if ( defined( my $attrib = $attribInfo->{$afield} ) ) {
+         if ( defined( my $attrib = $attribInfo->{$afield} ) )
+         {
             my $class = $attrib->class();
-            if ( defined($class) ) {
-                my $result = $self->{ $attribPfx . $afield } = $class->new();
-                return $result;
+            if ( defined($class) )
+            {
+               $return = $self->{ $attribPfx . $afield } = $class->new();
             }
-        }
-    }
+         }
+      }
 
-    return undef;
+   }
+   return $return;
 }
 
 #----------------------------------------------

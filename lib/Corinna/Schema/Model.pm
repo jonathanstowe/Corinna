@@ -9,6 +9,7 @@ use Corinna::Schema::Object;
 use Corinna::Schema::NamespaceInfo;
 
 use Corinna::Util qw(merge_hash);
+use Scalar::Util qw(blessed);
 
 use parent 'Class::Accessor';
 
@@ -93,27 +94,20 @@ sub add {
     my $self = shift;
     my $args = {@_};
     my $field;
-    my $newItem;
 
-    unless ( defined($field) ) {
-        $newItem = $args->{object} || $args->{item} || $args->{node};
-      SWITCH: {
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Type" )
-              and do { $field = "type"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Element" )
-              and do { $field = "element"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Group" )
-              and do { $field = "group"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Attribute" )
-              and do { $field = "attribute"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::AttributeGroup" )
-              and do { $field = "attributeGroup"; last SWITCH; };
-        }
+    my  $newItem = $args->{object} || $args->{item} || $args->{node};
+
+    if ( blessed($newItem) && $newItem->isa('Corinna::Schema::Object') )
+    {
+       $field = $newItem->_type_key();
     }
 
-    unless ( defined($field) ) {
-        foreach my $arg (qw(type element group attribute attributeGroup)) {
-            if ( defined( $args->{$arg} ) ) {
+    if (!defined($field) ) 
+    {
+        foreach my $arg (qw(type element group attribute attributeGroup)) 
+        {
+            if ( defined( $args->{$arg} ) ) 
+            {
                 $field   = $arg;
                 $newItem = $args->{$field};
                 last;
@@ -121,9 +115,9 @@ sub add {
         }
     }
 
-    unless ( defined($field) ) {
-        return undef;
-    }
+    if ( defined($field) ) 
+    {
+    
 
     my $items = $self->{$field};
     my $key =
@@ -141,6 +135,7 @@ sub add {
       if ( $args->{operation} !~ /redefine/i )
       && UNIVERSAL::can( $newItem, 'is_redefinable' );
     $items->{$key} = $newItem;
+ }
 
 }
 

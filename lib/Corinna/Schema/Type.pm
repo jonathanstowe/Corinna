@@ -8,6 +8,13 @@ use parent 'Corinna::Schema::Object';
 Corinna::Schema::Type->mk_accessors(
     qw(base baseClasses contentType derivedBy final id));
 
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'type';
+}
+
 1;
 
 __END__

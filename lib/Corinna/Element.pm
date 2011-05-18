@@ -3,7 +3,7 @@ package Corinna::Element;
 use strict;
 use warnings;
 
-use base qw(Corinna::ComplexType);
+use parent qw(Corinna::ComplexType);
 
 Corinna::Element->mk_classdata('XmlSchemaElement');
 

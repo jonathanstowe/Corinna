@@ -8,7 +8,7 @@ use_ok('Corinna');
 
 my $pastor = Corinna->new();
 
-my $verbose = 10;
+my $verbose = 0;
 
 TODO:
 {

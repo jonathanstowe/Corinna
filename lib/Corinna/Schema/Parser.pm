@@ -355,6 +355,10 @@ sub _process_node
 
       if ( defined($obj) )
       {
+         if ( $context->operation() eq 'redefine' && $obj->can('is_redefinable'))
+         {
+            $obj->is_redefinable(1);
+         }
          $node_stack->push($obj);
       }
 

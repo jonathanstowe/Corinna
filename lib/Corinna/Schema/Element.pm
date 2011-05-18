@@ -19,6 +19,13 @@ sub is_singleton {
     return 0;
 }
 
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'element';
+}
+
 1;
 
 __END__

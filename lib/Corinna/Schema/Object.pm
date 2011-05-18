@@ -124,6 +124,15 @@ sub type {
     return $definition->type();
 }
 
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   my $tk;
+
+   return $tk;
+}
+
 1;
 
 __END__
@@ -352,11 +361,21 @@ value is NOT already defined for this field, but if there is a I<definition>
 of this object, then the value of the same field is returned from the
 I<definition> of the object.  (See L</definition()>).
 
+
+=head4 _type_key
+
+This is a read-only property that must be over-ridden in a child class.
+This is used internally to determine where the object should be cached in
+the model.  The default implementation  returns undef which should be
+fatal wherever it is used.
+
+
 =head2 OTHER METHODS
 
 =head4 set_fields()
 
   $object->set_fields(%fields);
+
 
 B<OBJECT METHOD>.
 

@@ -24,6 +24,13 @@ sub new {
     return bless $self, $class;
 }
 
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'group';
+}
+
 1;
 
 __END__
