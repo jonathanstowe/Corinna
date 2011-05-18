@@ -13,6 +13,8 @@ use Scalar::Util qw(blessed);
 
 use parent 'Class::Accessor';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Model->mk_accessors(
     qw(xsd_namespace type element group attribute attributeGroup defaultNamespace namespaces namespaceCounter)
 );
@@ -90,7 +92,8 @@ sub xml_item_class {
 }
 
 #-------------------------------------------------------
-sub add {
+sub add 
+{
     my $self = shift;
     my $args = {@_};
     my $field;

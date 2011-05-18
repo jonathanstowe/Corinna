@@ -18,6 +18,8 @@ use Corinna::Util qw(get_attribute_hash sprint_xml_element);
 use Scalar::Util qw(reftype);
 
 use parent 'Class::Accessor';
+our $VERSION = '2.0';
+
 Corinna::Schema::Parser->mk_accessors(qw(model contextStack counter verbose));
 
 #------------------------------------------------------------

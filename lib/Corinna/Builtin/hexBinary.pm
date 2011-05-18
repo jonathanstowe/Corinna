@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Builtin::Scalar';
 
+our $VERSION = '2.0';
+
 Corinna::Builtin::hexBinary->XmlSchemaType(
     bless(
         {

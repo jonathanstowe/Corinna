@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Class::Accessor';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Object->mk_accessors(
     qw(class definition documentation is_redefinable meta_class name name_is_auto_generated ref ref_key scope type targetNamespace)
 );
@@ -17,7 +19,8 @@ sub new {
 }
 
 #------------------------------------------------------------
-sub key {
+sub key 
+{
     my $self = shift;
     if (@_) {
         return ( $self->{key} = shift );

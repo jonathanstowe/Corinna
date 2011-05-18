@@ -8,6 +8,8 @@ use Corinna::Schema::Object;
 
 use parent 'Class::Accessor';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Context->mk_accessors(
     qw( counter schema schema_url operation node_stack targetNamespace));
 

@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Builtin::SimpleType';
 
+our $VERSION = '2.0';
+
 1;
 
 __END__

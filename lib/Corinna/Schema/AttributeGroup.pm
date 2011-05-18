@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::AttributeGroup->mk_accessors(qw(attributes attribute_info));
 
 sub new {

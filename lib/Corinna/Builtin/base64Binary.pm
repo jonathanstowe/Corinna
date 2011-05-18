@@ -8,6 +8,8 @@ use MIME::Base64 ();
 
 use parent 'Corinna::Builtin::Scalar';
 
+our $VERSION = '2.0';
+
 Corinna::Builtin::base64Binary->XmlSchemaType(
     bless(
         {

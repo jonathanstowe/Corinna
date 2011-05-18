@@ -8,6 +8,8 @@ use Class::Accessor;
 
 use parent qw(Class::Accessor Class::Data::Inheritable);
 
+our $VERSION = '2.0';
+
 Corinna::Meta->mk_classdata('Model');
 
 #----------------------------------------------

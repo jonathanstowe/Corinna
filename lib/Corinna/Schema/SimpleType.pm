@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Type';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::SimpleType->mk_accessors(
     qw(
       enumeration

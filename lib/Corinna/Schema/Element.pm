@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Element->mk_accessors(
     qw(baseClasses minOccurs maxOccurs targetNamespace));
 

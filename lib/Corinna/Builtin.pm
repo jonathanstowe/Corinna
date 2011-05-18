@@ -15,6 +15,8 @@ use Corinna::Builtin::date;
 use Corinna::Builtin::dateTime;
 use Corinna::Builtin::hexBinary;
 
+our $VERSION = '2.0';
+
 #======================================================================
 package Corinna::Builtin::string;
 our @ISA = qw(Corinna::Builtin::Scalar);

@@ -10,6 +10,8 @@ use File::Spec;
 use Class::Accessor;
 use Corinna::Util qw(merge_hash module_path);
 
+our $VERSION = '2.0';
+
 sub new {
     my $class = shift;
     my $self  = {@_};

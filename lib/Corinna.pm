@@ -17,8 +17,7 @@ use Corinna::SimpleType;
 use Corinna::Stack;
 use Corinna::Util;
 
-use vars qw($VERSION);
-$VERSION = 2.0;
+our $VERSION = 2.0;
 
 #------------------------------------------------------------
 sub new {

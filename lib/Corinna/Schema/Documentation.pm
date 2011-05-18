@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Documentation->mk_accessors(qw(lang text));
 
 1;

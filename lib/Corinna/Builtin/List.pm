@@ -9,6 +9,8 @@ use warnings;
 
 use parent 'Corinna::Builtin::SimpleType';
 
+our $VERSION = '2.0';
+
 #-----------------------------------------------------------------
 sub to_list {
     my $self  = shift;

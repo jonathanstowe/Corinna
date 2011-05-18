@@ -7,6 +7,8 @@ use parent 'Corinna::Builtin::Scalar';
 
 use Corinna::Util qw(validate_date);
 
+our $VERSION = '2.0';
+
 Corinna::Builtin::date->XmlSchemaType(
     bless(
         {

@@ -6,6 +6,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Attribute->mk_accessors(qw(use default));
 
 sub _type_key

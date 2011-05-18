@@ -11,6 +11,8 @@ use parent qw(Class::Accessor Class::Data::Inheritable);
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
+our $VERSION = '2.0';
+
 Corinna::Type->mk_classdata('XmlSchemaType');
 Corinna::Type->mk_accessors(qw(__value));
 

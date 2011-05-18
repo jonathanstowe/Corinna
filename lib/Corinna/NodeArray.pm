@@ -6,8 +6,7 @@ use warnings;
 
 use parent 'Data::HashArray';
 
-use vars qw($VERSION);
-$VERSION = '1.0.1';
+our $VERSION = '2.0';
 
 1;
 
