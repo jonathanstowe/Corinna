@@ -18,6 +18,8 @@ use Corinna::Util qw(get_attribute_hash sprint_xml_element);
 use Scalar::Util qw(reftype);
 
 use parent 'Class::Accessor';
+our $VERSION = '2.0';
+
 Corinna::Schema::Parser->mk_accessors(qw(model contextStack counter verbose));
 
 #------------------------------------------------------------
@@ -48,7 +50,7 @@ sub context {
 }
 
 #------------------------------------------------------------
-# Parse one or more schemas and create a schema model (internal Pastor
+# Parse one or more schemas and create a schema model (internal Corinna
 # structure that represents the object model of the schemas.
 #
 # ARGUMENTS :
@@ -87,7 +89,7 @@ sub import_schema() {
 
     $self->_process( @_, operation => "import" );
 
-    #   die "Pastor : Schema IMPORT functionality not yet supported!\n";
+    #   die "Corinna : Schema IMPORT functionality not yet supported!\n";
 }
 
 #------------------------------------------------------------
@@ -111,14 +113,14 @@ sub parse_to_dom() {
     my $schema_str = $args->{schema_str};
 
     unless ( defined($schema_url) || defined($schema_str) ) {
-        die "Pastor: Parse Schema : Undefined schema !\n";
+        die "Corinna: Parse Schema : Undefined schema !\n";
     }
 
     if ( defined($schema_url) ) {
-        print STDERR "Pastor : Fetching schema : '$schema_url' ...\n"
+        print STDERR "Corinna : Fetching schema : '$schema_url' ...\n"
           if ( $verbose >= 2 );
         my $ua = LWP::UserAgent->new;
-        $ua->agent("Pastor/0.1 ");
+        $ua->agent("Corinna/0.1 ");
         $ua->env_proxy();
 
         # Create a request
@@ -129,24 +131,24 @@ sub parse_to_dom() {
 
         # Check the outcome of the response
         unless ( $res->is_success ) {
-            die "Pastor: Schema Parser : cannot GET from URL '$schema_url' : "
+            die "Corinna: Schema Parser : cannot GET from URL '$schema_url' : "
               . $res->status_line . "\n";
         }
 
         $schema_str = $res->content;
     }
 
-    print STDERR "Pastor : Parsing schema ...\n" if ( $verbose >= 2 );
+    print STDERR "Corinna : Parsing schema ...\n" if ( $verbose >= 2 );
 
     my $parser = XML::LibXML->new();
     my $doc    = $parser->parse_string($schema_str);
 
-    print STDERR "Pastor : Parsing ended\n" if ( $verbose >= 2 );
+    print STDERR "Corinna : Parsing ended\n" if ( $verbose >= 2 );
     return $doc;
 }
 
 #------------------------------------------------------------
-# Parse a schema or an array of schemas into a Pastor schema model.
+# Parse a schema or an array of schemas into a Corinna schema model.
 # Recurse if given an array.
 # see 'parse' for more details.
 #------------------------------------------------------------
@@ -157,7 +159,7 @@ sub _process {
 
     # We need a schema to process. Otherwise why are we here?
     defined( $args->{schema} )
-      or die "Pastor: Process Schema : Undefined schema!\n";
+      or die "Corinna: Process Schema : Undefined schema!\n";
 
     # If the given 'schema' argument is an ARRAY, then
     # recurse on each of the items one by one.
@@ -170,7 +172,7 @@ sub _process {
         return $self->model();
     }
 
-    print STDERR "Pastor : Processing schema : '$args->{schema}' ...\n"
+    print STDERR "Corinna : Processing schema : '$args->{schema}' ...\n"
       if ( $verbose >= 2 );
 
     # By default the 'operation' is 'process', but it could have been
@@ -228,7 +230,7 @@ sub _process {
     # Pop the context from the stack.
     $self->contextStack->pop();
 
-    print STDERR "Pastor : Process ENDED : '$args->{schema}' ...\n"
+    print STDERR "Corinna : Process ENDED : '$args->{schema}' ...\n"
       if ( $verbose >= 2 );
 
     # return our resulting "model"
@@ -355,6 +357,10 @@ sub _process_node
 
       if ( defined($obj) )
       {
+         if ( $context->operation() eq 'redefine' && $obj->can('is_redefinable'))
+         {
+            $obj->is_redefinable(1);
+         }
          $node_stack->push($obj);
       }
 
@@ -409,7 +415,7 @@ sub _process_attribute {
 
     # All attributes must have a name.
     unless ( $obj->name() ) {
-        die "Pastor : Attribute must have a name!\n";
+        die "Corinna : Attribute must have a name!\n";
     }
 
     if ( $obj->scope() =~ /local/io ) {
@@ -434,7 +440,7 @@ sub _process_attribute {
         else {
 
             # An 'orphan' attribute. What is it doing here?
-            die "Pastor : Attribute '"
+            die "Corinna : Attribute '"
               . $obj->name
               . "' found where unexpected!\n"
               . sprint_xml_element( $node->parentNode() || $node ) . "\n";
@@ -496,7 +502,7 @@ sub _process_attributeGroup {
     $self->_fix_up_object( $obj, $node );
 
     unless ( $obj->name() ) {
-        die "Pastor : Attribute Group must have a name!\n"
+        die "Corinna : Attribute Group must have a name!\n"
           . sprint_xml_element($node) . "\n";
     }
 
@@ -516,7 +522,7 @@ sub _process_attributeGroup {
         else {
 
             # An 'orphan' attribute group. What is it doing here?
-            die "Pastor : Element '"
+            die "Corinna : Element '"
               . $obj->name
               . "' found where unexpected!\n"
               . sprint_xml_element( $node->parentNode() || $node ) . "\n";
@@ -550,7 +556,7 @@ sub _process_element {
     # Fix-up the scope and the name of the newly created object.
     $self->_fix_up_object( $obj, $node );
     unless ( $obj->name() ) {
-        die "Pastor : Element must have a name!\n"
+        die "Corinna : Element must have a name!\n"
           . sprint_xml_element( $node->parentNode() || $node ) . "\n";
     }
 
@@ -575,7 +581,7 @@ sub _process_element {
         else {
 
             # An 'orphan' element. What is it doing here?
-            die "Pastor : Element '"
+            die "Corinna : Element '"
               . $obj->name
               . "' found where unexpected!\n"
               . sprint_xml_element( $node->parentNode() || $node ) . "\n";
@@ -609,7 +615,7 @@ sub _process_group {
     # Fix-up the scope and the name of the newly created object.
     $self->_fix_up_object( $obj, $node );
     unless ( $obj->name() ) {
-        die "Pastor : Group must have a name!\n"
+        die "Corinna : Group must have a name!\n"
           . sprint_xml_element( $node->parentNode() || $node ) . "\n";
     }
 
@@ -630,7 +636,7 @@ sub _process_group {
         else {
 
             # An 'orphan' group. What is it doing here?
-            die "Pastor : Element '"
+            die "Corinna : Element '"
               . $obj->name
               . "' found where unexpected!\n"
               . sprint_xml_element( $node->parentNode() || $node ) . "\n";
@@ -679,7 +685,7 @@ sub _process_documentation {
     else {
 
      # What is an 'documentation' doing outside the scope of a 'Schema::Object'?
-        die "Pastor : Documentation found where unexpected!\n"
+        die "Corinna : Documentation found where unexpected!\n"
           . sprint_xml_element( $node->parentNode() || $node ) . "\n";
     }
 
@@ -716,7 +722,7 @@ sub _process_enumeration {
     else {
 
         # What is an 'enumeration' doing outside the scope of a 'SimpleType'?
-        die "Pastor : Enumeration found where unexpected!\n"
+        die "Corinna : Enumeration found where unexpected!\n"
           . sprint_xml_element( $node->parentNode() || $node ) . "\n";
     }
 
@@ -750,7 +756,7 @@ sub _process_extension {
         $host->derivedBy("extension");
     }
     else {
-        die "Pastor : Extension found where unexpected!\n"
+        die "Corinna : Extension found where unexpected!\n"
           . sprint_xml_element( $node->parentNode() ) . "\n";
     }
 
@@ -780,7 +786,7 @@ sub _process_union {
         $host->derivedBy("union");
     }
     else {
-        die "Pastor : 'union' found where unexpected!\n"
+        die "Corinna : 'union' found where unexpected!\n"
           . sprint_xml_element( $node->parentNode() ) . "\n";
     }
 
@@ -826,7 +832,7 @@ sub _process_list {
         $host->derivedBy("list");
     }
     else {
-        die "Pastor : 'list' found where unexpected!\n"
+        die "Corinna : 'list' found where unexpected!\n"
           . sprint_xml_element( $node->parentNode() ) . "\n";
     }
 
@@ -863,7 +869,7 @@ sub _process_include {
 
    # "inlude" element must be a child of the schema element. It can't be deeper.
     unless ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
-        die "Pastor : Schema INCLUDE must be global!\n"
+        die "Corinna : Schema INCLUDE must be global!\n"
           . sprint_xml_element($node) . "\n";
     }
 
@@ -887,7 +893,7 @@ sub _process_import {
 
    # "import" element must be a child of the schema element. It can't be deeper.
     unless ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
-        die "Pastor : Schema IMPORT must be global!\n";
+        die "Corinna : Schema IMPORT must be global!\n";
     }
 
     # Just call the method that does the import.
@@ -910,7 +916,7 @@ sub _process_redefine {
 
  # "redefine" element must be a child of the schema element. It can't be deeper.
     unless ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
-        die "Pastor : Schema REPLACE must be global!\n"
+        die "Corinna : Schema REPLACE must be global!\n"
           . sprint_xml_element($node) . "\n";
     }
 
@@ -946,7 +952,7 @@ sub _process_restriction {
         $host->derivedBy("restriction");
     }
     else {
-        die "Pastor : Restriction found where unexpected!\n"
+        die "Corinna : Restriction found where unexpected!\n"
           . sprint_xml_element( $node->parentNode() ) . "\n";
     }
     return undef;
@@ -965,7 +971,7 @@ sub _process_schema_node {
     my $obj = Corinna::Schema->new()->set_fields( get_attribute_hash($node) );
 
     if ( $context->node_stack->count() ) {
-        die "Pastor : Schema elements cannot be nested!\n";
+        die "Corinna : Schema elements cannot be nested!\n";
     }
 
     # capture the schema namespace - assuming it to be the one that the
@@ -1045,7 +1051,7 @@ sub _process_simple_type {
     # Fix-up the scope and the name of the newly created object.
     $self->_fix_up_object( $obj, $node );
     unless ( $obj->name() ) {
-        die "Pastor : SimpleType must have a name!\n";
+        die "Corinna : SimpleType must have a name!\n";
     }
 
 # if this is a local definition, then our host element/attribute must be of this type
@@ -1099,7 +1105,7 @@ sub _process_complex_type {
     # Fix-up the scope and the name of the newly created object.
     $self->_fix_up_object( $obj, $node );
     unless ( $obj->name() ) {
-        die "Pastor : ComplexType must have a name!\n";
+        die "Corinna : ComplexType must have a name!\n";
     }
 
     # always getting to assume that a local dfinition is in the
@@ -1142,10 +1148,10 @@ sub _process_other_nodes {
         # Element with a 'value' attribute
         unless ( $context->node_stack()->count() ) {
             die
-"Pastor : Element '$name' unexpected as root element in schema!\n";
+"Corinna : Element '$name' unexpected as root element in schema!\n";
         }
         elsif ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
-            die "Pastor : Element '$name' cannot be global in schema!\n"
+            die "Corinna : Element '$name' cannot be global in schema!\n"
               . sprint_xml_element($node) . "\n";
         }
         else {
@@ -1174,13 +1180,13 @@ sub _process_other_nodes {
 
             }
             else {
-                die "Pastor : Don't know what to do with element '$name'\n"
+                die "Corinna : Don't know what to do with element '$name'\n"
                   . sprint_xml_element( $node->parentNode() || $node ) . "\n";
             }
         }
     }
     else {
-        die "Pastor : Unexpected element '$name' (" . $node->namespaceURI() || '' . ") in schema!\n"
+        die "Corinna : Unexpected element '$name' (" . $node->namespaceURI() || '' . ") in schema!\n"
           . sprint_xml_element( $node->parentNode() || $node ) . "\n";
     }
 
@@ -1215,7 +1221,7 @@ sub _fix_up_object {
     unless ( $context->node_stack()->count()
         || UNIVERSAL::isa( $obj, "Corinna::Schema" ) )
     {
-        die "Pastor Unexpected root element '"
+        die "Corinna Unexpected root element '"
           . $obj->name()
           . "' in schema. This may not be a real XSD schema!";
     }

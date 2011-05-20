@@ -1,4 +1,4 @@
-use Test::More 'no_plan';
+use Test::Most 'no_plan';
 
 
 use_ok('Corinna');
@@ -9,7 +9,7 @@ my $pastor = Corinna->new();
 # schema for instance contains xhtml - we don't want to cark it
 # when we encounter this.
 
-eval
+lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
@@ -18,14 +18,6 @@ $pastor->generate(
                    destination  => './test/out/lib/',
                    verbose      => 0 
 );
-};
-if ($@)
-{
-   fail("can parse schema with non-XSD namespace in documentation");
-}
-else
-{
-   pass("can parse schema with non-XSD namespace in documentation");
-}
+} "can parse schema with non-XSD namespace in documentation";
 
 1;

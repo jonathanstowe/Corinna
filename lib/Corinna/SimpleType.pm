@@ -10,6 +10,8 @@ use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
 use parent 'Corinna::Type';
 
+our $VERSION = '2.0';
+
 #----------------------------------------------
 # xml_validate_value
 #----------------------------------------------

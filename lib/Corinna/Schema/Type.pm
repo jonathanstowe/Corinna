@@ -5,8 +5,17 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Type->mk_accessors(
     qw(base baseClasses contentType derivedBy final id));
+
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'type';
+}
 
 1;
 

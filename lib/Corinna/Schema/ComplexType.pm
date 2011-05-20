@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Type';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::ComplexType->mk_accessors(
     qw(
       attributes

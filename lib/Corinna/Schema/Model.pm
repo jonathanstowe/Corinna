@@ -9,8 +9,11 @@ use Corinna::Schema::Object;
 use Corinna::Schema::NamespaceInfo;
 
 use Corinna::Util qw(merge_hash);
+use Scalar::Util qw(blessed);
 
 use parent 'Class::Accessor';
+
+our $VERSION = '2.0';
 
 Corinna::Schema::Model->mk_accessors(
     qw(xsd_namespace type element group attribute attributeGroup defaultNamespace namespaces namespaceCounter)
@@ -89,31 +92,25 @@ sub xml_item_class {
 }
 
 #-------------------------------------------------------
-sub add {
+sub add 
+{
     my $self = shift;
     my $args = {@_};
     my $field;
-    my $newItem;
 
-    unless ( defined($field) ) {
-        $newItem = $args->{object} || $args->{item} || $args->{node};
-      SWITCH: {
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Type" )
-              and do { $field = "type"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Element" )
-              and do { $field = "element"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Group" )
-              and do { $field = "group"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::Attribute" )
-              and do { $field = "attribute"; last SWITCH; };
-            UNIVERSAL::isa( $newItem, "Corinna::Schema::AttributeGroup" )
-              and do { $field = "attributeGroup"; last SWITCH; };
-        }
+    my  $newItem = $args->{object} || $args->{item} || $args->{node};
+
+    if ( blessed($newItem) && $newItem->isa('Corinna::Schema::Object') )
+    {
+       $field = $newItem->_type_key();
     }
 
-    unless ( defined($field) ) {
-        foreach my $arg (qw(type element group attribute attributeGroup)) {
-            if ( defined( $args->{$arg} ) ) {
+    if (!defined($field) ) 
+    {
+        foreach my $arg (qw(type element group attribute attributeGroup)) 
+        {
+            if ( defined( $args->{$arg} ) ) 
+            {
                 $field   = $arg;
                 $newItem = $args->{$field};
                 last;
@@ -121,9 +118,9 @@ sub add {
         }
     }
 
-    unless ( defined($field) ) {
-        return undef;
-    }
+    if ( defined($field) ) 
+    {
+    
 
     my $items = $self->{$field};
     my $key =
@@ -134,13 +131,14 @@ sub add {
         unless ( UNIVERSAL::can( $oldItem, 'is_redefinable' )
             && $oldItem->is_redefinable() )
         {
-            die "Pastor : $field already defined : '$key'\\n";
+            die "Corinna : $field already defined : '$key'\\n";
         }
     }
     $newItem->is_redefinable(1)
       if ( $args->{operation} !~ /redefine/i )
       && UNIVERSAL::can( $newItem, 'is_redefinable' );
     $items->{$key} = $newItem;
+ }
 
 }
 
@@ -347,7 +345,7 @@ sub _resolve_object_class {
       if ( $verbose >= 6 );
 
     if ( UNIVERSAL::can( $object, "meta_class" ) ) {
-        $object->meta_class( $class_prefix . "Pastor::Meta" );
+        $object->meta_class( $class_prefix . "Corinna::Meta" );
     }
 
     if ( UNIVERSAL::isa( $object, "Corinna::Schema::Type" ) ) {

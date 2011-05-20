@@ -21,6 +21,8 @@ use Corinna::Schema::Union;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema->mk_accessors(
     qw( targetNamespace attributeFormDefault elementFormDefault ));
 

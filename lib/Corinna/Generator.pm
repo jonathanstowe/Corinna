@@ -10,6 +10,8 @@ use File::Spec;
 use Class::Accessor;
 use Corinna::Util qw(merge_hash module_path);
 
+our $VERSION = '2.0';
+
 sub new {
     my $class = shift;
     my $self  = {@_};
@@ -36,7 +38,7 @@ sub generate {
     my $self  = shift;
     my $args  = {@_};
     my $model = $args->{model}
-      or die "Pastor: Code generation requires a 'model'!\n";
+      or die "Corinna: Code generation requires a 'model'!\n";
     my $mode = $args->{mode};
     if ( ( $mode =~ /eval/ ) || ( $mode =~ /return/ ) ) {
         $args->{style} = "single";    # force single module generation
@@ -55,7 +57,7 @@ sub generate {
     while ( ($class_prefix) && ( $class_prefix !~ /::$/ ) ) {
         $class_prefix .= ':';
     }
-    $args->{metaModule} = $class_prefix . "Pastor::Meta";
+    $args->{metaModule} = $class_prefix . "Corinna::Meta";
 
     print STDERR "\nGenerating code...\n" if ( $verbose >= 2 );
     if ( $style =~ /single/ ) {
@@ -87,7 +89,7 @@ sub _generate_single {
         }
     }
 
-    $code .= $self->_fabricateHeaderModuleCode(@_);
+    $code .= $self->_fabricate_header_module_code(@_);
     $code .= $self->_fabricate_meta_module_code(@_);
 
     # Perl modules must return TRUE
@@ -121,7 +123,7 @@ sub _generate_single {
 
         my $file = $module
           or die
-          "Pastor:Generator:_generate_single:A 'module' name is required!\n";
+          "Corinna 'module' name is required!\n";
 
         $file = $destination . $file . '.pm';
         $file =~ s/::/\//g;
@@ -169,7 +171,7 @@ sub _generate_multiple {
     if ($module) {
 
       # Generate the module with all the 'use' statements for different modules.
-        my $code = $self->_fabricateHeaderModuleCode(@_);
+        my $code = $self->_fabricate_header_module_code(@_);
 
         my $file =
           module_path( module => $module, destination => $destination );
@@ -182,7 +184,7 @@ sub _generate_multiple {
 #--------------------------------------------
 # Fabricate the code for the module that will 'use' all the generated classes.
 #--------------------------------------------
-sub _fabricateHeaderModuleCode {
+sub _fabricate_header_module_code {
     my $self         = shift;
     my $args         = {@_};
     my $model        = $args->{model};
@@ -285,7 +287,7 @@ sub _fabricate_code {
     my $self   = shift;
     my $args   = {@_};
     my $object = $args->{object}
-      or die "Pastor: _fabricate_code: Need a type!\n";
+      or die "Corinna: _fabricate_code: Need a type!\n";
     my $style   = $args->{style};
     my $class   = $object->class();
     my $isa     = $object->baseClasses() || [];
@@ -479,7 +481,7 @@ sub _fabricate_pod {
     my $self   = shift;
     my $args   = {@_};
     my $object = $args->{object}
-      or die "Pastor: _fabricate_pod: Need a type!\n";
+      or die "Corinna: _fabricate_pod: Need a type!\n";
     my $style   = $args->{style};
     my $class   = $object->class();
     my $isa     = $object->baseClasses() || [];
@@ -617,14 +619,14 @@ sub _write_code {
     my $args = {@_};
     my $code = $args->{code} || "";
     my $file = $args->{file}
-      or die "Pastor : Generator : _write_code : requires a file name\n";
+      or die "Corinna : Generator : _write_code : requires a file name\n";
     my $verbose = $self->{verbose} || 0;
 
     print STDERR "\nWriting module '$file' ..." if ( $verbose >= 2 );
     my ( $volume, $directories, $filebase ) = File::Spec->splitpath($file);
     File::Path::mkpath( $volume . $directories );
     my $handle = IO::File->new( $file, "w" )
-      or die "Pastor : Generator : _write_code : Can't open file : $file\n";
+      or die "Corinna : Generator : _write_code : Can't open file : $file\n";
 
     $handle->binmode(':utf8');
     print $handle $code;

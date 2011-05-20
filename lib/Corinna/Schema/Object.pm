@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Class::Accessor';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Object->mk_accessors(
     qw(class definition documentation is_redefinable meta_class name name_is_auto_generated ref ref_key scope type targetNamespace)
 );
@@ -17,7 +19,8 @@ sub new {
 }
 
 #------------------------------------------------------------
-sub key {
+sub key 
+{
     my $self = shift;
     if (@_) {
         return ( $self->{key} = shift );
@@ -124,13 +127,22 @@ sub type {
     return $definition->type();
 }
 
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   my $tk;
+
+   return $tk;
+}
+
 1;
 
 __END__
 
 =head1 NAME
 
-B<Corinna::Schema::Object> - Ancestor of all Pastor schema object classes.
+B<Corinna::Schema::Object> - Ancestor of all Corinna schema object classes.
 
 =head1 WARNING
 
@@ -352,11 +364,21 @@ value is NOT already defined for this field, but if there is a I<definition>
 of this object, then the value of the same field is returned from the
 I<definition> of the object.  (See L</definition()>).
 
+
+=head4 _type_key
+
+This is a read-only property that must be over-ridden in a child class.
+This is used internally to determine where the object should be cached in
+the model.  The default implementation  returns undef which should be
+fatal wherever it is used.
+
+
 =head2 OTHER METHODS
 
 =head4 set_fields()
 
   $object->set_fields(%fields);
+
 
 B<OBJECT METHOD>.
 

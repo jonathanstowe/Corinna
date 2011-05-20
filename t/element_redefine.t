@@ -10,18 +10,22 @@ my $pastor = Corinna->new();
 
 my $verbose = 0;
 
+TODO:
+{
+   local $TODO = "redefine doesn't appear to work at present";
 lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
-                   schema       => ['./test/source/bugs/schema/local_complex_type.xsd'],
+                   schema       => ['./test/source/elements/schema/redefine_2.xsd'],
                    class_prefix => "Attribute::Test::Default",
                    destination  => './test/out/lib/',
                    verbose      => $verbose );
-} "generate with XSD as default namespace and local complexType";
+} "generate with redefine";
 
 
-my $class = Attribute::Test::Default::Corinna::Meta->Model->xml_item_class('TestElement');
+my $class;
+lives_ok { $class = Attribute::Test::Default::Corinna::Meta->Model->xml_item_class('author')} "got class of element";
 
-can_ok($class,'test_attribute');
-
+can_ok($class,'country');
+}

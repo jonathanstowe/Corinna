@@ -11,6 +11,8 @@ use parent qw(Class::Accessor Class::Data::Inheritable);
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
+our $VERSION = '2.0';
+
 Corinna::Type->mk_classdata('XmlSchemaType');
 Corinna::Type->mk_accessors(qw(__value));
 
@@ -227,59 +229,67 @@ sub xml_text_content { &__value; }
 # Grab a field. The difference from 'get'is that 'grab' will create
 # the field if it doesn't exist (correctly typed).
 #------------------------------------------------------
-sub grab($) {
-    my $self  = shift;
-    my $field = shift;
+sub grab
+{
+   my $self  = shift;
+   my $field = shift;
 
-    return $self->{$field} if ( defined( $self->{$field} ) );
-    return undef unless ( UNIVERSAL::can( $self, "XmlSchemaType" ) );
+   my $return;
 
-    my $type = $self->XmlSchemaType();
-
-    # Try with elements
-    if ( UNIVERSAL::can( $type, 'effective_element_info' ) ) {
-        my $elementInfo = $type->effective_element_info();
-        if ( defined( my $element = $elementInfo->{$field} ) ) {
+   if ( defined $field )
+   {
+      my $type = $self->XmlSchemaType();
+      if ( defined( $self->{$field} ) )
+      {
+         $return = $self->{$field};
+      }
+      elsif ( UNIVERSAL::can( $type, 'effective_element_info' ) )
+      {
+         my $elementInfo = $type->effective_element_info();
+         if ( defined( my $element = $elementInfo->{$field} ) )
+         {
             my $class = $element->class();
-            if ( defined($class) ) {
-                my $result;
+            if ( defined($class) )
+            {
 
-                if ( $element->is_singleton() ) {
+               if ( $element->is_singleton() )
+               {
 
-                    # singleton
-                    $result = $self->{$field} = $class->new();
-                }
-                else {
+                  # singleton
+                  $return = $self->{$field} = $class->new();
+               }
+               else
+               {
 
-                    # multiplicity
+                  # multiplicity
 
     # What to do? Should we return an empty array or one having an object in it?
-                    $result = $self->{$field} = Corinna::NodeArray->new();
+                  $return = $self->{$field} = Corinna::NodeArray->new();
 
-        #               $result = $self->{$field} = Corinna::NodeArray->new($class->new());
-                }
-                return $result;
+#               $result = $self->{$field} = Corinna::NodeArray->new($class->new());
+               }
             }
-        }
-    }
+         }
+      }
+      elsif ( UNIVERSAL::can( $type, 'effective_attribute_info' ) )
+      {
+         my $attribInfo = $type->effective_attribute_info();
+         my $attribPfx  = $type->attributePrefix();
+         my $afield     = $field;
+         $afield =~ s/^$attribPfx//;
 
-    # Try with attributes
-    if ( UNIVERSAL::can( $type, 'effective_attribute_info' ) ) {
-        my $attribInfo = $type->effective_attribute_info();
-        my $attribPfx  = $type->attributePrefix();
-        my $afield     = $field;
-        $afield =~ s/^$attribPfx//;
-
-        if ( defined( my $attrib = $attribInfo->{$afield} ) ) {
+         if ( defined( my $attrib = $attribInfo->{$afield} ) )
+         {
             my $class = $attrib->class();
-            if ( defined($class) ) {
-                my $result = $self->{ $attribPfx . $afield } = $class->new();
-                return $result;
+            if ( defined($class) )
+            {
+               $return = $self->{ $attribPfx . $afield } = $class->new();
             }
-        }
-    }
+         }
+      }
 
-    return undef;
+   }
+   return $return;
 }
 
 #----------------------------------------------
@@ -320,7 +330,7 @@ sub xml_validate {
             unless ( defined($value) ) {
                 if ( $attrib->use =~ /required/io ) {
                     die
-"Pastor : Validate : $path : required attribute '$attribName' is missing!";
+"Corinna : Validate : $path : required attribute '$attribName' is missing!";
                 }
                 else {
                     next;
@@ -355,7 +365,7 @@ sub xml_validate {
                 && ( @$items < $element->minOccurs ) )
             {
                 die
-"Pastor : Validate : $path : Element '$elemName' must occur at least '"
+"Corinna : Validate : $path : Element '$elemName' must occur at least '"
                   . $element->minOccurs
                   . "' times whereas it occurs only '"
                   . scalar(@$items)
@@ -367,7 +377,7 @@ sub xml_validate {
                 && ( @$items > $element->maxOccurs ) )
             {
                 die
-"Pastor : Validate : $path : Element '$elemName' must occur at most '"
+"Corinna : Validate : $path : Element '$elemName' must occur at most '"
                   . $element->maxOccurs
                   . "' times whereas it occurs '"
                   . scalar(@$items)
@@ -400,7 +410,7 @@ sub xml_validate {
                     }
                     else {
                         die
-"Pastor : Validate : $path : Don't know how to validate '$elemName' (not a known or convertable type)";
+"Corinna : Validate : $path : Don't know how to validate '$elemName' (not a known or convertable type)";
                     }
                 }
 
@@ -618,7 +628,7 @@ sub from_xml_url {
     return undef unless ($url);
 
     my $ua = LWP::UserAgent->new;
-    $ua->agent("Pastor/0.1 ");
+    $ua->agent("Corinna/0.1 ");
 
     # Create a request
     my $req = HTTP::Request->new( GET => $url );
@@ -628,7 +638,7 @@ sub from_xml_url {
 
     # Check the outcome of the response
     unless ( $res->is_success ) {
-        die "Pastor: ComplexType : from_xml_url : cannot GET from URL '$url' : "
+        die "Corinna: ComplexType : from_xml_url : cannot GET from URL '$url' : "
           . $res->status_line . "\n";
     }
 
@@ -683,13 +693,13 @@ sub to_xml_fh {
 #-------------------------------------------------------------------
 sub to_xml_file {
     my $self = shift;
-    my $file = shift or die "Pastor : to_xml_file : need a file name!\n";
+    my $file = shift or die "Corinna : to_xml_file : need a file name!\n";
     my $str  = $self->to_xml_string(@_);
 
     my ( $volume, $directories, $filebase ) = File::Spec->splitpath($file);
     File::Path::mkpath( $volume . $directories );
     my $handle = IO::File->new( $file, "w" )
-      or die "Pastor : ComplexType : to_xml_file : Can't open file : $file\n";
+      or die "Corinna : ComplexType : to_xml_file : Can't open file : $file\n";
 
     print $handle $str;
     $handle->close();
@@ -722,11 +732,11 @@ sub to_xml_string {
 #-------------------------------------------------------------------
 sub to_xml_url {
     my $self = shift;
-    my $url  = shift or die "Pastor : to_xml_url : need a URL!\n";
+    my $url  = shift or die "Corinna : to_xml_url : need a URL!\n";
     my $str  = $self->to_xml_string(@_);
 
     my $ua = LWP::UserAgent->new;
-    $ua->agent("Pastor/0.1 ");
+    $ua->agent("Corinna/0.1 ");
 
     # Create a request
     my $req = HTTP::Request->new( PUT => $url );
@@ -737,7 +747,7 @@ sub to_xml_url {
 
     # Check the outcome of the response
     unless ( $res->is_success ) {
-        die "Pastor: ComplexType : to_xml_url : cannot PUT to URL '$url' : "
+        die "Corinna: ComplexType : to_xml_url : cannot PUT to URL '$url' : "
           . $res->status_line . "\n";
     }
     return $str;
@@ -777,7 +787,7 @@ sub to_xml_dom {
     }
 
     # We absolutely need a name
-    $name or die "Pastor: to_xml_dom : Element needs a name!\n";
+    $name or die "Corinna: to_xml_dom : Element needs a name!\n";
 
     print STDERR "**** to_xml_dom : " . $name . "\n" if ( $verbose >= 9 );
 
@@ -859,7 +869,7 @@ sub to_xml_dom {
                     }
                     else {
                         die
-"Pastor : to_xml_dom : Don't know how to transform '$elemName' into DOM (not a known or convertable type)";
+"Corinna : to_xml_dom : Don't know how to transform '$elemName' into DOM (not a known or convertable type)";
                     }
                 }
 
@@ -897,8 +907,8 @@ sub _child_to_dom {
 
 # Otherwise, we'll just stringify the child and return an element with a text node.
     my $name = $args->{name}
-      or die "Pastor: _child_to_dom : Child node needs a name!\n";
-    $doc or die "Pastor: _child_to_dom : Need a DOM Document!\n";
+      or die "Corinna: _child_to_dom : Child node needs a name!\n";
+    $doc or die "Corinna: _child_to_dom : Need a DOM Document!\n";
 
     # TODO : Namespaces
     my $node = $doc->createElement($name);
@@ -1191,7 +1201,7 @@ Currently, B<%options> may contain a field called B<name> which is necessary
 only when the class corresponds to a complex type definition in the schema.
 When it corresponds to a global element, the name of the element is already
 known, but in other cases this information must be supplied. In fact,
-B<Pastor> carries out a last ditch effort to recover the name of the element
+B<Corinna> carries out a last ditch effort to recover the name of the element
 if it has been previously been parsed from DOM, but don't count on this. The
 rule of the thumb is, if your class corresponds to a global element, you do
 NOT have to provide a B<name> for the element to be written. Otherwise, you do
@@ -1246,7 +1256,7 @@ Currently, B<%options> may contain a field called B<name> which is necessary
 only when the class corresponds to a complex type definition in the schema.
 When it corresponds to a global element, the name of the element is already
 known, but in other cases this information must be supplied. In fact,
-B<Pastor> carries out a last ditch effort to recover the name of the element
+B<Corinna> carries out a last ditch effort to recover the name of the element
 if it has been previously been parsed from DOM, but don't count on this. The
 rule of the thumb is, if your class corresponds to a global element, you do
 NOT have to provide a B<name> for the element to be written. Otherwise, you do
@@ -1529,7 +1539,7 @@ information coming from your B<W3C Schema>.  This data is of class
 L<Corinna::Schema::ComplexType> or L<Corinna::Schema::SimpleType>.
 
 You don't really need to know much about B<XmlSchemaType>. It's used
-internally by Pastor's XML binding and validation methods as meta information
+internally by Corinna's XML binding and validation methods as meta information
 about the generated class.
 
 =head2 OTHER METHODS
@@ -1578,7 +1588,7 @@ from the death of L</xml_validate>.
 
 B<OBJECT METHOD>.
 
-When overriden by the descendants, 'B<xml_validate>' validates a Pastor XML
+When overriden by the descendants, 'B<xml_validate>' validates a Corinna XML
 object (of a generated class) with respect to the META information that had
 originally be extracted from your original B<W3C XSD Schema>.
 
@@ -1621,7 +1631,7 @@ scalars are left alone.
 
 B<OBJECT METHOD>.
 
-'B<xml_validate_further>' should perform extra validation on a Pastor XML
+'B<xml_validate_further>' should perform extra validation on a Corinna XML
 object (of a generated class).
 
 It is called by L</xml_validate> after performing rutine validations.

@@ -7,6 +7,8 @@ use Scalar::Util qw(looks_like_number);
 
 use parent 'Corinna::Builtin::Scalar';
 
+our $VERSION = '2.0';
+
 sub xml_validate
 {
    my ( $self, $path ) = @_;

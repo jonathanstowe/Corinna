@@ -15,8 +15,7 @@ use File::Spec;
 use Getopt::Long;
 use Pod::Usage;
 
-use vars qw($VERSION);
-$VERSION = '1.0.1';
+our $VERSION = '2.0';
 
 #-------------------------------------------------------------
 # METHOD

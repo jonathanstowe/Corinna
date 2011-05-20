@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Builtin::SimpleType';
 
+our $VERSION = '2.0';
+
 #--------------------------------------------------------------
 sub xml_validate {
     my $self    = shift;
@@ -27,7 +29,7 @@ sub xml_validate {
     }
 
     die
-"Pastor : Validate : $path : None of the union members validate value '$value'";
+"Corinna : Validate : $path : None of the union members validate value '$value'";
 }
 
 1;

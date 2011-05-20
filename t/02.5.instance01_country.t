@@ -1,7 +1,8 @@
 use utf8;
-use Test::More tests => 98;
+use Test::Most tests => 98;
 
 use Scalar::Util qw(refaddr);
+use File::Path;
 
 use_ok('URI');
 use_ok('URI::file');
@@ -22,7 +23,7 @@ $pastor->generate(
 
 # ======= COUNTRY ==============
 my $country_class =
-  Corinna::Test::Pastor::Meta->Model->xml_item_class('country');
+  Corinna::Test::Corinna::Meta->Model->xml_item_class('country');
 is( $country_class, "Corinna::Test::country" );
 
 my $country_in = $country_class->from_xml(
@@ -241,6 +242,11 @@ foreach my $country (@countries) {
 
 #	print STDERR "\nTest OVER baby!\n";
 ok( 1, 'end' );    # survived everything
+
+END
+{
+   rmtree './test/out';
+}
 
 1;
 

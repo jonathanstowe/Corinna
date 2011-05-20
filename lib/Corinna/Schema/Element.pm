@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Element->mk_accessors(
     qw(baseClasses minOccurs maxOccurs targetNamespace));
 
@@ -17,6 +19,13 @@ sub is_singleton {
     return 0 if ( $maxOccurs eq 'unbounded' );
     return 1 if ( $maxOccurs == 1 );
     return 0;
+}
+
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'element';
 }
 
 1;

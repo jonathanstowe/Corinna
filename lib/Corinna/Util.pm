@@ -7,6 +7,8 @@ use XML::LibXML;
 
 use parent 'Exporter';
 
+our $VERSION = '2.0';
+
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(    merge_hash
   get_attribute_hash

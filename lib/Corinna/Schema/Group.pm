@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
+our $VERSION = '2.0';
+
 Corinna::Schema::Group->mk_accessors(qw(elements elementInfo));
 
 sub new {
@@ -22,6 +24,13 @@ sub new {
     }
 
     return bless $self, $class;
+}
+
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'group';
 }
 
 1;

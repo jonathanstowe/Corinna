@@ -1,4 +1,4 @@
-use Test::More 'no_plan';
+use Test::Most 'no_plan';
 
 
 use_ok('Corinna');
@@ -13,22 +13,13 @@ $pastor->generate(
                    verbose      => 0
 );
 
-my $class = Corinna::Test::Pastor::Meta->Model->xml_item_class('Test');
+my $class = Corinna::Test::Corinna::Meta->Model->xml_item_class('Test');
 
 my $obj;
 
-eval
+lives_ok
 {
    $obj = $class->from_xml_file('./test/source/bugs/xml/no_type.xml');
-};
-if ($@)
-{
-   fail("doesn't croak with an implicit anyType");
-   diag $@;
-}
-else
-{
-   pass("doesn't croak with an implicit anyType");
-}
+} "doesn't croak with an implicit anyType";
 
 1;

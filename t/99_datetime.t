@@ -1,4 +1,4 @@
-use Test::More;
+use Test::Most;
 
 eval 
 {
@@ -26,7 +26,7 @@ $pastor->generate(
                    verbose      => 0
 );
 
-my $class = Corinna::Test::Pastor::Meta->Model->xml_item_class('DateTest');
+my $class = Corinna::Test::Corinna::Meta->Model->xml_item_class('DateTest');
 
 my $obj = $class->new();
 

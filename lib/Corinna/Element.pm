@@ -3,7 +3,9 @@ package Corinna::Element;
 use strict;
 use warnings;
 
-use base qw(Corinna::ComplexType);
+use parent qw(Corinna::ComplexType);
+
+our $VERSION = '2.0';
 
 Corinna::Element->mk_classdata('XmlSchemaElement');
 

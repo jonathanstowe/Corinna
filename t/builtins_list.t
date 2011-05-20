@@ -1,4 +1,4 @@
-use Test::More qw(no_plan);
+use Test::Most qw(no_plan);
 
 use_ok('Corinna');
 
@@ -12,7 +12,7 @@ $pastor->generate(
                    verbose      => 0
 );
 
-my $class = Corinna::Test::Pastor::Meta->Model->xml_item_class('ListTest');
+my $class = Corinna::Test::Corinna::Meta->Model->xml_item_class('ListTest');
 
 my $obj = $class->from_xml_file('./test/source/builtins/list/list.xml');
 

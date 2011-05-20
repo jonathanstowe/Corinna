@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:redefine schemaLocation="redefine_1.xsd">
+    <xs:complexType name="pname">
+      <xs:complexContent>
+        <xs:extension base="pname">
+          <xs:sequence>
+            <xs:element name="country" type="xs:string"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:redefine>
+  <xs:element name="author" type="pname"/>
+</xs:schema>

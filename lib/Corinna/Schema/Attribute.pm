@@ -6,7 +6,16 @@ use warnings;
 
 use parent 'Corinna::Schema::Object';
 
-Corinna::Schema::Attribute->mk_accessors(qw(use));
+our $VERSION = '2.0';
+
+Corinna::Schema::Attribute->mk_accessors(qw(use default));
+
+sub _type_key
+{
+   my ( $self ) = @_;
+
+   return 'attribute';
+}
 
 1;
 
@@ -84,11 +93,20 @@ documentation of those.
   my $u = $object->use();  # GET
   $object->use($u);        # SET
 
-This is W3C property.
+This is a W3C property.
 
 Indicates if the B<use> of an attribute is either 'I<optional>',
 'I<required>', or 'I<prohibited>'.  This is filled in by the schema parser and
 is used at validation time.
+
+=head4 default()
+
+   my $default = $object->default();  
+   $object->default($default);
+
+This is a W3C property.
+
+This is the default value for the attribute when B<use> is 'I<required>'.
 
 =head1 BUGS & CAVEATS
 

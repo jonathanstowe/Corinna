@@ -1,11 +1,11 @@
-use Test::More 'no_plan';
+use Test::Most 'no_plan';
 
 
 use_ok('Corinna');
 
 my $pastor = Corinna->new();
 
-eval
+lives_ok
 {
 $pastor->generate(
                    mode         => 'eval',
@@ -14,33 +14,15 @@ $pastor->generate(
                    destination  => './test/out/lib/',
                    verbose      => 0 
 );
-};
+} "Can parse the W3C testSuite schema";
 
-if ($@)
-{
-   fail("Can parse the W3C testSuite schema");
-}
-else
-{
-   pass("Can parse the W3C testSuite schema");
-}
-
-my $class = W3C::Test::Pastor::Meta->Model->xml_item_class('testSuite');
+my $class = W3C::Test::Corinna::Meta->Model->xml_item_class('testSuite');
 
 my $obj;
 
-eval
+lives_ok
 {
    $obj = $class->from_xml_file('./test/source/w3c/suite.xml');
-};
-if ($@)
-{
-   fail("doesn't croak with an implicit anyType");
-   diag $@;
-}
-else
-{
-   pass("doesn't croak with an implicit anyType");
-}
+} "resulting classes can parse example XML";
 
 1;
