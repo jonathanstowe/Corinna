@@ -8,28 +8,43 @@ use parent 'Corinna::Builtin::SimpleType';
 our $VERSION = '2.0';
 
 #--------------------------------------------------------------
-sub xml_validate {
+sub xml_validate 
+{
     my $self    = shift;
     my $path    = shift || '';
     my $type    = $self->XmlSchemaType();
     my $value   = $self->__value;
     my $members = $type->memberClasses || [];
 
-    unless (@$members) {
-        return 1;
-    }
+    # I'm not actually convinced this logic is right
+    # surely if one of the members doesn't validate 
+    # then it's not valid, this appears to be the other
+    # way round :-\
+    my $rc = 1;
+    if  (@$members) 
+    {
 
-    foreach my $class (@$members) {
-        if ( UNIVERSAL::can( $class, "xml_validate" ) ) {
+       $rc = 0;
+    foreach my $class (@$members) 
+    {
+        if ( $class->can("xml_validate" ) ) {
             my $object = $class->new( __value => $value );
-            if ( $object->xml_validate(@_) ) {
-                return 1;
+            if ( $object->xml_validate(@_) ) 
+            {
+                $rc = 1;
+                last;
             }
         }
     }
 
-    die
+    if (!$rc)
+    {
+      die
 "Corinna : Validate : $path : None of the union members validate value '$value'";
+    }
+   }
+
+   return $rc;
 }
 
 1;

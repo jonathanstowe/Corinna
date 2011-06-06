@@ -5,11 +5,19 @@ use warnings;
 
 use parent 'Class::Accessor';
 
+use Scalar::Util qw(reftype blessed);
+
 our $VERSION = '2.0';
 
-Corinna::Schema::Object->mk_accessors(
-    qw(class definition documentation is_redefinable meta_class name name_is_auto_generated ref ref_key scope type targetNamespace)
-);
+Corinna::Schema::Object->mk_accessors( qw(class definition 
+                                          documentation 
+                                          is_redefinable 
+                                          meta_class name 
+                                          name_is_auto_generated 
+                                          ref 
+                                          ref_key 
+                                          scope 
+                                          type targetNamespace));
 
 #------------------------------------------------------------
 sub new {
@@ -67,15 +75,18 @@ sub ref_key {
 #------------------------------------------------------------
 # Set multiple fields (hash values) of this object all at once from a given
 # hash.
-sub set_fields {
+sub set_fields 
+{
     my $self = shift;
     my $h    = $_[0];    # if the first argument is a hash-ref, use it.
 
     # otherwise, use the argument list as a hash.
-    unless ( ref($h) =~ /HASH/ ) {
+    if ( ! (reftype($h) && reftype($h) eq 'HASH') ) 
+    {
         $h = {@_};
     }
-    while ( my ( $key, $value ) = each %$h ) {
+    while ( my ( $key, $value ) = each %$h ) 
+    {
         $self->{$key} = $value;
     }
     return $self;
@@ -84,47 +95,84 @@ sub set_fields {
 #----------------------------------------------------------
 # override the accessor -- only for GET.
 # Default to the value in "definition" if there is one.
-sub class {
-    my $self = shift;
+sub class
+{
+   my $self = shift;
 
-    # _class_accesor is an alias for class() made by Class::Accessor
-    # We are not interested by the SET case which should do the default.
-    return $self->_class_accessor(@_) if (@_);
+   my $ret;
 
-    # if we have it defined here, just return it.
-    my $result = $self->_class_accessor();
-    return $result if $result;
+   # _class_accesor is an alias for class() made by Class::Accessor
+   # We are not interested by the SET case which should do the default.
+
+   if (@_)
+   {
+      $ret = $self->_class_accessor(@_);
+   }
+   else
+   {
+
+      # if we have it defined here, just return it.
+      my $result = $self->_class_accessor();
+
+      if ($result)
+      {
+         $ret = $result;
+
+      }
+      elsif ( $self->can('definition'))
+      {
 
   # Otherwise, see if our "definition" has it. So we would effectively delegate.
-    my $definition = undef;
-    return $result
-      unless ( UNIVERSAL::can( $self, "definition" )
-        && ( $definition = $self->definition )
-        && UNIVERSAL::can( $definition, "class" ) );
-    return $definition->class();
-}
+            my $definition;
+            if ( $definition = $self->definition() && $definition->can('class') ) 
+            {
+               $ret = $definition->class();
+            }
+      }
 
+      return $ret;
+   }
+}
 #----------------------------------------------------------
 # override the accessor -- only for GET.
 # Default to the value in "definition" if there is one.
-sub type {
-    my $self = shift;
+sub type
+{
+   my $self = shift;
 
-    # _type_accesor is an alias for type() made by Class::Accessor
-    # We are not interested by the SET case which should do the default.
-    return $self->_type_accessor(@_) if (@_);
+   my $ret;
 
-    # if we have it defined here, just return it.
-    my $result = $self->_type_accessor();
-    return $result if $result;
+   # _type_accesor is an alias for type() made by Class::Accessor
+   # We are not interested by the SET case which should do the default.
+   if (@_)
+   {
+      $ret = $self->_type_accessor(@_);
+   }
+   else
+   {
+
+      # if we have it defined here, just return it.
+      my $result = $self->_type_accessor();
+
+      if ($result)
+      {
+         $ret = $result;
+      }
+      else
+      {
 
   # Otherwise, see if our "definition" has it. So we would effectively delegate.
-    my $definition = undef;
-    return $result
-      unless ( UNIVERSAL::can( $self, "definition" )
-        && ( $definition = $self->definition )
-        && UNIVERSAL::can( $definition, "type" ) );
-    return $definition->type();
+         my $definition;
+         if (    $self->can("definition")
+              && ( $definition = $self->definition() )
+              && $definition->can("type") )
+         {
+            $ret = $definition->type();
+         }
+
+      }
+   }
+   return $ret;
 }
 
 sub _type_key

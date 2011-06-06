@@ -168,16 +168,21 @@ sub xml_validate_ancestors {
     my $value     = $self->__value;
     my @ancestors = $self->get_ancestors();
 
-    foreach my $class (@ancestors) {
-        next
-          unless ( UNIVERSAL::can( $class, 'new' )
-            && UNIVERSAL::can( $class, 'xml_validate' ) );
-
-        my $obj = $class->new( __value => $value );
-        return 0 unless $obj->xml_validate(@_);
+    my $rt = 1;
+    foreach my $class (@ancestors) 
+    {
+          if (  $class->can('new') && $class->can( 'xml_validate' ) )
+          {
+            my $obj = $class->new( __value => $value );
+            if (! $obj->xml_validate(@_))
+            {
+               $rt = 0;
+               last;
+            }
+         }
     }
 
-    return 1;
+    return $rt;
 }
 
 #-----------------------------------------------------------------------------
@@ -204,14 +209,19 @@ sub normalize_whitespace {
     }
     else {
         my @ancestors = $self->get_ancestors();
-        foreach my $class (@ancestors) {
-            next
-              unless UNIVERSAL::can( $class, 'normalize_whitespace' )
-                  && UNIVERSAL::can( $class, 'new' );
-            my $object = $class->new( __value => $value );
-            my $nvalue = $object->normalize_whitespace($value);
+        foreach my $class (@ancestors) 
+        {
+            if ($class->can( 'normalize_whitespace' ) && $class->can('new'))
+            {
+               my $object = $class->new( __value => $value );
+               my $nvalue = $object->normalize_whitespace($value);
 
-            return $nvalue if ( $nvalue ne $value );
+               if ( $nvalue ne $value )
+               {
+                  $value = $nvalue;
+                  last;
+               }
+            }
         }
     }
 

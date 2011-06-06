@@ -102,5 +102,9 @@ test/source/builtins/list/list.xml
 test/source/builtins/list/list.xsd
 test/source/elements/schema/redefine_1.xsd
 test/source/elements/schema/redefine_2.xsd
-
+t/itemconfig.t
+test/source/itemconfig/schema/ActionReference.xsd
+test/source/itemconfig/schema/baseBase.xsd
+test/source/itemconfig/schema/InfoItems.xsd
+test/source/itemconfig/schema/ItemConfig.xsd
 META.yml                                 Module meta-data (added by MakeMaker)

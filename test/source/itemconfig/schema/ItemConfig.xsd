@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="urn:ItemConfig" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ItemConfig" xmlns:ad="urn:ActionDescription"
+	xmlns:ii="urn:InfoItems" xmlns:ar="urn:ActionReference">
+	
+	<xs:import schemaLocation="InfoItems.xsd" namespace="urn:InfoItems" />
+	<xs:import schemaLocation="ActionReference.xsd" namespace="urn:ActionReference" />
+	
+	<xs:element name="ItemConfig" type="ItemConfigType" />
+	
+	<xs:complexType name="ItemConfigType">
+		<xs:sequence>
+			<xs:element ref="ii:Configuration" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="ar:Actions" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="lastid" type="xs:int" />
+	</xs:complexType>
+
+</xs:schema>

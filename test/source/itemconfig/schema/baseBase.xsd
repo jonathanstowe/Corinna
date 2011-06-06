@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="urn:baseBase" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:baseBase">
+	<xs:complexType name="baseBaseType">
+		<xs:attribute name="created" type="xs:dateTime" />
+		<xs:attribute name="retired" type="xs:boolean" default="false"/>
+	</xs:complexType>
+
+	<xs:complexType name="baseType">
+		<xs:complexContent>
+			<xs:extension base="baseBaseType">
+				<xs:attribute name="name" type="xs:string" />
+				<xs:attribute name="id" type="xs:integer" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

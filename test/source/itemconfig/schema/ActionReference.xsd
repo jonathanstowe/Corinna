@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="urn:ActionReference" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ActionReference" xmlns:bb="urn:baseBase">
+
+	<xs:import schemaLocation="baseBase.xsd" namespace="urn:baseBase" />
+	
+	<xs:complexType name="ActionRefType">
+		<xs:complexContent>
+			<xs:extension base="bb:baseBaseType">
+				<xs:attribute name="name" type="xs:string" />
+				<xs:attribute name="version" type="xs:string" />
+				<xs:attribute name="type" type="ActionRefTypeType" use="optional"/>
+				<xs:attribute name="category" type="ActionRefCategoryType" use="optional" default="general" />
+				<xs:attribute name="depends_on" type="xs:string" use="optional" >
+					<xs:annotation>
+						<xs:documentation>This is the name of another action that is required to have been run before this one, it can be  used to select which actions to allow on the object.
+</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="hidden" type="xs:boolean" use="optional" default="false" />
+				<xs:attribute name="environment" type="xs:string" use="optional" default="any" />
+				<xs:attribute name="status" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+    <xs:element name="Action" type="ActionRefType" />
+
+	<xs:simpleType name="ActionRefTypeType">
+		<xs:restriction base="xs:string">
+			<!-- maybe an enum later but don't know what they are yet -->	
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="ActionRefCategoryType">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+	
+    <xs:complexType name="ActionsType">
+    	<xs:sequence>
+    		<xs:element ref="Action" minOccurs="0" maxOccurs="unbounded" />
+    	</xs:sequence>
+    </xs:complexType>
+    
+    <xs:element name="Actions" type="ActionsType" />
+</xs:schema>
