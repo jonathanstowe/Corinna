@@ -42,7 +42,7 @@ sub xml_validate {
     my $type  = $self->XmlSchemaType();
     my $class = $type->itemClass || "Corinna::SimpleType";
 
-    unless ( UNIVERSAL::can( $class, "xml_validate" ) ) {
+    unless ( $class->can( "xml_validate" ) ) {
         return $self->xml_validate_further(@_);
     }
 

@@ -9,6 +9,7 @@ use File::Path;
 use File::Spec;
 use Class::Accessor;
 use Corinna::Util qw(merge_hash module_path);
+use Scalar::Util qw(blessed reftype);
 
 our $VERSION = '2.0';
 
@@ -19,19 +20,22 @@ sub new {
 }
 
 #--------------------------------------------
-# Generate Perl code from a given schema model (produced by the Parser) by the
-# argument 'model'.
+# Generate Perl code from a given schema model (produced by the Parser)
+# by the argument 'model'.
 #
 # Understands several modes of functioning => generate, eval, return
 #
-# mode = 'offline' : Generate perl code and write it to one or more module files.
-# mode = 'eval'     : Generate perl code and 'evaluate' it in situ without writing out to any file.
-# mode = 'return'   : Generate perl code and return the resulting string to the caller.
+# mode = 'offline' : Generate perl code and write it to one or more
+# module files.  mode = 'eval'     : Generate perl code and 'evaluate'
+# it in situ without writing out to any file.  mode = 'return'   :
+# Generate perl code and return the resulting string to the caller.
 #
-# Understands also two styles:
-# style = 'single'  : Generate one big chunk of code with all the packages in it.
-#                       Note that this is the forced case when mode is 'eval' or 'return'
-# style = 'multiple': Generate one chunk of code for each class and write it out to multiple
+# Understands also two styles: style = 'single'  : Generate one big
+# chunk of code with all the packages in it.
+#                       Note that this is the forced case when mode is
+#                       'eval' or 'return'
+# style = 'multiple': Generate one chunk of code for each class and
+# write it out to multiple
 #                       module files within the 'destination' directory.
 #----------------------------------------------------------------------
 sub generate {
@@ -44,13 +48,9 @@ sub generate {
         $args->{style} = "single";    # force single module generation
     }
     my $style       = $args->{style};
-    my $destination = $args->{destination} || '/tmp/lib/perl/';
+    my $destination = $args->{destination} || Corinna::Util->_tmp_dir();
     my $verbose     = $self->{verbose} || 0;
 
-    # If 'destination' doesn't end with a trailing slash, add one.
-    if ( $destination && ( $destination !~ /\/$/ ) ) {
-        $destination .= '/';
-    }
     $args->{destination} = $destination;
 
     my $class_prefix = $args->{class_prefix} || '';
@@ -80,7 +80,7 @@ sub _generate_single {
     my $class_prefix = $args->{class_prefix};
     my $module       = $args->{module} || $class_prefix;
     my $code         = $self->_fabricate_prelude(@_);
-    my $destination  = $args->{destination} || '/tmp/lib/perl/';
+    my $destination  = $args->{destination} || Corinna::Util->_tmp_dir();
     my $verbose      = $self->{verbose} || 0;
 
     foreach my $items ( $model->type(), $model->element() ) {
@@ -144,7 +144,7 @@ sub _generate_multiple {
     my $metaModule   = $args->{metaModule};
 
     my $types = $model->type();
-    my $destination = $args->{destination} || '/tmp/lib/perl/';
+    my $destination = $args->{destination} || Corinna::Util->_tmp_dir();
 
     foreach my $items ( $model->type(), $model->element() ) {
         foreach my $name ( sort keys %$items ) {

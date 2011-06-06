@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	targetNamespace="urn:InfoItems"
+	elementFormDefault="qualified"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="urn:InfoItems"
+	xmlns:bb="urn:baseBase"
+	>
+
+	<xs:import schemaLocation="baseBase.xsd" namespace="urn:baseBase"></xs:import>
+
+	<!--  
+		  this is the most frequently used element name
+          it makes it easier for things that might make them by hand	
+	 -->
+	<xs:element name="Configuration" type="InfoItemsType" />
+	
+	<xs:element name="Requires" type="InfoItemsType" />
+		
+	<xs:complexType name="InfoItemsType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="Item" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="Item" type="InfoItemType" />
+	
+	<xs:complexType name="InfoItemType" >
+		<xs:complexContent>
+			<xs:extension base="bb:baseBaseType">			
+				<xs:sequence>
+					<xs:element type="InfoItemValueType" name="Value" minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+				<xs:attribute name="key" type="InfoItemKeyType" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	
+	<xs:simpleType name="InfoItemValueType">
+		<xs:restriction base="xs:string" />
+		
+	</xs:simpleType>
+	
+	<xs:simpleType name="InfoItemKeyType">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+</xs:schema>

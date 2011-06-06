@@ -6,6 +6,8 @@ use warnings;
 use Corinna::Stack;
 use Corinna::Schema::Object;
 
+use Scalar::Util qw(blessed reftype);
+
 use parent 'Class::Accessor';
 
 our $VERSION = '2.0';
@@ -41,23 +43,26 @@ sub find_node {
     my $args  = {@_};
     my $class = $args->{class};
 
+    my $ret;
     my $node_stack = $self->node_stack();
+    STACK:
     for ( my $i = 0 ; $i < $node_stack->count() ; $i++ ) {
         my $node = $node_stack->get($i);
 
         #       print "\n", ref($node);
-        if ( ref($class) =~ /ARRAY/ ) {
+        if ( ref($class) && reftype($class) eq 'ARRAY' ) {
             foreach my $c (@$class) {
-                if ( UNIVERSAL::isa( $node, $c ) ) {
-                    return $node;
-                }
+                if (  $node->isa($c) ) {
+                    $ret = $node;
+                    last STACK;
+                 }
             }
         }
-        elsif ( UNIVERSAL::isa( $node, $class ) ) {
-            return $node;
+        elsif (  $node->isa($class) ) {
+            $ret = $node;
         }
     }
-    return undef;
+    return $ret;
 }
 
 #------------------------------------------------------------
@@ -71,19 +76,23 @@ sub name_path {
     for ( my $i = 0 ; $i < $node_stack->count() ; $i++ ) {
         my $node = $node_stack->get($i);
         my $name = undef;
-        if ( UNIVERSAL::can( $node, "name_is_auto_generated" )
+        if ( blessed( $node ))
+        {
+
+        if ( $node->can( "name_is_auto_generated" )
             && $node->name_is_auto_generated() )
         {
 
             # ignore auto-generated names
             $name = undef;
         }
-        elsif ( UNIVERSAL::can( $node, "name" ) ) {
+        elsif ( $node->can( "name" ) ) {
             $name = $node->name();
         }
-        elsif ( ( ref($node) =~ /HASH/ ) && $node->{name} ) {
+        elsif ( ( reftype($node) eq 'HASH' ) && $node->{name} ) {
             $name = $node->{name};
         }
+     }
 
         if ($name) {
             unshift @names, $name;

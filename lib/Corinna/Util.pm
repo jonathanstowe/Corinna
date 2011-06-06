@@ -4,25 +4,24 @@ use strict;
 use warnings;
 
 use XML::LibXML;
+use Scalar::Util qw(blessed);
+use File::Spec;
 
 use parent 'Exporter';
 
 our $VERSION = '2.0';
 
 our @EXPORT    = qw();
-our @EXPORT_OK = qw(    merge_hash
-  get_attribute_hash
-  get_children_hash_dom
-
-  module_path
-
-  slurp_file
-  sprint_xml_doc
-  sprint_xml_element
-
-  validate_date
-  validate_time
-);
+our @EXPORT_OK = qw(merge_hash
+                    get_attribute_hash
+                    get_children_hash_dom
+                    module_path
+                    slurp_file
+                    sprint_xml_doc
+                    sprint_xml_element
+                    validate_date
+                    validate_time
+                    );
 
 #------------------------------------------------------------------
 # merge h2 into h1;
@@ -42,48 +41,53 @@ sub merge_hash {
 # This is a utility function (not a method) that will get all the attributes
 # of an DOM element into a hash and return that hash.
 #-------------------------------------------------------------
-sub get_attribute_hash {
-    my $node    = shift;
-    my $attribs = {};
+sub get_attribute_hash
+{
+   my $node = shift;
+   my $attribs;
 
-    unless ( UNIVERSAL::isa( $node, "XML::LibXML::Element" ) ) {
-        return undef;
-    }
+   if ( blessed($node) && $node->isa("XML::LibXML::Element") )
+   {
+      $attribs = {};
+      my @attributes = $node->attributes();
+      foreach my $attribute (@attributes)
+      {
 
-    my @attributes = $node->attributes();
-    foreach my $attribute (@attributes) {
-       # not convinced this is necessary
-       # next unless defined $attribute;
-        $attribs->{ $attribute->nodeName() } = $attribute->value();
-    }
-    return $attribs;
+         $attribs->{ $attribute->nodeName() } = $attribute->value();
+      }
+   }
+   return $attribs;
 }
 
 #------------------------------------------------------------
 # This is a utility function (not a method) that will get all the children
 # of an DOM element into a hash of arrays and return that hash.
 #-------------------------------------------------------------
-sub get_children_hash_dom {
-    my $node   = shift;
-    my $result = {};
+sub get_children_hash_dom
+{
+   my $node = shift;
+   my $result;
 
-    unless ( UNIVERSAL::isa( $node, "XML::LibXML::Element" ) ) {
-        return undef;
-    }
+   if ( blessed($node) && $node->isa("XML::LibXML::Element") )
+   {
+      $result = {};
 
-    my @children =
-      grep { UNIVERSAL::isa( $_, "XML::LibXML::Element" ) } $node->childNodes();
-    foreach my $child (@children) {
-       # this definitely isn't necessary
-       # next unless defined $child;
-        my $name = $child->localName();
-        unless ( defined( $result->{$name} ) ) {
+      my @children = grep { $_->isa("XML::LibXML::Element") }
+                     $node->childNodes();
+
+      foreach my $child (@children)
+      {
+
+         my $name = $child->localName();
+         unless ( defined( $result->{$name} ) )
+         {
             $result->{$name} = [];
-        }
-        push @{ $result->{$name} }, $child;
-    }
+         }
+         push @{ $result->{$name} }, $child;
+      }
+   }
 
-    return $result;
+   return $result;
 }
 
 #------------------------------------------------------------
@@ -119,8 +123,8 @@ sub sprint_xml_element($;$) {
        # next unless defined $attribute;
         $s .= $attribute->nodeName() . "=\"" . $attribute->value() . "\" ";
     }
-    my @children =
-      grep { UNIVERSAL::isa( $_, "XML::LibXML::Element" ) } $elem->childNodes();
+    my @children = grep { $_->isa( "XML::LibXML::Element" ) } 
+                   $elem->childNodes();
     unless ( scalar(@children) ) {
         $s .= "/>";
     }
@@ -165,23 +169,29 @@ sub slurp_file {
 # Given a module name (without the .pm) and a destination directory,
 # Compute the file path where the module would be written to.
 #-------------------------------------------------------------
-sub module_path {
+sub module_path 
+{
     my $args        = {@_};
     my $module      = $args->{module} || die "Need a module name!";
-    my $destination = $args->{destination} || "/tmp/lib/perl/";
+    my $destination = $args->{destination} || _tmp_dir();
 
-    # Add a trailing slash if necessary.
-    $destination .= '/' if ( $destination !~ /\/$/  );
+    # this is so much more sensible  
+    my @bits = split '::', $module;
 
-    # get ride of any trailing colons.
-    $module =~ s/:+$//;
-
-    my $file = $module;
-    $file = $destination . $file . '.pm';
-    $file =~ s/::/\//g;
+    my $file = File::Spec->catfile($destination, @bits) . '.pm';
 
     return $file;
 }
+
+# This returns the default location for creation of the modules
+# # if none is supplied in the arguments.
+# # This is by default /tmp/lib/perl (or its platform specific equivalent
+#
+sub _tmp_dir
+{
+   return File::Spec->catfile(File::Spec->tmpdir(),'lib','perl');
+}
+
 
 #------------------------------------------------
 # code taken from XML::Schema::Validate who took it from Date::Simple

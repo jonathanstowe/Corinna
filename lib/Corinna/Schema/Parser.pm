@@ -15,7 +15,7 @@ use Corinna::Stack;
 use Corinna::Schema;
 
 use Corinna::Util qw(get_attribute_hash sprint_xml_element);
-use Scalar::Util qw(reftype);
+use Scalar::Util qw(reftype blessed);
 
 use parent 'Class::Accessor';
 our $VERSION = '2.0';
@@ -257,140 +257,160 @@ sub _process_node
 
    # If we are given a DOM document, instead of an ELEMENT, then
    # obtain the root element.
-   if ( UNIVERSAL::isa( $node, "XML::LibXML::Document" ) )
+   if ( blessed($node) )
    {
-      $node = $node->documentElement();
-   }
-
-   # We only process DOM elements here, nothing else means much to us.
-   if ( UNIVERSAL::isa( $node, "XML::LibXML::Element" ) )
-   {
-
-      my $context    = $self->context();
-      my $node_stack = $context->node_stack();
-      my $obj        = undef;
-
-      # TODO : Namespaces
-      my $name   = $node->localName;
-      my $nsURI  = $node->namespaceURI();
-      my $xsd_ns = $self->model()->xsd_namespace();
-
-      if ( $verbose >= 10 )
+      if ( $node->isa("XML::LibXML::Document") )
       {
-         my $attribs = get_attribute_hash($node);
-         print STDERR "  $name (", $attribs->{name} || "", ")\n";
+         $node = $node->documentElement();
       }
 
-      # if we've got a namespace from the schema element and the namespace
-      # of the element doesn't match it we'll ignore it - this is not
-      # strictly correct but can't think of a case where different is
-      # needed.
-      if ( !defined $xsd_ns || ( defined $nsURI && $nsURI eq $xsd_ns ) )
+      # We only process DOM elements here, nothing else means much to us.
+      if ( $node->isa("XML::LibXML::Element") )
       {
 
-         # If the element name matches any string below, we'll do the
-         # corresponding action.
+         my $context    = $self->context();
+         my $node_stack = $context->node_stack();
+         my $obj        = undef;
 
-       SWITCH: for ($name)
-         {    # iterator = $_ (we'll do pattern matching on it)
-            /^all$/        and do { last SWITCH; };
-            /^annotation$/ and do { last SWITCH; };
-            /^any$/ and do { $obj = $self->_process_any($node); last SWITCH; }; # NOOP at the moment
-            /^anyAttribute$/ and do { $obj = $self->_process_any_attribute($node); last SWITCH; }; # NOOP at the moment
-            /^appinfo$/ and return 0;    # ignore children as well
-            /^attribute$/
-              and do { $obj = $self->_process_attribute($node); last SWITCH; };
-            /^attributeGroup$/
-              and
-              do { $obj = $self->_process_attributeGroup($node); last SWITCH; };
-            /^choice$/         and do { last SWITCH; };
-            /^complexContent$/ and do { last SWITCH; };
-            /^complexType$/
-              and
-              do { $obj = $self->_process_complex_type($node); last SWITCH; };
-            /^documentation$/
-              and
-              do { $obj = $self->_process_documentation($node); last SWITCH; };
-            /^element$/
-              and do { $obj = $self->_process_element($node); last SWITCH; };
-            /^extension$/
-              and do { $obj = $self->_process_extension($node); last SWITCH; };
-            /^enumeration$/
-              and
-              do { $obj = $self->_process_enumeration($node); last SWITCH; };
-            /^field$/ and do { return 0; };    # ignore children as well
-            /^group$/
-              and do { $obj = $self->_process_group($node); last SWITCH; };
-            /^import$/
-              and do { $obj = $self->_process_import($node); last SWITCH; };
-            /^include$/
-              and do { $obj = $self->_process_include($node); last SWITCH; };
-            /^key$/    and do { return 0; };    # ignore children as well
-            /^keyref$/ and do { return 0; };    # ignore children as well
-            /^list$/
-              and do { $obj = $self->_process_list($node); last SWITCH; };
-            /^redefine$/
-              and do { $obj = $self->_process_redefine($node); last SWITCH; };
-            /^restriction$/
-              and
-              do { $obj = $self->_process_restriction($node); last SWITCH; };
-            /^schema$/
-              and
-              do { $obj = $self->_process_schema_node($node); last SWITCH; };
-            /^selector$/ and do { return 0; };      # ignore children as well
-            /^sequence$/ and do { last SWITCH; };
-            /^simpleContent$/
-              and
-              do { $obj = $self->_process_simple_content($node); last SWITCH; };
-            /^simpleType$/
-              and
-              do { $obj = $self->_process_simple_type($node); last SWITCH; };
-            /^unique$/ and do { return 0; };
-            /^union$/
-              and do { $obj = $self->_process_union($node); last SWITCH; };
-          OTHERWISE: { $obj = $self->_process_other_nodes($node); }
-         }
-      }
+         # TODO : Namespaces
+         my $name   = $node->localName;
+         my $nsURI  = $node->namespaceURI();
+         my $xsd_ns = $self->model()->xsd_namespace();
 
-      # If the above created a model object, push it on the node stack within
-      # the current  context.
-
-      if ( defined($obj) )
-      {
-         if ( $context->operation() eq 'redefine' && $obj->can('is_redefinable'))
+         if ( $verbose >= 10 )
          {
-            $obj->is_redefinable(1);
+            my $attribs = get_attribute_hash($node);
+            print STDERR "  $name (", $attribs->{name} || "", ")\n";
          }
-         $node_stack->push($obj);
-      }
 
-      # RECURSE into children.
-      my @children =
-        grep { UNIVERSAL::isa( $_, "XML::LibXML::Element" ) }
-        $node->childNodes();
-      foreach my $child (@children)
-      {
-         $self->_process_node($child);
-      }
-
-      # CLEAN UP
-      if ( defined($obj) )
-      {
-         $self->_fix_name_spaces( $obj, $node, [ 'type', 'base', 'ref' ] );
-
-         # 'Union' must be post-processed
-         if ( UNIVERSAL::isa( $obj, "Corinna::Schema::Union" ) )
+         # if we've got a namespace from the schema element and the namespace
+         # of the element doesn't match it we'll ignore it - this is not
+         # strictly correct but can't think of a case where different is
+         # needed.
+         if ( !defined $xsd_ns || ( defined $nsURI && $nsURI eq $xsd_ns ) )
          {
-            $self->_post_process_union( $obj, $node );
+
+            # If the element name matches any string below, we'll do the
+            # corresponding action.
+
+          SWITCH: for ($name)
+            {    # iterator = $_ (we'll do pattern matching on it)
+               /^all$/        and do { last SWITCH; };
+               /^annotation$/ and do { last SWITCH; };
+               /^any$/
+                 and
+                 do { $obj = $self->_process_any($node); last SWITCH; }; # NOOP at the moment
+               /^anyAttribute$/ and do {
+                  $obj = $self->_process_any_attribute($node);
+                  last SWITCH;
+               };    # NOOP at the moment
+               /^appinfo$/ and return 0;    # ignore children as well
+               /^attribute$/
+                 and
+                 do { $obj = $self->_process_attribute($node); last SWITCH; };
+               /^attributeGroup$/
+                 and do
+               {
+                  $obj = $self->_process_attributeGroup($node);
+                  last SWITCH;
+               };
+               /^choice$/         and do { last SWITCH; };
+               /^complexContent$/ and do { last SWITCH; };
+               /^complexType$/
+                 and
+                 do { $obj = $self->_process_complex_type($node); last SWITCH; };
+               /^documentation$/
+                 and do {
+                  $obj = $self->_process_documentation($node);
+                  last SWITCH;
+                 };
+               /^element$/
+                 and do { $obj = $self->_process_element($node); last SWITCH; };
+               /^extension$/
+                 and
+                 do { $obj = $self->_process_extension($node); last SWITCH; };
+               /^enumeration$/
+                 and
+                 do { $obj = $self->_process_enumeration($node); last SWITCH; };
+               /^field$/ and do { return 0; };    # ignore children as well
+               /^group$/
+                 and do { $obj = $self->_process_group($node); last SWITCH; };
+               /^import$/
+                 and do { $obj = $self->_process_import($node); last SWITCH; };
+               /^include$/
+                 and do { $obj = $self->_process_include($node); last SWITCH; };
+               /^key$/    and do { return 0; };    # ignore children as well
+               /^keyref$/ and do { return 0; };    # ignore children as well
+               /^list$/
+                 and do { $obj = $self->_process_list($node); last SWITCH; };
+               /^redefine$/
+                 and
+                 do { $obj = $self->_process_redefine($node); last SWITCH; };
+               /^restriction$/
+                 and
+                 do { $obj = $self->_process_restriction($node); last SWITCH; };
+               /^schema$/
+                 and
+                 do { $obj = $self->_process_schema_node($node); last SWITCH; };
+               /^selector$/ and do { return 0; };      # ignore children as well
+               /^sequence$/ and do { last SWITCH; };
+               /^simpleContent$/
+                 and do
+               {
+                  $obj = $self->_process_simple_content($node);
+                  last SWITCH;
+               };
+               /^simpleType$/
+                 and
+                 do { $obj = $self->_process_simple_type($node); last SWITCH; };
+               /^unique$/ and do { return 0; };
+               /^union$/
+                 and do { $obj = $self->_process_union($node); last SWITCH; };
+             OTHERWISE: { $obj = $self->_process_other_nodes($node); }
+            }
          }
 
-         # 'List' must be post-processed
-         if ( UNIVERSAL::isa( $obj, "Corinna::Schema::List" ) )
+         # If the above created a model object, push it on the node stack within
+         # the current  context.
+
+         if ( defined($obj) )
          {
-            $self->_post_process_list( $obj, $node );
+            if (    $context->operation() eq 'redefine'
+                 && $obj->can('is_redefinable') )
+            {
+               $obj->is_redefinable(1);
+            }
+            $node_stack->push($obj);
          }
 
-         $node_stack->pop();
+         # RECURSE into children.
+         my @children =
+           grep { $_->isa("XML::LibXML::Element") } $node->childNodes();
+
+         foreach my $child (@children)
+         {
+            $self->_process_node($child);
+         }
+
+         # CLEAN UP
+         if ( defined($obj) )
+         {
+            $self->_fix_name_spaces( $obj, $node, [ 'type', 'base', 'ref' ] );
+
+            # 'Union' must be post-processed
+            if ( $obj->isa("Corinna::Schema::Union") )
+            {
+               $self->_post_process_union( $obj, $node );
+            }
+
+            # 'List' must be post-processed
+            if ( $obj->isa("Corinna::Schema::List") )
+            {
+               $self->_post_process_list( $obj, $node );
+            }
+
+            $node_stack->pop();
+         }
       }
    }
    return $rc;
@@ -860,47 +880,57 @@ sub _post_process_list {
 # This routine is called whenever an 'include' element is encountered
 # in the schema being processed.
 #------------------------------------------------------------
-sub _process_include {
-    my $self           = shift;
-    my $node           = shift;
-    my $context        = $self->context();
-    my $attribs        = get_attribute_hash($node);
-    my $schemaLocation = $attribs->{schemaLocation};
+sub _process_include
+{
+   my $self           = shift;
+   my $node           = shift;
+   my $context        = $self->context();
+   my $attribs        = get_attribute_hash($node);
+   my $schemaLocation = $attribs->{schemaLocation};
 
    # "inlude" element must be a child of the schema element. It can't be deeper.
-    unless ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
-        die "Corinna : Schema INCLUDE must be global!\n"
-          . sprint_xml_element($node) . "\n";
-    }
+   if ( $self->_is_global() )
+   {
 
-    # Just call the method that does the inclusion.
-    $self->include_schema( schema => $schemaLocation );
+      # Just call the method that does the inclusion.
+      $self->include_schema( schema => $schemaLocation );
+   }
+   else
+   {
+      die "Corinna : Schema INCLUDE must be global!\n"
+        . sprint_xml_element($node) . "\n";
+   }
 
-    # Nothing will get pushed on the node-stack.
-    return undef;
+   # Nothing will get pushed on the node-stack.
+   return undef;
 }
 
 #------------------------------------------------------------
 # This routine is called whenever an 'import' element is encountered
 # in the schema being processed.
 #------------------------------------------------------------
-sub _process_import {
-    my $self           = shift;
-    my $node           = shift;
-    my $context        = $self->context();
-    my $attribs        = get_attribute_hash($node);
-    my $schemaLocation = $attribs->{schemaLocation};
+sub _process_import
+{
+   my $self           = shift;
+   my $node           = shift;
+   my $context        = $self->context();
+   my $attribs        = get_attribute_hash($node);
+   my $schemaLocation = $attribs->{schemaLocation};
 
    # "import" element must be a child of the schema element. It can't be deeper.
-    unless ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
-        die "Corinna : Schema IMPORT must be global!\n";
-    }
+   if ( $self->_is_global() )
+   {
 
-    # Just call the method that does the import.
-    $self->import_schema( schema => $schemaLocation );
+      # Just call the method that does the import.
+      $self->import_schema( schema => $schemaLocation );
+   }
+   else
+   {
+      die "Corinna : Schema IMPORT must be global!\n";
+   }
 
-    # Nothing will get pushed on the node-stack.
-    return undef;
+   # Nothing will get pushed on the node-stack.
+   return undef;
 }
 
 #------------------------------------------------------------
@@ -915,13 +945,16 @@ sub _process_redefine {
     my $schemaLocation = $attribs->{schemaLocation};
 
  # "redefine" element must be a child of the schema element. It can't be deeper.
-    unless ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
+    if ( $self->_is_global() ) {
+
+    # Just call the method that does the redefine.
+      $self->redefine_schema( schema => $schemaLocation );
+    }
+    else
+    {
         die "Corinna : Schema REPLACE must be global!\n"
           . sprint_xml_element($node) . "\n";
     }
-
-    # Just call the method that does the redefine.
-    $self->redefine_schema( schema => $schemaLocation );
 
     # Nothing will get pushed on the node-stack.
     return undef;
@@ -1034,6 +1067,18 @@ sub _process_simple_content {
 
 }
 
+# returns a list of those Classes that can host a simple type
+sub _simple_hosts
+{
+
+   my @hosts = qw(Corinna::Schema::Attribute 
+                  Corinna::Schema::Element
+                  Corinna::Schema::Union     
+                  Corinna::Schema::List);
+
+   return \@hosts;
+
+}
 #------------------------------------------------------------
 # This routine is called whenever an 'simpleType' element is encountered
 # in the schema being processed.
@@ -1045,37 +1090,32 @@ sub _process_simple_type {
 
     # Create an "SimpleType" schema model object and set all fields with the
     # attributes of this node.
-    my $obj = Corinna::Schema::SimpleType->new()
-      ->set_fields( get_attribute_hash($node) );
+    my $obj = Corinna::Schema::SimpleType->new();
+    $obj->set_fields( get_attribute_hash($node) );
 
     # Fix-up the scope and the name of the newly created object.
     $self->_fix_up_object( $obj, $node );
-    unless ( $obj->name() ) {
+    if ( !$obj->name() ) 
+    {
         die "Corinna : SimpleType must have a name!\n";
     }
 
 # if this is a local definition, then our host element/attribute must be of this type
-    if (
-        my $host = $context->find_node(
-            class => [
-                "Corinna::Schema::Attribute", "Corinna::Schema::Element",
-                "Corinna::Schema::Union",     "Corinna::Schema::List",
-            ]
-        )
-      )
+    if ( my $host = $context->find_node(class => $self->_simple_hosts()))
     {
-        if (   UNIVERSAL::isa( $host, "Corinna::Schema::Attribute" )
-            || UNIVERSAL::isa( $host, "Corinna::Schema::Element" ) )
+        if ( $host->isa("Corinna::Schema::Attribute") || $host->isa("Corinna::Schema::Element"))
         {
             $host->set_fields( { type => $obj->name() } );
         }
-        elsif ( UNIVERSAL::isa( $host, "Corinna::Schema::Union" ) ) {
+        elsif ( $host->isa("Corinna::Schema::Union")) 
+        {
             my $mbt = $host->memberTypes;
             $mbt .= ' ' if ($mbt);
             $mbt .= $obj->name();
             $host->memberTypes($mbt);
         }
-        elsif ( UNIVERSAL::isa( $host, "Corinna::Schema::List" ) ) {
+        elsif ( $host->isa("Corinna::Schema::List")) 
+        {
             $host->itemType( $obj->name );
         }
     }
@@ -1150,7 +1190,7 @@ sub _process_other_nodes {
             die
 "Corinna : Element '$name' unexpected as root element in schema!\n";
         }
-        elsif ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
+        elsif ( $self->_is_global() ) {
             die "Corinna : Element '$name' cannot be global in schema!\n"
               . sprint_xml_element($node) . "\n";
         }
@@ -1198,65 +1238,73 @@ sub _process_other_nodes {
 # This routine is called for most newly created model objects.
 #
 # It fixes the 'scope' of the given object by looking at the nodeSstack.
-# If we are just within a "schema" element, then we are in "global" context.
-# Othewise we must be in local context.
+# If we are just within a "schema" element, then we are in "global"
+# context.  Othewise we must be in local context.
 #
-# It also autogenerates a name for objects when there isn't one already given
-# as an attribute. This is handy for elements with a 'ref' attribute what without a name.
+# It also autogenerates a name for objects when there isn't one already
+# given as an attribute. This is handy for elements with a 'ref' attribute
+# what without a name.
 #
-# It is also handy for ComplexTypes that are anonymously defined locally. Since
-# we globalize type definitions in all cases. We need distunguashible names for them.
+# It is also handy for ComplexTypes that are anonymously defined
+# locally. Since we globalize type definitions in all cases. We need
+# distunguashible names for them.
 #
 #------------------------------------------------------------
-sub _fix_up_object {
-    my $self    = shift;
-    my $obj     = shift;
-    my $node    = shift;
-    my $context = $self->context();
-    my $verbose = $self->verbose() || 0;
+sub _fix_up_object
+{
+   my $self    = shift;
+   my $obj     = shift;
+   my $node    = shift;
+   my $context = $self->context();
+   my $verbose = $self->verbose() || 0;
 
-    print STDERR "fixing up object of ", ref($obj), "\n"
-       if $verbose >= 9;
+   if ( defined $obj )
+   {
+      print STDERR "fixing up object of ", ref($obj), "\n"
+        if $verbose >= 9;
 
-    unless ( $context->node_stack()->count()
-        || UNIVERSAL::isa( $obj, "Corinna::Schema" ) )
-    {
-        die "Corinna Unexpected root element '"
-          . $obj->name()
-          . "' in schema. This may not be a real XSD schema!";
-    }
+      if (!($context->node_stack()->count() || $obj->isa("Corinna::Schema")))
+      {
+         die "Corinna Unexpected root element '"
+           . $obj->name()
+           . "' in schema. This may not be a real XSD schema!";
+      }
 
-    if ( UNIVERSAL::isa( $context->top_node(), "Corinna::Schema" ) ) {
+      if ( $self->_is_global() )
+      {
 
-        # If we are immediatly underneath a schema element,
-        # this means we are in a global scope
-        $obj->scope("global");
-        print STDERR "Global scope\n" if $verbose >= 9;
-    }
-    else {
+         # If we are immediatly underneath a schema element,
+         # this means we are in a global scope
+         $obj->scope("global");
+         print STDERR "Global scope\n" if $verbose >= 9;
+      }
+      else
+      {
 
-        # Otherwise we are in LOCAL context.
-        $obj->scope("local");
-        print STDERR "local scope\n" if $verbose >= 9;
-        if ( $obj->ref() && !$obj->name() ) {
+         # Otherwise we are in LOCAL context.
+         $obj->scope("local");
+         print STDERR "local scope\n" if $verbose >= 9;
+         if ( $obj->ref() && !$obj->name() )
+         {
 
             # No name but this a reference.
             # Just set the name to the reference.
             $obj->name( $obj->ref() );
             $obj->name_is_auto_generated(1);
-            print STDERR "auto-name ", $obj->name()," from ref\n"
-               if $verbose >= 9;
-        }
-        elsif (
-            !$obj->name()
-            && (   $context->find_node( class => "Corinna::Schema::Union" )
-                || $context->find_node( class => "Corinna::Schema::List" ) )
-          )
-        {
+            print STDERR "auto-name ", $obj->name(), " from ref\n"
+              if $verbose >= 9;
+         }
+         elsif (
+                 !$obj->name()
+                 && (  $context->find_node( class => "Corinna::Schema::Union" )
+                    || $context->find_node( class => "Corinna::Schema::List" ) )
+           )
+         {
 
             # This is a union/list item. Just use the auto-incrementer.
-            unless ( defined( $self->counter ) ) {
-                $self->counter(0);
+            unless ( defined( $self->counter ) )
+            {
+               $self->counter(0);
             }
             $self->counter( $self->counter + 1 );
             my $name = "item_" . sprintf( "%04d", $self->counter );
@@ -1266,9 +1314,10 @@ sub _fix_up_object {
             $obj->name($name);
             $obj->name_is_auto_generated(1);
             print STDERR "auto-name for list/union ", $obj->name(), "\n"
-               if $verbose >= 9;
-        }
-        elsif ( !$obj->name() ) {
+              if $verbose >= 9;
+         }
+         elsif ( !$obj->name() )
+         {
 
             # No name, no reference, not union/list member. Out of luck.
             # Set the name to the concationation of all non-autogenerated
@@ -1276,16 +1325,18 @@ sub _fix_up_object {
             $obj->name( $context->name_path( separator => "_" ) );
             $obj->name_is_auto_generated(1);
 
-        }
-    }
+         }
+      }
 
-    if ( UNIVERSAL::can( $obj, 'targetNamespace' ) ) {
-        $obj->targetNamespace( $context->targetNamespace )
-          if ( $context->targetNamespace );
-    }
+      if ( $obj->can('targetNamespace' ))
+      {
+         $obj->targetNamespace( $context->targetNamespace )
+           if ( $context->targetNamespace );
+      }
 
-    $self->_fix_name_spaces( $obj, $node, ['name'], localize => 1 );
-    return $obj;
+      $self->_fix_name_spaces( $obj, $node, ['name'], localize => 1 );
+   }
+   return $obj;
 }
 
 #------------------------------------------------------------
@@ -1384,6 +1435,24 @@ sub _fix_name_spaces
       }
    }
    return $obj;
+}
+
+# utility to check whether we are processing in global scope
+#
+
+sub _is_global
+{
+   my ( $self ) = @_;
+
+   my $rc = 0;
+
+   my $tn = $self->context()->top_node();
+
+   if ( defined $tn && $tn->isa('Corinna::Schema') )
+   {
+      $rc = 1;
+   }
+   return $rc;
 }
 
 1;
