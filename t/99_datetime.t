@@ -7,7 +7,7 @@ eval
 };
 if ($@)
 {
-   plan skip_all => 'DateTime required for date tests';
+   plan skip_all => 'DateTime and DateTime::Format::W3CDTF required for date tests';
 }
 else
 {
