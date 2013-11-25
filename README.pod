@@ -334,7 +334,7 @@ not support that.
 
 B<Corinna> is NOT a recommended way of treating HUGE XML documents. The exact
 definition of HUGE varies.  It usually means paging into virtual memory. If
-you find yourself doing that, you should know that you might be better of with
+you find yourself doing that, you should know that you might be better off with
 L<XML::Twig> which lets you selectively parse chunks of a tree. Or better yet,
 just do B<SAX> processing. Note that things are not that bad with B<Corinna>
 => The memory used by B<Corinna> is not that much more than that of
