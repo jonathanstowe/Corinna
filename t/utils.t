@@ -64,8 +64,8 @@ else
    fail("module_path() dies without a module name");
 }
 
-is(Corinna::Util::module_path(module => 'Foo::Bar'),'/tmp/lib/perl/Foo/Bar.pm',"module_path - no destination");
-is(Corinna::Util::module_path(module => 'Foo::Bar::'),'/tmp/lib/perl/Foo/Bar.pm',"module_path - no destination - trailing colons");
+like(Corinna::Util::module_path(module => 'Foo::Bar'),qr|^/.*/Foo/Bar.pm$|,"module_path - no destination");
+like(Corinna::Util::module_path(module => 'Foo::Bar::'),qr|^/.*/Foo/Bar.pm$|,"module_path - no destination - trailing colons");
 is(Corinna::Util::module_path(module => 'Foo::Bar', destination => '/tmp/lib/perl'),'/tmp/lib/perl/Foo/Bar.pm',"module_path - with destination");
 
 # datey things
