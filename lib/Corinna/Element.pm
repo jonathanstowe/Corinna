@@ -3,7 +3,8 @@ package Corinna::Element;
 use strict;
 use warnings;
 
-use parent qw(Corinna::ComplexType);
+use Moose;
+extends qw(Corinna::ComplexType);
 
 our $VERSION = '2.0';
 

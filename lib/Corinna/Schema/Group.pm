@@ -3,28 +3,25 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Group->mk_accessors(qw(elements elementInfo));
 
-sub new {
-    my $class = shift;
-    my $self  = {@_};
+has elements => (
+               is => 'rw',
+               isa   => 'ArrayRef',
+               default  => sub { [] },
+             );
 
-    unless ( $self->{elements} ) {
-        $self->{elements} = [];
-    }
-    unless ( $self->{elementInfo} ) {
-        $self->{elementInfo} = {};
-    }
-    unless ( $self->{contentType} ) {
-        $self->{contentType} = "group";
-    }
+has elementInfo => (
+               is => 'rw',
+               isa   => 'HashRef',
+               default  => sub { {} },
+             );
 
-    return bless $self, $class;
-}
 
 sub _type_key
 {

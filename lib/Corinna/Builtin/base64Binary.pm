@@ -6,7 +6,8 @@ use warnings;
 
 use MIME::Base64 ();
 
-use parent 'Corinna::Builtin::Scalar';
+use Moose;
+extends 'Corinna::Builtin::Scalar';
 
 our $VERSION = '2.0';
 

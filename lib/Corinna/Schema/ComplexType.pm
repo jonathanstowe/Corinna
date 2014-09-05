@@ -3,24 +3,61 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Type';
+use Moose;
+extends 'Corinna::Schema::Type';
 
 our $VERSION = '2.0';
 
-Corinna::Schema::ComplexType->mk_accessors(
-    qw(
-      attributes
-      attribute_info
-      attributePrefix
-      elements
-      elementInfo
-      isSimpleContent
-      xAttributes
-      xAttributeInfo
-      xElements
-      xElementInfo
-      )
-);
+
+has attributes => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has attribute_info => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has attributePrefix => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has elements => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has elementInfo => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has isSimpleContent => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has xAttributes => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has xAttributeInfo => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has xElements => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has xElementInfo => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
 sub new {
     my $class = shift;

@@ -4,11 +4,23 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Attribute->mk_accessors(qw(use default));
+
+has use => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has default => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
 
 sub _type_key
 {

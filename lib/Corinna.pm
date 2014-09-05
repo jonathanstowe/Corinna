@@ -6,6 +6,11 @@ use warnings;
 
 require 5.008;
 
+use Moose;
+with qw(
+         Corinna::Role::Verbose
+       );
+
 use Corinna::Builtin;
 use Corinna::ComplexType;
 use Corinna::Element;
@@ -17,41 +22,44 @@ use Corinna::SimpleType;
 use Corinna::Stack;
 use Corinna::Util;
 
+use MooseX::ClassAttribute;
+
 our $VERSION = 2.0;
 
-#------------------------------------------------------------
-sub new {
-    my $class = shift;
-    my $self  = {@_};
-    return bless $self, $class;
-}
 
 #--------------------------------------------------------
-sub version {
+
+class_has version => (
+                  is => 'ro',
+                  isa   => 'Str',
+                  lazy  => 1,
+                  builder  => '_version',
+               );
+sub _version {
     return $Corinna::VERSION;
 }
 
+
 #--------------------------------------------------------
 sub generate {
-    my $self    = shift;
-    my $args    = {@_};
-    my $verbose = $args->{verbose} || $self->{verbose} || 0;
+    my ($self, %args ) = @_;
+    my $verbose = $args{verbose} || $self->verbose();
 
     my $parser = Corinna::Schema::Parser->new( verbose => $verbose );
-    my $model = $parser->parse( @_, verbose => $verbose );
+    my $model = $parser->parse( %args, verbose => $verbose );
 
     print STDERR "\n========= AFTER PARSE =============\n"
       . $model->dump() . "\n\n"
       if ( $verbose >= 8 );
 
-    $model->resolve( @_, verbose => $verbose );
+    $model->resolve( %args, verbose => $verbose );
     print STDERR "\n========= AFTER RESOLVE =============\n"
       . $model->dump() . "\n\n"
       if ( $verbose >= 8 );
 
     my $generator = Corinna::Generator->new( verbose => $verbose );
     my $result =
-      $generator->generate( @_, model => $model, verbose => $verbose );
+      $generator->generate( %args, model => $model, verbose => $verbose );
 
     print STDERR "\n========= AFTER GENERATE =============\n"
       . $model->dump() . "\n\n"

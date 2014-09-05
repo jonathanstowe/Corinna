@@ -3,28 +3,80 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Class::Accessor';
+use Moose;
 
 use Scalar::Util qw(reftype blessed);
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Object->mk_accessors( qw(class definition 
-                                          documentation 
-                                          is_redefinable 
-                                          meta_class name 
-                                          name_is_auto_generated 
-                                          ref 
-                                          ref_key 
-                                          scope 
-                                          type targetNamespace));
+
+has class => (
+               is => 'rw',
+               isa   => 'Item',
+               lazy  => 1,
+               builder => '_get_class',
+             );
+
+has definition => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has documentation => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has is_redefinable => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has meta_class => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has name => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has name_is_auto_generated => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has ref => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has ref_key => (
+               is => 'rw',
+               isa   => 'Maybe[Str]',
+               lazy  => 1,
+               builder  => '_ref_key',
+             );
+
+has scope => (
+               is => 'rw',
+               isa   => 'Item',
+             );
+
+has type => (
+               is => 'rw',
+               isa   => 'Str',
+               lazy  => 1,
+               builder  => '_type',
+             );
+
+has targetNamespace => (
+               is => 'rw',
+               isa   => 'Item',
+             );
 
 #------------------------------------------------------------
-sub new {
-    my $class = shift;
-    my $self  = {@_};
-    return bless $self, $class;
-}
 
 #------------------------------------------------------------
 sub key 
@@ -50,26 +102,18 @@ sub key
 }
 
 #------------------------------------------------------------
-sub ref_key {
-    my $self = shift;
-    if (@_) {
-        return ( $self->{ref_key} = shift );
+sub _ref_key {
+    my ($self ) = @_;
+
+    my $ref_key;
+
+
+    if( defined (my $ref = $self->ref()))
+    {
+      return $ref if ( $ref =~ /\|/ );
+      my $ns = $self->targetNamespace || '';
+      return $self->ref() . ( $ns ? '|' . $ns : "" );
     }
-    if ( exists $self->{ref_key} ) {
-        return $self->{ref_key};
-    }
-
-    # WAS
-    #   return $self->ref();
-
-    # Let's take a ride towards namespace support
-    return undef unless $self->ref();
-
-    my $ref = $self->ref;
-
-    return $ref if ( $ref =~ /\|/ );
-    my $ns = $self->targetNamespace || '';
-    return $self->ref() . ( $ns ? '|' . $ns : "" );
 }
 
 #------------------------------------------------------------
@@ -95,73 +139,31 @@ sub set_fields
 #----------------------------------------------------------
 # override the accessor -- only for GET.
 # Default to the value in "definition" if there is one.
-sub class
+sub _get_class
 {
-   my $self = shift;
+   my ($self) = @_;
 
    my $ret;
-
-   # _class_accesor is an alias for class() made by Class::Accessor
-   # We are not interested by the SET case which should do the default.
-
-   if (@_)
+   if ( my $definition = $self->definition() )
    {
-      $ret = $self->_class_accessor(@_);
-   }
-   else
-   {
-
-      # if we have it defined here, just return it.
-      my $result = $self->_class_accessor();
-
-      if ($result)
-      {
-         $ret = $result;
-
-      }
-      elsif ( $self->can('definition'))
-      {
-
-  # Otherwise, see if our "definition" has it. So we would effectively delegate.
-            my $definition;
-            if ( $definition = $self->definition() && $definition->can('class') ) 
-            {
+       if ( $definition->can('class') ) 
+       {
                $ret = $definition->class();
-            }
-      }
-
-      return $ret;
+        }
    }
+
+   return $ret;
 }
+
 #----------------------------------------------------------
 # override the accessor -- only for GET.
 # Default to the value in "definition" if there is one.
-sub type
+sub _type
 {
-   my $self = shift;
+   my ($self) = @_;
 
    my $ret;
 
-   # _type_accesor is an alias for type() made by Class::Accessor
-   # We are not interested by the SET case which should do the default.
-   if (@_)
-   {
-      $ret = $self->_type_accessor(@_);
-   }
-   else
-   {
-
-      # if we have it defined here, just return it.
-      my $result = $self->_type_accessor();
-
-      if ($result)
-      {
-         $ret = $result;
-      }
-      else
-      {
-
-  # Otherwise, see if our "definition" has it. So we would effectively delegate.
          my $definition;
          if (    $self->can("definition")
               && ( $definition = $self->definition() )
@@ -170,8 +172,6 @@ sub type
             $ret = $definition->type();
          }
 
-      }
-   }
    return $ret;
 }
 

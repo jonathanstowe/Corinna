@@ -3,31 +3,95 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Type';
+use Moose;
+extends 'Corinna::Schema::Type';
 
 our $VERSION = '2.0';
 
-Corinna::Schema::SimpleType->mk_accessors(
-    qw(
-      enumeration
-      itemType
-      itemClass
-      length
-      memberTypes
-      memberClasses
-      minLength
-      maxLength
-      minInclusive
-      maxInclusive
-      minExclusive
-      maxExclusive
-      pattern
-      regex
-      totalDigits
-      fractionDigits
-      whiteSpace
-      )
-);
+has enumeration => (
+               is => 'rw',
+               isa   => 'HashRef',
+             );
+
+has itemType => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has itemClass => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has length => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has memberTypes => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has memberClasses => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has minLength => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has maxLength => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has minInclusive => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has maxInclusive => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has minExclusive => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has maxExclusive => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has pattern => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has regex => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has totalDigits => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has fractionDigits => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has whiteSpace => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
 sub new {
     my $class = shift;

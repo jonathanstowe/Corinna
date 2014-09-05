@@ -8,7 +8,8 @@ use XML::LibXML;
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
-use parent 'Corinna::Type';
+use Moose;
+extends 'Corinna::Type';
 
 our $VERSION = '2.0';
 

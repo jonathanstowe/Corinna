@@ -6,7 +6,8 @@ no warnings qw(uninitialized);
 
 use Class::Accessor;
 
-use parent qw(Class::Accessor Class::Data::Inheritable);
+use Moose;
+extends qw(Class::Accessor Class::Data::Inheritable);
 
 our $VERSION = '2.0';
 

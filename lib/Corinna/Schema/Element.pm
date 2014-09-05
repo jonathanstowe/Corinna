@@ -3,12 +3,32 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Element->mk_accessors(
-    qw(baseClasses minOccurs maxOccurs targetNamespace));
+
+has baseClasses => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has minOccurs => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has maxOccurs => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has targetNamespace => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
 sub is_singleton {
     my $self = shift;

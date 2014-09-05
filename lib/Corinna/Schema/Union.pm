@@ -3,11 +3,22 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Union->mk_accessors(qw(memberTypes memberClasses));
+has memberTypes   => (
+   is => 'rw',
+   isa   => 'Str'
+);
+
+has memberClasses => (
+   is => 'rw',
+   isa   => 'Str',
+);
+
 
 1;
 

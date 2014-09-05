@@ -5,7 +5,8 @@ use warnings;
 
 use Scalar::Util qw(looks_like_number);
 
-use parent 'Corinna::Builtin::Scalar';
+use Moose;
+extends 'Corinna::Builtin::Scalar';
 
 our $VERSION = '2.0';
 

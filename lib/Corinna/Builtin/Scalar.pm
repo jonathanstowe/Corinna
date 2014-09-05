@@ -3,7 +3,8 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Builtin::SimpleType';
+use Moose;
+extends 'Corinna::Builtin::SimpleType';
 
 our $VERSION = '2.0';
 

@@ -7,7 +7,8 @@ use XML::LibXML;
 use Scalar::Util qw(blessed);
 use File::Spec;
 
-use parent 'Exporter';
+use Moose;
+extends 'Exporter';
 
 our $VERSION = '2.0';
 

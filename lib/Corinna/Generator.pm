@@ -1,23 +1,22 @@
 package Corinna::Generator;
+
 use utf8;
 use strict;
 use warnings;
+
+use Moose;
 
 use Data::Dumper;
 use IO::File;
 use File::Path;
 use File::Spec;
-use Class::Accessor;
 use Corinna::Util qw(merge_hash module_path);
 use Scalar::Util qw(blessed reftype);
 
+use Corinna;
+
 our $VERSION = '2.0';
 
-sub new {
-    my $class = shift;
-    my $self  = {@_};
-    return bless $self, $class;
-}
 
 #--------------------------------------------
 # Generate Perl code from a given schema model (produced by the Parser)

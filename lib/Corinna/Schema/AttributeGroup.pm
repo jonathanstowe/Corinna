@@ -3,35 +3,40 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends 'Corinna::Schema::Object';
 
 our $VERSION = '2.0';
 
-Corinna::Schema::AttributeGroup->mk_accessors(qw(attributes attribute_info));
 
-sub new {
-    my $class = shift;
-    my $self  = {@_};
+has attributes => (
+   is => 'rw',
+   isa   => 'ArrayRef',
+   lazy  => 1,
+   default  => sub { [] },
+);
 
-    unless ( $self->{attributes} ) {
-        $self->{attributes} = [];
-    }
-    unless ( $self->{attribute_info} ) {
-        $self->{attribute_info} = {};
-    }
-    unless ( $self->{contentType} ) {
-        $self->{contentType} = "attributeGroup";
-    }
+has attribute_info   => (
+   is => 'rw',
+   isa   => 'HashRef',
+   lazy  => 1,
+   default  => sub { {} },
+);
 
-    return bless $self, $class;
-}
+has contentType  => (
+   is => 'rw',
+   isa   => 'Str',
+   lazy  => 1,
+   default  => 'attributeGroup',
 
-sub _type_key
-{
-   my ( $self ) = @_;
+);
 
-   return 'attributeGroup';
-}
+
+has _type_key =>  (
+      is => 'ro',
+      isa   => 'Str',
+      default  => 'attributeGroup',
+);
 
 1;
 

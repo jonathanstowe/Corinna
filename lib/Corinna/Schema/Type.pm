@@ -3,12 +3,41 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Type->mk_accessors(
-    qw(base baseClasses contentType derivedBy final id));
+has base => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has baseClasses => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has contentType => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has derivedBy => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has final => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has id => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
 sub _type_key
 {

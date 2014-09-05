@@ -3,41 +3,64 @@ use utf8;
 use strict;
 use warnings;
 
+use Moose;
+
 use Corinna::Stack;
 use Corinna::Schema::Object;
 
 use Scalar::Util qw(blessed reftype);
 
-use parent 'Class::Accessor';
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Context->mk_accessors(
-    qw( counter schema schema_url operation node_stack targetNamespace));
 
-#------------------------------------------------------------
-sub new {
-    my $class = shift;
-    my $self  = {@_};
+has counter => (
+               is => 'rw',
+               isa   => 'Int',
+               lazy  => 1,
+               default => 0,
+             );
 
-    unless ( $self->{node_stack} ) {
-        $self->{node_stack} = Corinna::Stack->new();
-    }
+has schema => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
-    unless ( defined( $self->{counter} ) ) {
-        $self->{counter} = 0;
-    }
+has schema_url => (
+               is => 'rw',
+               isa   => 'URI',
+             );
 
-    return bless $self, $class;
+has operation => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has node_stack => (
+               is => 'rw',
+               isa   => 'Corinna::Stack',
+               lazy  => 1,
+               builder  => '_get_node_stack',
+               handles =>  {
+                  top_node => 'peek',
+               }
+             );
+
+sub _get_node_stack
+{
+    my ( $self ) = @_;
+
+   require Corinna::Stack;
+    return Corinna::Stack->new();
+
 }
 
-#------------------------------------------------------------
-sub top_node {
-    my $self = shift;
-    return $self->node_stack()->peek();
-}
+has targetNamespace => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
-#------------------------------------------------------------
+
 sub find_node {
     my $self  = shift;
     my $args  = {@_};

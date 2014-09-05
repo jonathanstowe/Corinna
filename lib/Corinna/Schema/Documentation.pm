@@ -3,11 +3,21 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Documentation->mk_accessors(qw(lang text));
+has lang => (
+               is => 'rw',
+               isa   => 'Str',
+               );
+
+has text => (
+               is => 'rw',
+               isa   => 'Str',
+            );
 
 1;
 

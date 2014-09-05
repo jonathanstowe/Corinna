@@ -3,6 +3,8 @@ use utf8;
 use strict;
 use warnings;
 
+use Moose;
+
 use Data::Dumper;
 
 use Corinna::Schema::Object;
@@ -11,47 +13,69 @@ use Corinna::Schema::NamespaceInfo;
 use Corinna::Util qw(merge_hash);
 use Scalar::Util qw(blessed);
 
-use parent 'Class::Accessor';
 
 our $VERSION = '2.0';
 
-Corinna::Schema::Model->mk_accessors(
-    qw(xsd_namespace type element group attribute attributeGroup defaultNamespace namespaces namespaceCounter)
-);
 
-sub new {
-    my $class = shift;
-    my $self  = {@_};
+has xsd_namespace => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
-    unless ( $self->{type} ) {
-        $self->{type} = {};
-    }
-    unless ( $self->{element} ) {
-        $self->{element} = {};
-    }
+has type => (
+               is => 'rw',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
+             );
 
-    unless ( $self->{group} ) {
-        $self->{group} = {};
-    }
+has element => (
+               is => 'rw',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
+             );
 
-    unless ( $self->{attribute} ) {
-        $self->{attribute} = {};
-    }
+has group => (
+               is => 'rw',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
+             );
 
-    unless ( $self->{attributeGroup} ) {
-        $self->{attributeGroup} = {};
-    }
+has attribute => (
+               is => 'rw',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
+             );
 
-    unless ( $self->{namespaces} ) {
-        $self->{namespaces} = {};
-    }
+has attributeGroup => (
+               is => 'rw',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
+             );
 
-    unless ( $self->{namespaceCounter} ) {
-        $self->{namespaceCounter} = 0;
-    }
+has defaultNamespace => (
+               is => 'rw',
+               isa   => 'Corinna::Schema::NamespaceInfo',
+             );
 
-    return bless $self, $class;
-}
+has namespaces => (
+               is => 'rw',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
+             );
+
+has namespaceCounter => (
+               is => 'rw',
+               isa   => 'Int',
+               lazy  => 1,
+               default => 0,
+             );
+
 
 #-------------------------------------------------------
 sub xml_item {

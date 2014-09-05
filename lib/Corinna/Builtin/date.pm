@@ -3,7 +3,8 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Corinna::Builtin::Scalar';
+use Moose;
+extends 'Corinna::Builtin::Scalar';
 
 use Corinna::Util qw(validate_date);
 

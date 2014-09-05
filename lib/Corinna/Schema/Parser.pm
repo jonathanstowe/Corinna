@@ -3,6 +3,11 @@ use utf8;
 use strict;
 use warnings;
 
+use Moose;
+with qw(
+         Corinna::Role::Verbose
+       );
+
 use Cwd;
 use File::Spec;
 use LWP::UserAgent;
@@ -11,32 +16,55 @@ use URI::file;
 use Data::HashArray;
 
 use XML::LibXML;
-use Corinna::Stack;
 use Corinna::Schema;
 
 use Corinna::Util qw(get_attribute_hash sprint_xml_element);
 use Scalar::Util qw(reftype blessed);
 
-use parent 'Class::Accessor';
 our $VERSION = '2.0';
 
-Corinna::Schema::Parser->mk_accessors(qw(model contextStack counter verbose));
 
 #------------------------------------------------------------
-sub new () {
-    my $class = shift;
-    my $self  = {@_};
 
-    unless ( $self->{model} ) {
-        $self->{model} = Corinna::Schema::Model->new();
-    }
+has model   => (
+                  is => 'rw',
+                  isa   => 'Corinna::Schema::Model',
+                  lazy  => 1,
+                  builder  => '_get_model',
+               );
 
-    unless ( $self->{contextStack} ) {
-        $self->{contextStack} = Corinna::Stack->new();
-    }
-
-    return bless $self, $class;
+sub _get_model
+{
+    my ( $self ) = @_;
+    require Corinna::Schema::Model;
+    return Corinna::Schema::Model->new();
 }
+
+has contextStack  => (
+                        is => 'rw',
+                        isa =>   'Corinna::Stack',
+                        lazy  => 1,
+                        builder  => '_get_context_stack',
+                        handles  => {
+                            context => 'peek',
+                        }
+                     );
+
+sub _get_context_stack
+{
+    my ( $self ) = @_;
+
+    require Corinna::Stack;
+
+    return Corinna::Stack->new();
+}
+
+has counter => (
+                  is => 'rw',
+                  isa   => 'Int',
+                  lazy  => 1,
+                  default  => 0,
+               );
 
 #------------------------------------------------------------
 # Parser context gets changed (by a PUSH on the stack) each time a new
@@ -44,10 +72,6 @@ sub new () {
 # the parser state for that file.
 # This method will return the top-most context for the parser.
 #------------------------------------------------------------
-sub context {
-    my $self = shift;
-    return $self->contextStack()->peek();
-}
 
 #------------------------------------------------------------
 # Parse one or more schemas and create a schema model (internal Corinna

@@ -19,11 +19,25 @@ use Corinna::Schema::Parser;
 use Corinna::Schema::SimpleType;
 use Corinna::Schema::Union;
 
-use parent 'Corinna::Schema::Object';
+use Moose;
+extends qw(Corinna::Schema::Object);
+
 
 our $VERSION = '2.0';
 
-Corinna::Schema->mk_accessors(
-    qw( targetNamespace attributeFormDefault elementFormDefault ));
+has targetNamespace => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has attributeFormDefault => (
+               is => 'rw',
+               isa   => 'Str',
+             );
+
+has elementFormDefault => (
+               is => 'rw',
+               isa   => 'Str',
+             );
 
 1;

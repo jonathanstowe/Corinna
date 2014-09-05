@@ -6,7 +6,8 @@ use warnings;
 
 use Carp;
 
-use parent qw(Class::Accessor Class::Data::Inheritable);
+use Moose;
+extends qw(Class::Accessor Class::Data::Inheritable);
 
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);

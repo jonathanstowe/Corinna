@@ -4,7 +4,8 @@ use utf8;
 use strict;
 use warnings;
 
-use parent 'Data::HashArray';
+use Moose;
+extends 'Data::HashArray';
 
 our $VERSION = '2.0';
 
