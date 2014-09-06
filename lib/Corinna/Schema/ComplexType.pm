@@ -5,33 +5,41 @@ use warnings;
 
 use Moose;
 extends 'Corinna::Schema::Type';
+with qw(
+         Corinna::Role::ContentType
+       );
 
 our $VERSION = '2.0';
 
 
 has attributes => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'ArrayRef',
+               default  => sub { [] },
              );
 
 has attribute_info => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'HashRef',
+               default  => sub { {} },
              );
 
 has attributePrefix => (
                is => 'rw',
                isa   => 'Str',
+               default  => '_',
              );
 
 has elements => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'ArrayRef',
+               default  => sub { [] },
              );
 
 has elementInfo => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'HashRef',
+               default  => sub { {} },
              );
 
 has isSimpleContent => (
@@ -59,33 +67,16 @@ has xElementInfo => (
                isa   => 'Str',
              );
 
-sub new {
-    my $class = shift;
-    my $self  = {@_};
+sub BUILD
+{
+    my ($self, $args ) = @_;
 
-    unless ( $self->{attributes} ) {
-        $self->{attributes} = [];
-    }
-    unless ( $self->{attribute_info} ) {
-        $self->{attribute_info} = {};
+    if(!$self->has_content_type())
+    {
+        $self->contentType("complex");
     }
 
-    unless ( $self->{elements} ) {
-        $self->{elements} = [];
-    }
-    unless ( $self->{elementInfo} ) {
-        $self->{elementInfo} = {};
-    }
-    unless ( $self->{contentType} ) {
-        $self->{contentType} = "complex";
-    }
-
-    unless ( defined( $self->{attributePrefix} ) ) {
-        $self->{attributePrefix} =
-          "_";    # Default value. No need to change this for now.
-    }
-
-    return bless $self, $class;
+    return $self;
 }
 
 #-----------------------------------------------------------------

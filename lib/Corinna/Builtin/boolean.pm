@@ -5,12 +5,19 @@ use warnings;
 
 use Moose;
 extends 'Corinna::Builtin::Scalar';
+with qw(
+         Corinna::Role::XmlSchemaType
+       );
 
 our $VERSION = '2.0';
 
-Corinna::Builtin::boolean->XmlSchemaType(
-    bless(
-        {
+sub _get_xml_schema_type
+{
+    my ( $self ) = @_;
+
+    require Corinna::Schema::SimpleType;
+
+    my $type = Corinna::Schema::SimpleType->new(
             'class'       => 'Corinna::Builtin::boolean',
             'contentType' => 'simple',
             'derivedBy'   => 'restriction',
@@ -21,10 +28,11 @@ Corinna::Builtin::boolean->XmlSchemaType(
                 'true'  => '1',
             },
             'name' => 'boolean|http://www.w3.org/2001/XMLSchema',
-        },
-        'Corinna::Schema::SimpleType'
-    )
-);
+            );
+
+    return $type;
+
+}
 
 #----------------------------------------------
 # Boolean value.

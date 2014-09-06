@@ -93,15 +93,16 @@ has whiteSpace => (
                isa   => 'Str',
              );
 
-sub new {
-    my $class = shift;
-    my $self  = {@_};
+# Myfeeling is that contentType should be in a roole and this should
+# be a class attribute.
+sub BUILD {
+    my ( $self, $args ) = @_; 
 
-    unless ( $self->{contentType} ) {
-        $self->{contentType} = "simple";
+    if ( !exists $args->{contentType} ) {
+        $self->contentType("simple");
     }
 
-    return bless $self, $class;
+    return $self;
 }
 
 1;

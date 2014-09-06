@@ -5,62 +5,30 @@ use warnings;
 
 our $VERSION = '0.01';
 
-sub new {
-    my $class = shift;
+use Moose;
 
-    my $self = [];
-    if (@_) {
-        push( @{$self}, @_ );
-    }
+has _items =>  (
+         is => 'rw',
+         isa   => 'ArrayRef',
+         default => sub { [] },
+         traits   => ['Array'],
+         handles => {
+             _first => 'first',
+             clear   => 'clear',
+             get     => 'get',
+             count   => 'count',
+             empty   => 'is_empty',
+             pop     => 'shift',
+             push    => 'unshift',
+         },
 
-    return bless( $self, $class );
-}
+);
 
-sub peek {
-    my $self = shift();
+sub peek
+{
+    my ( $self ) = @_;
 
-    return $self->get(0);
-}
-
-sub clear {
-    my $self = shift();
-
-    $#{$self} = -1;
-}
-
-sub get {
-    my $self  = shift();
-    my $index = shift();
-
-    return $self->[$index];
-}
-
-sub count {
-    my $self = shift();
-
-    return $#{$self} + 1;
-}
-
-sub empty {
-    my $self = shift();
-
-    if ( $self->count() == 0 ) {
-        return 1;
-    }
-
-    return 0;
-}
-
-sub pop {
-    my $self = shift();
-
-    return shift( @{$self} );
-}
-
-sub push {
-    my $self = shift();
-
-    unshift( @{$self}, shift() );
+    return $self->_first(sub { 1; });
 }
 
 1;

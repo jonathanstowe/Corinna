@@ -4,25 +4,18 @@ use strict;
 use warnings;
 no warnings qw(uninitialized);
 
-use Class::Accessor;
 
 use Moose;
-extends qw(Class::Accessor Class::Data::Inheritable);
+
+use MooseX::ClassAttribute;
 
 our $VERSION = '2.0';
 
-Corinna::Meta->mk_classdata('Model');
 
-#----------------------------------------------
-# Accepts a single parameter or a hash.
-# If single parameter, then it is taken to be the value.
-#----------------------------------------------
-sub new {
-    my $class = shift;
-    my $self  = {@_};
-
-    return bless $self, $class;
-}
+has Model   => (
+                  is => 'rw',
+                  isa   => 'Corinna::Schema::Model',
+               );
 
 1;
 

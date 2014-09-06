@@ -5,22 +5,29 @@ use warnings;
 
 use Moose;
 extends 'Corinna::Builtin::Scalar';
+with qw(
+         Corinna::Role::XmlSchemaType
+       );
 
 our $VERSION = '2.0';
 
-Corinna::Builtin::hexBinary->XmlSchemaType(
-    bless(
-        {
+sub _xml_schema_type
+{
+    my ( $self ) = @_;
+
+    require Corinna::Schema::SimpleType;
+
+    my $type = Corinna::Schema::SimpleType->new(
             'class'       => 'Corinna::Builtin::hexBinary',
             'contentType' => 'simple',
             'derivedBy'   => 'restriction',
             'name'        => 'hexBinary|http://www.w3.org/2001/XMLSchema',
             'regex'       => qr/^([0-9a-fA-F][0-9a-fA-F])+$/
             , # Regex shamelessly copied from XML::Validator::Schema by Sam Tregar
-        },
-        'Corinna::Schema::SimpleType'
-    )
-);
+    );
+
+    return $type;
+}
 
 1;
 

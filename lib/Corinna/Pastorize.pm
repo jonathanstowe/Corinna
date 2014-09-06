@@ -7,6 +7,7 @@ no warnings qw(uninitialized);
 
 #===============================================
 
+use Moose;
 use Corinna;
 
 use File::chdir;
@@ -17,14 +18,6 @@ use Pod::Usage;
 
 our $VERSION = '2.0';
 
-#-------------------------------------------------------------
-# METHOD
-#-------------------------------------------------------------
-sub new {
-    my $class = shift;
-    my $self  = {@_};
-    return bless $self, $class;
-}
 
 #------------------------------------------------------------
 # run(@opts) : Class method

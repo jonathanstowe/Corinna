@@ -1,4 +1,5 @@
 package Corinna::Schema::Context;
+
 use utf8;
 use strict;
 use warnings;
@@ -51,7 +52,7 @@ sub _get_node_stack
     my ( $self ) = @_;
 
    require Corinna::Stack;
-    return Corinna::Stack->new();
+   return Corinna::Stack->new();
 
 }
 

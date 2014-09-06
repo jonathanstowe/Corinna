@@ -8,22 +8,28 @@ use MIME::Base64 ();
 
 use Moose;
 extends 'Corinna::Builtin::Scalar';
+with qw(Corinna::Role::XmlSchemaType);
 
 our $VERSION = '2.0';
 
-Corinna::Builtin::base64Binary->XmlSchemaType(
-    bless(
-        {
+
+sub _get_xml_schema_type
+{
+    my ( $self );
+
+    require Corinna::Schema::SimpleType;
+
+    my $type = Corinna::Schema::SimpleType->new(
             'class'       => 'Corinna::Builtin::base64Binary',
             'contentType' => 'simple',
             'derivedBy'   => 'restriction',
             'name'        => 'base64Binary|http://www.w3.org/2001/XMLSchema',
             'regex'       => qr /^([0-9a-zA-Z\+\\\=][0-9a-zA-Z\+\\\=])+$/
             , # Regex shamelessly copied from XML::Validator::Schema by Sam Tregar
-        },
-        'Corinna::Schema::SimpleType'
-    )
-);
+            );
+
+    return $type;
+};
 
 #-----------------------------------------------------------------
 sub to_binary {

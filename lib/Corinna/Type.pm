@@ -7,15 +7,15 @@ use warnings;
 use Carp;
 
 use Moose;
-extends qw(Class::Accessor Class::Data::Inheritable);
+
+use MooseX::ClassAttribute;
+use MooseX::StrictConstructor;
 
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
 our $VERSION = '2.0';
 
-Corinna::Type->mk_classdata('XmlSchemaType');
-Corinna::Type->mk_accessors(qw(__value));
 
 use overload
   '""'     => 'stringify',
@@ -31,13 +31,25 @@ use overload
 #----------------------------------------------
 
 # Turns out that ref $proto is needed
-sub new {
-    my $proto = shift;
-    my $class = ref($proto) || $proto;
-    my $self  = ( @_ == 1 ) ? { __value => $_[0] } : {@_};
+#
+around BUILDARGS  => sub {
+    my ( $orig, $self, @args ) = @_;
 
-    return bless $self, $class;
-}
+    if (@args == 1 )
+    {
+        if ( reftype($args[0]) ne 'HASH' )
+        {
+            unshift @args, '__value';
+        }
+    }
+
+    return $self->$orig(@args);
+};
+
+has '__value'  => (
+                     is => 'rw',
+                     isa   => 'Item',
+                  );
 
 #----------------------------------------------
 # String value.

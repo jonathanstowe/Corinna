@@ -5,14 +5,21 @@ use warnings;
 
 use Moose;
 extends 'Corinna::Builtin::Scalar';
+with qw(
+         Corinna::Role::XmlSchemaType
+       );
 
 use Corinna::Util qw(validate_date validate_time);
 
 our $VERSION = '2.0';
 
-Corinna::Builtin::dateTime->XmlSchemaType(
-    bless(
-        {
+sub _get_xml_schema_type
+{
+    my ( $self ) = @_;
+
+    require Corinna::Schema::SimpleType;
+
+    my $type = Corinna::Schema::SimpleType->new(
             'class'       => 'Corinna::Builtin::dateTime',
             'contentType' => 'simple',
             'derivedBy'   => 'restriction',
@@ -20,10 +27,10 @@ Corinna::Builtin::dateTime->XmlSchemaType(
             'regex' =>
 qr/^[-+]?(\d{4,})-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:(?:Z)|(?:[-+]\d{2}:\d{2}))?$/
             , # Regex shamelessly copied from XML::Validator::Schema by Sam Tregar
-        },
-        'Corinna::Schema::SimpleType'
-    )
-);
+    );
+
+    return $type;
+}
 
 #--------------------------------------------------------
 # returns a DateTime object representing the value.

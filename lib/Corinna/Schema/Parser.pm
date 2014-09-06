@@ -164,11 +164,27 @@ sub parse_to_dom() {
 
     print STDERR "Corinna : Parsing schema ...\n" if ( $verbose >= 2 );
 
-    my $parser = XML::LibXML->new();
-    my $doc    = $parser->parse_string($schema_str);
+    my $doc    = $self->parse_string($schema_str);
 
     print STDERR "Corinna : Parsing ended\n" if ( $verbose >= 2 );
     return $doc;
+}
+
+has parser  => (
+                  is => 'ro',
+                  isa   => 'XML::LibXML',
+                  lazy  => 1,
+                  builder  => '_get_parser',
+                  handles  => [qw(parse_string)],
+               );
+
+sub _get_parser
+{
+    my ( $self ) = @_;
+
+    require XML::LibXML;
+
+    return XML::LibXML->new();
 }
 
 #------------------------------------------------------------
@@ -316,6 +332,7 @@ sub _process_node
 
             # If the element name matches any string below, we'll do the
             # corresponding action.
+
 
           SWITCH: for ($name)
             {    # iterator = $_ (we'll do pattern matching on it)
@@ -1050,7 +1067,7 @@ sub _process_schema_node {
         if ( $cstack->count > 1 ) {
 
             # Lucky, we've got one.
-            my $prevContext = $cstack->[1]
+            my $prevContext = $cstack->get(1);
               ; # This is the one before the top. Becuase a push is actually unshift.
             $nsUri = $prevContext->targetNamespace();
         }
@@ -1471,6 +1488,7 @@ sub _is_global
    my $rc = 0;
 
    my $tn = $self->context()->top_node();
+
 
    if ( defined $tn && $tn->isa('Corinna::Schema') )
    {

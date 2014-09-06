@@ -8,6 +8,6 @@ extends qw(Corinna::ComplexType);
 
 our $VERSION = '2.0';
 
-Corinna::Element->mk_classdata('XmlSchemaElement');
+#Corinna::Element->mk_classdata('XmlSchemaElement');
 
 1;
