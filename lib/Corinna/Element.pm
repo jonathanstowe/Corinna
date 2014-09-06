@@ -5,6 +5,7 @@ use warnings;
 
 use Moose;
 extends qw(Corinna::ComplexType);
+use MooseX::StrictConstructor;
 
 our $VERSION = '2.0';
 

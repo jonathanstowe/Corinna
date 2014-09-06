@@ -3,13 +3,13 @@ use utf8;
 use strict;
 use warnings;
 
-use XML::LibXML;
-
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
 use Moose;
 extends 'Corinna::Type';
+
+use MooseX::StrictConstructor;
 
 our $VERSION = '2.0';
 

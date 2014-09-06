@@ -49,22 +49,31 @@ has isSimpleContent => (
 
 has xAttributes => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'ArrayRef',
+               lazy  => 1,
+               default  => sub { [] },
+
              );
 
 has xAttributeInfo => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default  => sub { {} },
              );
 
 has xElements => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'ArrayRef',
+               lazy  => 1,
+               default => sub { [] },
              );
 
 has xElementInfo => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'HashRef',
+               lazy  => 1,
+               default => sub { {} },
              );
 
 sub BUILD

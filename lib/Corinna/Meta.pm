@@ -12,7 +12,7 @@ use MooseX::ClassAttribute;
 our $VERSION = '2.0';
 
 
-has Model   => (
+class_has Model   => (
                   is => 'rw',
                   isa   => 'Corinna::Schema::Model',
                );

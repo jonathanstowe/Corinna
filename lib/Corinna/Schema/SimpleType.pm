@@ -5,6 +5,9 @@ use warnings;
 
 use Moose;
 extends 'Corinna::Schema::Type';
+with qw(
+         Corinna::Role::memberClasses
+       );
 
 our $VERSION = '2.0';
 
@@ -33,10 +36,6 @@ has memberTypes => (
                isa   => 'Str',
              );
 
-has memberClasses => (
-               is => 'rw',
-               isa   => 'Str',
-             );
 
 has minLength => (
                is => 'rw',

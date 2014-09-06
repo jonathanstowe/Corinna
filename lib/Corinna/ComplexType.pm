@@ -5,6 +5,7 @@ use warnings;
 
 use Moose;
 extends 'Corinna::Type';
+use MooseX::StrictConstructor;
 
 our $VERSION = '2.0';
 

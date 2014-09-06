@@ -19,7 +19,7 @@ has class => (
 
 has definition => (
                is => 'rw',
-               isa   => 'Item',
+               isa   => 'Maybe[Corinna::Schema::Object]',
              );
 
 has documentation => (
@@ -66,7 +66,7 @@ has scope => (
 
 has type => (
                is => 'rw',
-               isa   => 'Str',
+               isa   => 'Maybe[Str]',
                lazy  => 1,
                builder  => '_type',
              );

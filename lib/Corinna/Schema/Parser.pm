@@ -37,7 +37,7 @@ sub _get_model
 {
     my ( $self ) = @_;
     require Corinna::Schema::Model;
-    return Corinna::Schema::Model->new();
+    return Corinna::Schema::Model->new(verbose => $self->verbose());
 }
 
 has contextStack  => (

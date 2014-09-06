@@ -9,6 +9,8 @@ no warnings qw(uninitialized);
 
 use Moose;
 use Corinna;
+ 
+use MooseX::StrictConstructor;
 
 use File::chdir;
 use File::Path;

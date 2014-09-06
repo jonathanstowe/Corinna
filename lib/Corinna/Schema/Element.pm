@@ -5,15 +5,14 @@ use warnings;
 
 use Moose;
 extends qw(Corinna::Schema::Object);
+with qw(
+         Corinna::Role::baseClasses
+       );
 
 
 our $VERSION = '2.0';
 
 
-has baseClasses => (
-               is => 'rw',
-               isa   => 'Str',
-             );
 
 has minOccurs => (
                is => 'rw',

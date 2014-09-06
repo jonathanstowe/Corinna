@@ -5,6 +5,9 @@ use warnings;
 
 use Moose;
 extends qw(Corinna::Schema::Object);
+with qw(
+         Corinna::Role::baseClasses
+       );
 
 
 our $VERSION = '2.0';
@@ -14,10 +17,6 @@ has base => (
                isa   => 'Str',
              );
 
-has baseClasses => (
-               is => 'rw',
-               isa   => 'Str',
-             );
 
 has contentType => (
                is => 'rw',

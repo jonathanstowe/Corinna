@@ -5,6 +5,10 @@ use strict;
 use warnings;
 
 use Moose;
+with qw(
+         Corinna::Role::Verbose
+       );
+use MooseX::StrictConstructor;
 
 use Data::Dumper;
 use IO::File;

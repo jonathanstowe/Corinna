@@ -6,7 +6,7 @@ use MooseX::ClassAttribute;
 
 class_has XmlSchemaType => (
                               is => 'rw',
-                              isa   => 'Corinna::Type',
+                              isa   => 'Corinna::Schema::Object',
                               lazy  => 1,
                               builder  => '_xml_schema_type',
                            );

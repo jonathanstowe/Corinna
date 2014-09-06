@@ -146,7 +146,7 @@ sub add
     {
     
 
-    my $items = $self->{$field};
+    my $items = $self->$field;
     my $key = $newItem->can( "key" ) ? $newItem->key()
       : ( $newItem->can("name") ? $newItem->name : '_anonymous_' );
     if ( defined( my $oldItem = $items->{$key} ) ) 

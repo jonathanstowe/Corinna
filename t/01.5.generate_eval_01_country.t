@@ -3,7 +3,7 @@ use Test::Most tests => 2;
 
 use_ok('Corinna');
 
-my $pastor = Corinna->new(verbose => 66);
+my $pastor = Corinna->new();
 
 lives_ok {
 $pastor->generate(
