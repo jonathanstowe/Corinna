@@ -83,6 +83,15 @@ has style => (
       isa   => 'Str',
       );
 
+=item module
+
+=cut
+
+has module  => (
+      is => 'rw',
+      isa   => 'Str',
+      );
+
 =back
 
 =cut

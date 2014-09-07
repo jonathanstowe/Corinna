@@ -139,9 +139,11 @@ sub _generate_attributes
        {
            my ($name, $alias) = $self->_get_attr_name_alias($item, $object);
 
+           my $class = $self->_get_attribute_type($item);
+
            my @opts = (
                         is => 'rw',
-                        isa   => $item->class(),
+                        isa   => $class,
                       );
 
            if (defined $alias )
@@ -156,6 +158,31 @@ sub _generate_attributes
    return $attrs;
 
 }
+
+=item _get_attribute_type
+
+This returns the appropriate type to feed to the 'isa' of the attribute
+will get created for the attributes or elements
+
+=cut
+
+sub _get_attribute_type
+{
+    my ( $self, $item ) = @_;
+
+    my $type = $item->class();
+
+    if ( $item->isa('Corinna::Schema::Element') )
+    {
+        if (!$item->is_singleton() )
+        {
+            $type = 'Corinna::NodeArray';
+        }
+    }
+
+    return $type;
+}
+
 
 =item _get_attr_name_alias
 

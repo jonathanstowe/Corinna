@@ -18,7 +18,7 @@ $pastor->generate(
     schema       => ['./test/source/country/schema/country_schema1.xsd'],
     class_prefix => "Corinna::Test",
     destination  => './test/out/lib/',
-    verbose      => 0
+    verbose      => 0,
 );
 
 # ======= COUNTRY ==============
@@ -88,7 +88,6 @@ foreach my $country (@countries) {
         qw( 	xml_field_class
           is_xml_field_singleton
           is_xml_field_multiple
-          get
           set
           grab
           from_xml_dom

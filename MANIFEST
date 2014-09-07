@@ -1,4 +1,3 @@
-
 bin/pastorize
 Changes
 lib/Corinna.pm
@@ -39,6 +38,16 @@ lib/Corinna/SimpleType.pm
 lib/Corinna/Stack.pm
 lib/Corinna/Type.pm
 lib/Corinna/Util.pm
+lib/Corinna/Generator/Dynamic.pm
+lib/Corinna/Generator/Static.pm
+lib/Corinna/Role/baseClasses.pm
+lib/Corinna/Role/ContentType.pm
+lib/Corinna/Role/Generator.pm
+lib/Corinna/Role/memberClasses.pm
+lib/Corinna/Role/Model.pm
+lib/Corinna/Role/Verbose.pm
+lib/Corinna/Role/XmlSchemaElement.pm
+lib/Corinna/Role/XmlSchemaType.pm
 Makefile.PL
 Build.PL
 MANIFEST

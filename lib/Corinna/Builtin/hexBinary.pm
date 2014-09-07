@@ -11,7 +11,7 @@ with qw(
 
 our $VERSION = '2.91';
 
-sub _xml_schema_type
+sub _get_xml_schema_type
 {
     my ( $self ) = @_;
 

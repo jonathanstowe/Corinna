@@ -93,7 +93,7 @@ sub BUILD
 #-----------------------------------------------------------------
 sub effective_attributes {
     my $self = shift;
-    return ( $self->xAttributes() || $self->attributes() );
+    return ( @{$self->xAttributes()} ? $self->xAttributes() : $self->attributes() );
 }
 
 #-----------------------------------------------------------------
@@ -101,7 +101,7 @@ sub effective_attributes {
 #-----------------------------------------------------------------
 sub effective_attribute_info {
     my $self = shift;
-    return ( $self->xAttributeInfo() || $self->attribute_info() );
+    return ( keys %{$self->xAttributeInfo()} ? $self->xAttributeInfo() : $self->attribute_info() );
 }
 
 #-----------------------------------------------------------------
@@ -109,7 +109,7 @@ sub effective_attribute_info {
 #-----------------------------------------------------------------
 sub effective_elements {
     my $self = shift;
-    return ( $self->xElements() || $self->elements() );
+    return ( @{$self->xElements()} ? $self->xElements() : $self->elements() );
 }
 
 #-----------------------------------------------------------------
@@ -117,7 +117,7 @@ sub effective_elements {
 #-----------------------------------------------------------------
 sub effective_element_info {
     my $self = shift;
-    return ( $self->xElementInfo() || $self->elementInfo() );
+    return ( keys %{$self->xElementInfo()} ? $self->xElementInfo() : $self->elementInfo() );
 }
 
 1;

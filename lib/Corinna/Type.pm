@@ -103,9 +103,6 @@ sub str_cmp {
     return ( $strval cmp "$arg" );
 }
 
-#----------------------------------------------
-# set -- Overriden from Class::Accessor
-#----------------------------------------------
 sub set {
     my ( $self, $key ) = splice( @_, 0, 2 );
 
@@ -514,8 +511,9 @@ sub from_xml_dom {
                 print
                   "\nfrom_xml_dom : Attribute = $attribName,  Class = $class"
                   if ( $verbose >= 7 );
-                $self->{ $attribPfx . $attribName } =
-                  $class->new( __value => $attribs->{$attribName} );
+
+                my $aname = $attribPfx . $attribName;
+                $self->$aname($class->new( __value => $attribs->{$attribName}));
             }
         }
 
@@ -536,15 +534,13 @@ sub from_xml_dom {
                 if ( $elem->is_singleton() ) {
 
                     # singleton
-                    $self->{$elemName} =
-                      $class->from_xml_dom( $childNodes->[0] );
+                    $self->$elemName($class->from_xml_dom( $childNodes->[0]));
                 }
                 else {
 
                     # multiplicity
-                    $self->{$elemName} =
-                      Corinna::NodeArray->new( map { $class->from_xml_dom($_) }
-                          @$childNodes );
+                    my $val = Corinna::NodeArray->new( map { $class->from_xml_dom($_) } @$childNodes );
+                    $self->$elemName($val);
                 }
             }
         }

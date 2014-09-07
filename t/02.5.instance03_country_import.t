@@ -86,7 +86,6 @@ foreach my $country (@countries) {
         qw( 	xml_field_class
           is_xml_field_singleton
           is_xml_field_multiple
-          get
           set
           grab
           from_xml_dom
