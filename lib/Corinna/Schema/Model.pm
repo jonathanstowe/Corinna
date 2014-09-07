@@ -4,6 +4,9 @@ use strict;
 use warnings;
 
 use Moose;
+with qw(
+         MooseX::Clone
+       );
 
 use Data::Dumper;
 

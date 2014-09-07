@@ -1,21 +1,20 @@
 package Corinna::Meta;
+
 use utf8;
 use strict;
 use warnings;
-no warnings qw(uninitialized);
 
 
 use Moose;
+with qw(
+         Corinna::Role::Model
+       );
 
-use MooseX::ClassAttribute;
+use MooseX::StrictConstructor;
 
 our $VERSION = '2.91';
 
 
-class_has Model   => (
-                  is => 'rw',
-                  isa   => 'Corinna::Schema::Model',
-               );
 
 1;
 

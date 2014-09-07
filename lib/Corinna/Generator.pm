@@ -8,6 +8,7 @@ use Moose;
 with qw(
          Corinna::Role::Verbose
        );
+
 use MooseX::StrictConstructor;
 
 use Data::Dumper;
@@ -47,12 +48,23 @@ sub generate {
     my $model = $args->{model}
       or die "Corinna: Code generation requires a 'model'!\n";
     my $mode = $args->{mode};
-    if ( ( $mode =~ /eval/ ) || ( $mode =~ /return/ ) ) {
+    my $generator_class;
+
+    if ( ( $mode =~ /eval/ ) || ( $mode =~ /return/ ) ) 
+    {
         $args->{style} = "single";    # force single module generation
+
+        require Corinna::Generator::Dynamic;
+        $generator_class = 'Corinna::Generator::Dynamic';
+    }
+    else
+    {
+        require Corinna::Generator::Static;
+        $generator_class = 'Corinna::Generator::Static';
     }
     my $style       = $args->{style};
     my $destination = $args->{destination} || Corinna::Util->_tmp_dir();
-    my $verbose     = $self->{verbose} || 0;
+    my $verbose     = $self->verbose();
 
     $args->{destination} = $destination;
 
@@ -63,12 +75,10 @@ sub generate {
     $args->{metaModule} = $class_prefix . "Corinna::Meta";
 
     print STDERR "\nGenerating code...\n" if ( $verbose >= 2 );
-    if ( $style =~ /single/ ) {
-        $self->_generate_single(%$args);
-    }
-    else {
-        $self->_generate_multiple(%$args);
-    }
+
+    my $generator = $generator_class->new(%{$args});
+
+    return $generator->generate();
 }
 
 #--------------------------------------------

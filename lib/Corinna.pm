@@ -35,6 +35,7 @@ class_has version => (
                   lazy  => 1,
                   builder  => '_version',
                );
+
 sub _version {
     return $Corinna::VERSION;
 }
