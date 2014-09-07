@@ -24,7 +24,7 @@ use Corinna::Util;
 
 use MooseX::ClassAttribute;
 
-our $VERSION = 2.0;
+our $VERSION = 2.91;
 
 
 #--------------------------------------------------------
@@ -79,7 +79,7 @@ B<Corinna> - Generate Perl classes with XML bindings starting from a W3C XSD Sch
 
 =head1 VERSION
 
-2.0
+2.91
 
 =head1 SYNOPSIS
 

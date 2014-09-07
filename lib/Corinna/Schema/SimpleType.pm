@@ -9,7 +9,7 @@ with qw(
          Corinna::Role::memberClasses
        );
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 has enumeration => (
                is => 'rw',

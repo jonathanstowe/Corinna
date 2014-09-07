@@ -7,7 +7,7 @@ use Moose;
 
 use Scalar::Util qw(reftype blessed);
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 has class => (

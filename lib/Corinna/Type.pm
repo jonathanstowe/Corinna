@@ -14,7 +14,7 @@ use MooseX::StrictConstructor;
 use Scalar::Util qw(reftype);
 use Corinna::Util qw(get_attribute_hash get_children_hash_dom);
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 use overload

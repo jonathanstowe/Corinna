@@ -21,7 +21,7 @@ use Corinna::Schema;
 use Corinna::Util qw(get_attribute_hash sprint_xml_element);
 use Scalar::Util qw(reftype blessed);
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 #------------------------------------------------------------

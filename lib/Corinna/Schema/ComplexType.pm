@@ -9,7 +9,7 @@ with qw(
          Corinna::Role::ContentType
        );
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 has attributes => (

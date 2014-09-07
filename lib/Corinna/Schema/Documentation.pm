@@ -7,7 +7,7 @@ use Moose;
 extends qw(Corinna::Schema::Object);
 
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 has lang => (
                is => 'rw',

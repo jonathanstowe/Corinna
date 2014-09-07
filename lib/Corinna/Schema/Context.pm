@@ -12,7 +12,7 @@ use Corinna::Schema::Object;
 use Scalar::Util qw(blessed reftype);
 
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 has counter => (

@@ -10,7 +10,7 @@ use warnings;
 use Moose;
 extends 'Corinna::Builtin::SimpleType';
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 #-----------------------------------------------------------------
 sub to_list {

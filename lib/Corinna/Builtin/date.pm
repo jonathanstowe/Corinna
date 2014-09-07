@@ -11,7 +11,7 @@ with qw(
 
 use Corinna::Util qw(validate_date);
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 sub _get_xml_schema_type
 {

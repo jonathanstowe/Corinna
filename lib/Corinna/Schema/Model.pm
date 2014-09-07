@@ -14,7 +14,7 @@ use Corinna::Util qw(merge_hash);
 use Scalar::Util qw(blessed);
 
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 has xsd_namespace => (

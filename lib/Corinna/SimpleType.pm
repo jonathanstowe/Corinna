@@ -11,7 +11,7 @@ extends 'Corinna::Type';
 
 use MooseX::StrictConstructor;
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 #----------------------------------------------
 # xml_validate_value

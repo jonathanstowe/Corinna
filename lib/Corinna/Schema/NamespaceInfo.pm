@@ -3,7 +3,7 @@ package Corinna::Schema::NamespaceInfo;
 use Moose;
 use MooseX::UndefTolerant;    # :(
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 has uri => (
     is       => 'ro',

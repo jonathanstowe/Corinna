@@ -8,7 +8,7 @@ use Scalar::Util qw(looks_like_number);
 use Moose;
 extends 'Corinna::Builtin::Scalar';
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 sub xml_validate
 {

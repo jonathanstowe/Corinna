@@ -9,7 +9,7 @@ use Moose;
 
 use MooseX::ClassAttribute;
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 
 class_has Model   => (

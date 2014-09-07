@@ -9,7 +9,7 @@ with qw(
          Corinna::Role::XmlSchemaType
        );
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 sub _get_xml_schema_type
 {

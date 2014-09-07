@@ -10,7 +10,7 @@ use File::Spec;
 use Moose;
 extends 'Exporter';
 
-our $VERSION = '2.0';
+our $VERSION = '2.91';
 
 our @EXPORT    = qw();
 our @EXPORT_OK = qw(merge_hash
