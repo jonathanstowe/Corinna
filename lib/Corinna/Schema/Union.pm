@@ -92,7 +92,6 @@ W3C B<union>.  The value is retrieved from the W3C schema and further enriched
 by the implicit (local) type names by the schema parser. It is later used for
 validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 
 =head4 memberClasses()
@@ -107,7 +106,6 @@ I<type> mentioned in L</memberTypes()>.  So it makes sense only in a W3C
 B<union> context. The value is computed at schema model resolution time. It is
 later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 .
 
 =head1 BUGS & CAVEATS

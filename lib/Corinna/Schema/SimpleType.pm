@@ -196,7 +196,6 @@ Returns (GET) and expects (SET) a hash reference that represent the
 enumeration values that the simple type can accept. The hash keys are the
 enumeration values and the hash values are all set to 1.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 fractionDigits()
 
@@ -210,7 +209,6 @@ This field, if present, signifies the number of fractional digits that numeric
 values of this simple type must have. This is obtained directly from the W3C
 schema and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 length()
 
@@ -223,7 +221,6 @@ documentation.
 Returns (GET) and expects (SET) an integer value representing the exact string
 length of the simple type value must have for it to pass validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 itemType()
 
@@ -238,7 +235,6 @@ items in a 'B<list>' type.  A W3C list type is a whitespace separeted list of
 tokens (called items) which must have a common atomic type.  This value is
 obtained from the W3C schema by the parser and is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 itemClass()
 
@@ -253,7 +249,6 @@ of tokens (called items) which must have a common atomic type.  This value is
 computed from the I<itemType> at schema model resolution time and is later
 used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 maxExclusive()
 
@@ -267,7 +262,6 @@ This field, if present, signifies a numeric value that the values of this
 simple type must be less than. This is obtained directly from the W3C schema
 and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 maxInclusive()
 
@@ -281,7 +275,6 @@ This field, if present, signifies the B<maximum> numeric value that the values
 of this simple type can have. This is obtained directly from the W3C schema
 and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 maxLength()
 
@@ -295,7 +288,6 @@ This field, if present, signifies the B<maximum> string length that the values
 of this simple type can have. This is obtained directly from the W3C schema
 and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 memberTypes()
 
@@ -310,7 +302,6 @@ W3C B<union>.  The value is retrieved from the W3C schema and further enriched
 by the implicit (local) type names by the schema parser. It is later used for
 validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 memberClasses()
 
@@ -324,7 +315,6 @@ I<type> mentioned in L</memberTypes()>.  So it makes sense only in a W3C
 B<union> context. The value is computed at schema model resolution time. It is
 later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 minExclusive()
 
@@ -338,7 +328,6 @@ This field, if present, signifies a numeric value that the values of this
 simple type must be greater than. This is obtained directly from the W3C
 schema and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 minInclusive()
 
@@ -352,7 +341,6 @@ This field, if present, signifies the B<minimum> numeric value that the values
 of this simple type can have. This is obtained directly from the W3C schema
 and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 minLength()
 
@@ -366,7 +354,6 @@ This field, if present, signifies the B<minimum> string length that the values
 of this simple type can have. This is obtained directly from the W3C schema
 and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 
 =head4 pattern()
@@ -381,7 +368,6 @@ This field, if present, gives a W3C regular expression to which the values of
 this simple type must match. This is obtained directly from the W3C schema and
 placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 regex()
 
@@ -398,7 +384,6 @@ expression whereas 'pattern' may digresse in the future.  This is obtained
 directly from the W3C schema and placed here by the parser. It is later used
 for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 totalDigits()
 
@@ -412,7 +397,6 @@ This field, if present, signifies the total number of digits that numeric
 values of this simple type must have. This is obtained directly from the W3C
 schema and placed here by the parser. It is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 whiteSpace()
 
@@ -428,7 +412,6 @@ of this simple type upon validation.  Currently, three values are possible =>
 directly from the W3C schema and placed here by the parser. It is later used
 for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head1 BUGS & CAVEATS
 

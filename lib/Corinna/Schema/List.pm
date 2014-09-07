@@ -92,7 +92,6 @@ items in a 'B<list>' type.  A W3C list type is a whitespace separeted list of
 tokens (called items) which must have a common atomic type.  This value is
 obtained from the W3C schema by the parser and is later used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 itemClass()
 
@@ -107,7 +106,6 @@ of tokens (called items) which must have a common atomic type.  This value is
 computed from the I<itemType> at schema model resolution time and is later
 used for validation.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head1 BUGS & CAVEATS
 

@@ -134,9 +134,7 @@ feature to save state information that will not be written back to XML. Just
 make sure that the names of any such fields do not coincide with the name of
 an actual attribute or child element. Any such field will be silently ignored
 when writing to or validating XML. However, note that there won't be any
-auto-generated accessor for such fields. But you can actually achieve this by
-using the B<mk_accessors> method from L<Class::Accessor> somewhere else in
-your code as B<XML::ComplexType> eventually inherits from L<Class::Accessor>.
+auto-generated accessor for such fields. 
 
 Generated classes for simple types do not descend from this class. Instead,
 they descend from L<Corinna::SimpleType> (although both have a common ancestor

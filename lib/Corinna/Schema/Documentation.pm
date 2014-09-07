@@ -69,14 +69,12 @@ documentation of those.
     my $lang = $object->lang();    # GET
     $object->lang($lang);          # SET
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 text()
 
   my $txt = $object->text();    # GET
   $object->text($txt);        # SET
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head1 BUGS & CAVEATS
 

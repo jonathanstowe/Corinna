@@ -275,8 +275,7 @@ values within the newly created object.
 This is the Perl class that corresponds to the schema object. It is computed
 at schema model I<resolution> time. (see L<Corinna::Schema::Model/resolve()>).
 
-This accessor is originally created by a call to B<mk_accessors> from
-L<Class::Accessor>.  However, it is further overridden in the source code in
+However, it is further overridden in the source code in
 order to take into consideration the I<definition> of the object. The SET
 functionality works as usual, but the GET functionality works as follows: If a
 value is NOT already defined for this field, but if there is a I<definition>
@@ -296,7 +295,6 @@ actual global definition.
 This field is set during the schema model I<resolution> time (see
 L<Corinna::Schema::Model/resolve()>).
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 key()
 
@@ -333,7 +331,6 @@ When processing a schema within a 'redefine' block, all schema objects
 (including types and elements) are marked as I<redefinable>. This way, any
 subsequent redefinition in the model does not cause an error.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 name()
 
@@ -349,7 +346,6 @@ W3C schema.  However, non-global objects (such as local elements) will not
 have a name that comes from the W3C schema. Such objects will be named by the
 parser.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 name_is_auto_generated()
 
@@ -363,7 +359,6 @@ Such objects will be named by the parser. In this case (when the name is
 generated automatically), this field will be set to TRUE(1) by the parser on
 the corresponding sceham object.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 ref()
 
@@ -379,7 +374,6 @@ B<'ref'> field will contain the name of the referenced global object.
 The value of this field comes directly from the W3C schema, and is put into
 this field by the schema parser.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 scope()
 
@@ -390,7 +384,6 @@ All schema objects are defined within a scope. The scope can be I<'global'> or
 I<'local'>.  The scope of schema objects are determined by the schema parser
 and this field is set accordingly at parse time.
 
-This accessor is created by a call to B<mk_accessors> from L<Class::Accessor>.
 
 =head4 type()
 
@@ -404,8 +397,7 @@ refer to a B<type> that is defined globally in the schema set. The value of
 this field comes directly from the W3C schema, and is put into this field by
 the schema parser.
 
-This accessor is originally created by a call to B<mk_accessors> from
-L<Class::Accessor>.  However, it is further overridden in the source code in
+However, it is further overridden in the source code in
 order to take into consideration the I<definition> of the object. The SET
 functionality works as usual, but the GET functionality works as follows: If a
 value is NOT already defined for this field, but if there is a I<definition>
