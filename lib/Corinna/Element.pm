@@ -5,10 +5,9 @@ use warnings;
 
 use Moose;
 extends qw(Corinna::ComplexType);
+with qw(Corinna::Role::XmlSchemaElement);
 use MooseX::StrictConstructor;
 
 our $VERSION = '2.0';
-
-#Corinna::Element->mk_classdata('XmlSchemaElement');
 
 1;
