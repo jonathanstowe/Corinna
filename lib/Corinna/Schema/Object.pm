@@ -4,6 +4,9 @@ use strict;
 use warnings;
 
 use Moose;
+with qw(
+         MooseX::Clone
+       );
 
 use Scalar::Util qw(reftype blessed);
 
@@ -76,6 +79,20 @@ has targetNamespace => (
                isa   => 'Item',
              );
 
+
+has class_roles   => (
+               is => 'rw',
+               isa   => 'ArrayRef',
+               lazy  => 1,
+               builder  => '_class_roles',
+            );
+
+has xml_info_attribute  => (
+                              is => 'rw',
+                              isa   => 'Str',
+                              lazy  => 1,
+                              builder  => '_xml_info_attribute',
+                           );
 #------------------------------------------------------------
 
 #------------------------------------------------------------

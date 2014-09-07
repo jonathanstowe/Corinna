@@ -47,6 +47,33 @@ sub _type_key
    return 'element';
 }
 
+=item _class_roles
+
+This is a builder to return the additional roles that should be
+added to the generated class for this object.
+
+=cut
+
+sub _class_roles
+{
+    my ( $self ) = @_;
+
+    return [qw(Corinna::Role::XmlSchemaElement)];
+}
+
+=item _xml_info_attribute
+
+This returns the name of the attribute that will be used to store the
+raw information from the object.
+
+=cut
+
+sub _xml_info_attribute
+{
+    my ( $self ) = @_;
+    return 'XmlSchemaElement';
+}
+
 1;
 
 __END__

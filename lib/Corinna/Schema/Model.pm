@@ -80,6 +80,21 @@ has namespaceCounter => (
              );
 
 
+=item items
+
+This is convenience for the generator.  Returns a list of hash references
+of the sets of objects (e.g. types, elements ) that will be created as
+classes in the generator.
+
+=cut
+
+sub items
+{
+    my ( $self ) = @_;
+
+    return ( $self->type(), $self->element());
+}
+
 #-------------------------------------------------------
 sub xml_item {
     my $self    = shift;
